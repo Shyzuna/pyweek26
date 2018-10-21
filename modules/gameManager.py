@@ -35,8 +35,6 @@ class GameManager:
 
     def scrollObjects(self, deltaX, deltaY):
         for resource in self._resources:
-            print (deltaX)
-            print (deltaY)
             resource.current_x -= deltaX
             resource.current_y -= deltaY
 
