@@ -1,4 +1,4 @@
-from objects.Building import Building
+from objects.building import Building
 from modules.gameManager import gameManager
 
 

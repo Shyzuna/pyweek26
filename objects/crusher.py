@@ -1,14 +1,14 @@
-from objects.Building import Building
+from objects.building import Building
 
 
-class Drill(Building):
+class Crusher(Building):
 
     def __init__(self, position):
 
         self.position = position
         self.size = [1, 1]
-        self.connections = {'inputs': {'hydrogen_rock': False, 'Electricity': False},
-                            'outputs': {'hydrogen_gaz': False}}
+        self.connections = {'inputs': {'helium_rock': False, 'Electricity': False},
+                            'outputs': {'helium_gaz': False}}
         self.max_prod = 2
         self.cur_prod = 0
         self.ratio = 1
