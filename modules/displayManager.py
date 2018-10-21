@@ -49,6 +49,8 @@ class DisplayManager:
 
 
     def display(self, currentRect, resources):
+        rect = pygame.Rect(0, 0, settings.TILE_WIDTH, settings.TILE_HEIGHT)
+
         self.screen.fill(Colors.WHITE.value)
 
         # Display part of map
@@ -58,7 +60,7 @@ class DisplayManager:
         tileW, tileH = settings.TILE_WIDTH, settings.TILE_HEIGHT
         for resource in resources:
             self.screen.blit(self.imgs[resource._category.value],
-                             (resource._position[0] * tileW, resource._position[1] * tileH), currentRect)
+                             (resource.current_x, resource.current_y), rect)
 
         pygame.display.flip()
 
