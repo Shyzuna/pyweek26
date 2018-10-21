@@ -65,3 +65,7 @@ fabric.properties
 
 # Ignore precompiled python
 *.pyc
+
+# Misc
+__pycache/
+venv/

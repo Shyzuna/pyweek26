@@ -1,5 +1,7 @@
-import pygame
-from pygame.locals import *
+from modules.gameManager import gameManager
 
 if __name__ == '__main__':
-    pygame.init()
+    gameManager.init()
+    gameManager.start()
+
+
