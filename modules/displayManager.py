@@ -49,7 +49,7 @@ class DisplayManager:
         self.resourcesMapSurface = pygame.Surface((settings.MAP_WIDTH, settings.MAP_HEIGHT))
 
         for resource in resources:
-            self.resourcesMapSurface.blit(self.imgs[resource.category], (resource.x, resource.y))
+            self.resourcesMapSurface.blit(self.imgs[resource.category], (resource.position.x, resource.position.y))
 
 
     def display(self, currentRect):
