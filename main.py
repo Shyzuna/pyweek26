@@ -1,11 +1,5 @@
-import pygame
-from pygame.locals import *
-
-from modules.mapGenerator import MapGenerator
+from modules.gameManager import gameManager
 
 if __name__ == '__main__':
-    pygame.init()
-    mg = MapGenerator()
-    print(mg._seed)
-    for e in mg.generateSettingsMap():
-        print(e)
+    gameManager.init()
+    gameManager.start()
