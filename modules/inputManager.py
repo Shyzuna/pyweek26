@@ -29,28 +29,28 @@ class InputManager:
             elif event.type == pygame.KEYUP:
                 if event.key in self.directionState.keys():
                     self.directionState[event.key] = False
+            else:
+                # Mouse scrolling
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if mouse_x < settings.SCROLL_MOUSE_MARGIN:
+                    self.directionState[pygame.K_LEFT] = True
+                else:
+                    self.directionState[pygame.K_LEFT] = False
 
-        # Mouse scrolling
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        if mouse_x < settings.SCROLL_MOUSE_MARGIN:
-            self.directionState[pygame.K_LEFT] = True
-        else:
-            self.directionState[pygame.K_LEFT] = False
+                if mouse_x > settings.SCROLL_MOUSE_MAX_X:
+                    self.directionState[pygame.K_RIGHT] = True
+                else:
+                    self.directionState[pygame.K_RIGHT] = False
 
-        if mouse_x > settings.SCROLL_MOUSE_MAX_X:
-            self.directionState[pygame.K_RIGHT] = True
-        else:
-            self.directionState[pygame.K_RIGHT] = False
+                if mouse_y < settings.SCROLL_MOUSE_MARGIN:
+                    self.directionState[pygame.K_UP] = True
+                else:
+                    self.directionState[pygame.K_UP] = False
 
-        if mouse_y < settings.SCROLL_MOUSE_MARGIN:
-            self.directionState[pygame.K_UP] = True
-        else:
-            self.directionState[pygame.K_UP] = False
-
-        if mouse_y > settings.SCROLL_MOUSE_MAX_Y:
-            self.directionState[pygame.K_DOWN] = True
-        else:
-            self.directionState[pygame.K_DOWN] = False
+                if mouse_y > settings.SCROLL_MOUSE_MAX_Y:
+                    self.directionState[pygame.K_DOWN] = True
+                else:
+                    self.directionState[pygame.K_DOWN] = False
 
 
 inputManager = InputManager()
