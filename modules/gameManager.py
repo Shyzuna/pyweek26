@@ -23,6 +23,8 @@ class GameManager:
         self._resources = self._mg.generateSettingsMap()
 
     def start(self):
+        pygame.event.set_grab(True)
+
         while not inputManager.done:
             self.clock.tick(settings.FPS)
             deltaTime = self.clock.get_time()
