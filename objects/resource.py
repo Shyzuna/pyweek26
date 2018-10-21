@@ -1,3 +1,4 @@
+
 """
 Title: ressource File
 Desc: Ressource class
@@ -25,3 +26,4 @@ class Resource(object):
 
     def __str__(self):
         return "{} - {} -> {} ({})".format(self._position, self._size, self._category, self._amount)
+

@@ -3,7 +3,7 @@ from settings import settings
 
 class MapManager:
 
-    def __init__(self, baseMap, resourcesMap):
+    def __init__(self):
         pass
 
     def init(self):

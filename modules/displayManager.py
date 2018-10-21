@@ -27,9 +27,11 @@ class DisplayManager:
                 print(str(e))
 
         for resource in ObjectCategory:
-            img = pygame.image.load(os.path.join(settings.RESOURCES_PATH, resource.value + ".png"))
-            self.imgs[resource.value] = pygame.transform.scale(img, (settings.TILE_WIDTH, settings.TILE_HEIGHT))
-
+            try:
+                img = pygame.image.load(os.path.join(settings.RESOURCES_PATH, resource.value + ".png"))
+                self.imgs[resource.value] = pygame.transform.scale(img, (settings.TILE_WIDTH, settings.TILE_HEIGHT))
+            except:
+                pass
 
     def createBaseMapSurface(self, map):
         self.baseMapSurface = pygame.Surface((settings.MAP_WIDTH, settings.MAP_HEIGHT))
@@ -45,21 +47,18 @@ class DisplayManager:
             startY += tileH
             startX = 0
 
-    def createResourcesSurface(self, resources):
-        self.resourcesMapSurface = pygame.Surface((settings.MAP_WIDTH, settings.MAP_HEIGHT))
 
-        for resource in resources:
-            self.resourcesMapSurface.blit(self.imgs[resource.category], (resource.position.x, resource.position.y))
-
-
-    def display(self, currentRect):
+    def display(self, currentRect, resources):
         self.screen.fill(Colors.WHITE.value)
 
         # Display part of map
         self.screen.blit(self.baseMapSurface, (0, 0), currentRect)
 
         # Display resources
-        # self.screen.blit(self.resourcesMapSurface, (0, 0), currentRect)
+        tileW, tileH = settings.TILE_WIDTH, settings.TILE_HEIGHT
+        for resource in resources:
+            self.screen.blit(self.imgs[resource._category.value],
+                             (resource._position[0] * tileW, resource._position[1] * tileH), currentRect)
 
         pygame.display.flip()
 
