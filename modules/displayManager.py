@@ -45,21 +45,16 @@ class DisplayManager:
             startY += tileH
             startX = 0
 
-    def createResourcesSurface(self, resources):
-        self.resourcesMapSurface = pygame.Surface((settings.MAP_WIDTH, settings.MAP_HEIGHT))
 
-        for resource in resources:
-            self.resourcesMapSurface.blit(self.imgs[resource.category], (resource.position.x, resource.position.y))
-
-
-    def display(self, currentRect):
+    def display(self, currentRect, resources):
         self.screen.fill(Colors.WHITE.value)
 
         # Display part of map
         self.screen.blit(self.baseMapSurface, (0, 0), currentRect)
 
         # Display resources
-        # self.screen.blit(self.resourcesMapSurface, (0, 0), currentRect)
+        for resource in resources:
+            self.screen.blit(self.imgs[resource.category], (resource.position[0], resource.position[1]), currentRect)
 
         pygame.display.flip()
 
