@@ -6,8 +6,13 @@ from modules.inputManager import inputManager
 from modules.guiManager import guiManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
-from settings.enums import ObjectCategory
+from settings.enums import ObjectCategory,BuildingTypes
 from state.player import Player
+
+from objects.Battery import Battery
+from objects.Crusher import Crusher
+from objects.Drill import Drill
+import objects.SolarPanel as SolarPanel
 
 class GameManager:
 
@@ -15,11 +20,19 @@ class GameManager:
         pass
 
     def init(self):
+        self.buildingList = {
+            BuildingTypes.GENERAL: [],
+            BuildingTypes.GATHERER: [Crusher, Drill],
+            BuildingTypes.REFINER: [],
+            BuildingTypes.PRODUCER: [SolarPanel.SolarPanel],
+            BuildingTypes.CAPACITOR: [Battery],
+            BuildingTypes.CONNECTOR: [],
+        }
         self.clock = pygame.time.Clock()
         mapManager.init()
         inputManager.init()
         displayManager.init()
-        guiManager.init()
+        guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()

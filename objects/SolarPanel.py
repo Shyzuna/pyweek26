@@ -1,5 +1,5 @@
 from objects.Building import Building
-from modules.gameManager import gameManager
+import modules.gameManager
 
 
 class SolarPanel(Building):
@@ -17,14 +17,14 @@ class SolarPanel(Building):
 
     def update(self):
         # Update production
-        if gameManager.is_night:
+        if modules.gameManager.gameManager.is_night:
             self.cur_prod = 0
             # do nothing
         else:
             self.cur_prod = self.max_prod
             to_deliver = self.cur_prod
             # Giving away power to non full batteries in same network
-            for battery in gameManager.get_batteries():
+            for battery in modules.gameManager.gameManager.get_batteries():
                 cur_capacity = battery.cur_capacity
                 max_capacity = battery.max_capacity
                 if battery.is_full():

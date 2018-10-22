@@ -26,3 +26,14 @@ class ObjectCategory(Enum):
     TRIHYGROGEN = 'TRIHYDROGEN'
     TRIHELIUM = 'TRIHELIUM'
     ENERGY = 'ENERGY'
+
+class BuildingTypes(Enum):
+    """
+    Enum for the several buildings types
+    """
+    GENERAL = 'General'
+    GATHERER = 'Gatherer'
+    REFINER = 'Refiner'
+    PRODUCER = 'Producer'
+    CAPACITOR = 'Capacitor'
+    CONNECTOR = 'Connector'
