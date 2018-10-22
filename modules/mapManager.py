@@ -19,7 +19,7 @@ class MapManager:
 
         for i in range(0, settings.TILES_NUM_HEIGHT):
             line = []
-            for j in range(0, settings.TILES_NUM_WITDH):
+            for j in range(0, settings.TILES_NUM_WIDTH):
                 line.append(0)
             self.baseMap.append(line)
 
