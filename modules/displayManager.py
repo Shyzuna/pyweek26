@@ -48,7 +48,7 @@ class DisplayManager:
             startX = 0
 
 
-    def display(self, currentRect, resources):
+    def display(self, currentRect, resources, buildings):
         rect = pygame.Rect(0, 0, settings.TILE_WIDTH, settings.TILE_HEIGHT)
 
         self.screen.fill(Colors.WHITE.value)
@@ -61,5 +61,9 @@ class DisplayManager:
             self.screen.blit(self.imgs[resource._category.value],
                              (resource.current_x, resource.current_y), rect)
 
+        # Display buildings
+        for building in buildings:
+            # TODO: display here or in building.display()
+            pass
 
 displayManager = DisplayManager()

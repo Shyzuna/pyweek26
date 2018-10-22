@@ -1,6 +1,6 @@
 import copy
 
-from objects.Building import Building
+from objects.building import Building
 
 
 class Network(Building):

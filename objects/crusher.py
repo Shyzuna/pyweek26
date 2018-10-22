@@ -1,11 +1,12 @@
-from objects.Building import Building
+from objects.building import Building
 
 
 class Crusher(Building):
 
-    def __init__(self, position):
+    def __init__(self, position, uid):
 
         self.position = position
+        self.uid = uid
         self.size = [1, 1]
         self.connections = {'inputs': {'helium_rock': False, 'Electricity': False},
                             'outputs': {'helium_gaz': False}}
@@ -18,7 +19,7 @@ class Crusher(Building):
             'electric': None
         }
 
-        Building.__init__(self, self.position, self.size, self.connections)
+        Building.__init__(self, self.position, self.size, self.connections, self.uid)
 
     def update(self):
         # TODO: drain electricity from batteries and give ore if

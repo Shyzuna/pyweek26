@@ -8,6 +8,7 @@ TODO:
 """
 
 from enum import Enum
+import pygame
 
 class Colors(Enum):
     BLACK = (0,0,0)
@@ -27,6 +28,15 @@ class ObjectCategory(Enum):
     TRIHYGROGEN = 'TRIHYDROGEN'
     TRIHELIUM = 'TRIHELIUM'
     ENERGY = 'ENERGY'
+
+class BuildingShortcuts(Enum):
+    """
+    Enum for building shortcuts
+    """
+    BATTERY = pygame.K_1
+    SOLARPANEL = pygame.K_2
+    DRILL = pygame.K_3
+    CRUSHER = pygame.K_4
 
 class BuildingTypes(Enum):
     """

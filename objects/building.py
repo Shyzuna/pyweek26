@@ -4,7 +4,7 @@ import uuid
 
 class Building(pygame.sprite.Sprite):
 
-    def __init__(self, position, size, connections):
+    def __init__(self, position, size, connections, uid):
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -12,6 +12,7 @@ class Building(pygame.sprite.Sprite):
         self.position = position
         self.size = size
         self.connections = connections
+        self.uid = uid
 
     def connection(self, resource):
         if resource in self.connections['inputs']:
