@@ -61,7 +61,5 @@ class DisplayManager:
             self.screen.blit(self.imgs[resource._category.value],
                              (resource.current_x, resource.current_y), rect)
 
-        pygame.display.flip()
-
 
 displayManager = DisplayManager()

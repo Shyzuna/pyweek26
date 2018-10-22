@@ -18,6 +18,7 @@ FPS = 60
 # Paths
 TILES_PATH = os.path.join('data', 'tiles')
 RESOURCES_PATH = os.path.join('data', 'resources')
+FONT_PATH = os.path.join('data', 'fonts')
 
 # Map parameters
 TILE_WIDTH = 60
@@ -36,3 +37,7 @@ SCROLL_SPEED_VERTICAL = 1.0
 SCROLL_MOUSE_MARGIN = 5
 SCROLL_MOUSE_MAX_X = SCREEN_WIDTH - SCROLL_MOUSE_MARGIN
 SCROLL_MOUSE_MAX_Y = SCREEN_HEIGHT - SCROLL_MOUSE_MARGIN
+
+# UI
+UI_TOP_BAR = 0.06
+

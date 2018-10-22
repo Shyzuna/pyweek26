@@ -9,7 +9,7 @@ TODO:
 
 import numpy
 from objects.resource import Resource
-from settings import  settings
+from settings import settings
 
 class MapGenerator(object):
 
