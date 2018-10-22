@@ -69,8 +69,7 @@ class InputManager:
 
     def refreshMousePos(self):
         self.mousePos = pygame.mouse.get_pos()
-        # TODO: calculate from cursor position on map and not on screen
-        self.mousePosInTiles = (math.ceil(self.mousePos[0] / settings.TILES_NUM_WIDTH),
-                                math.ceil(self.mousePos[1] / settings.TILES_NUM_HEIGHT))
+        self.mousePosInTiles = (math.ceil(self.mousePos[0] / settings.TILE_WIDTH),
+                                math.ceil(self.mousePos[1] / settings.TILE_HEIGHT))
 
 inputManager = InputManager()

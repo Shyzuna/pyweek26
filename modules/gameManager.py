@@ -1,4 +1,5 @@
 import pygame
+import math
 
 from modules.displayManager import displayManager
 from modules.mapManager import mapManager
@@ -52,14 +53,24 @@ class GameManager:
             deltaTime = self.clock.get_time()
 
             inputManager.loop()
+            currentPosInTiles = self.computeAbsolutePosInTiles(inputManager.mousePos, mapManager.currentRect)
             (deltaX, deltaY) = mapManager.scroll(inputManager.directionState, deltaTime)
             self.scrollObjects(deltaX, deltaY)
             if inputManager.keyPressed is not None:
-                self.processKeyPressed(inputManager.keyPressed, inputManager.mousePosInTiles)
+                self.processKeyPressed(inputManager.keyPressed, currentPosInTiles)
+                print("Current pos in tiles: ", currentPosInTiles)
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
             guiManager.displayGui(displayManager.screen, self._player)
             pygame.display.flip()
         pygame.quit()
+
+    def computeAbsolutePosInTiles(self, mousePos, currentWindowRect):
+        if mousePos == (0, 0) and currentWindowRect.topleft == (0, 0):
+            # Special case in topleft corner of map
+            return (1, 1)
+        else:
+            return (math.ceil((mousePos[0] + currentWindowRect.topleft[0]) / settings.TILE_WIDTH),
+                    math.ceil((mousePos[1] + currentWindowRect.topleft[1]) / settings.TILE_HEIGHT))
 
     def scrollObjects(self, deltaX, deltaY):
         for resource in self._resources:
