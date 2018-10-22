@@ -29,23 +29,47 @@ class MapManager:
 
         if directionState[pygame.K_LEFT]:
             if self.currentRect.x > 0:
-                deltaX -= deltaTime * settings.SCROLL_SPEED_HORIZONTAL
-                self.currentRect.x -= deltaTime * settings.SCROLL_SPEED_HORIZONTAL
+                scrollSpeed = deltaTime * settings.SCROLL_SPEED_HORIZONTAL
+                newPos = self.currentRect.x - scrollSpeed
+                if newPos > 0:
+                    deltaX -= scrollSpeed
+                    self.currentRect.x = newPos
+                else:
+                    deltaX -= self.currentRect.x
+                    self.currentRect.x = 0
 
         if directionState[pygame.K_UP]:
             if self.currentRect.y > 0:
-                deltaY -= deltaTime * settings.SCROLL_SPEED_VERTICAL
-                self.currentRect.y -= deltaTime * settings.SCROLL_SPEED_VERTICAL
+                scrollSpeed = deltaTime * settings.SCROLL_SPEED_VERTICAL
+                newPos = self.currentRect.y - scrollSpeed
+                if newPos > 0:
+                    deltaY -= scrollSpeed
+                    self.currentRect.y = newPos
+                else:
+                    deltaY -= self.currentRect.y
+                    self.currentRect.y = 0
 
         if directionState[pygame.K_DOWN]:
-            if self.currentRect.y < settings.MAP_HEIGHT + settings.SCREEN_HEIGHT:
-                deltaY += deltaTime * settings.SCROLL_SPEED_VERTICAL
-                self.currentRect.y += deltaTime * settings.SCROLL_SPEED_VERTICAL
+            if self.currentRect.y < settings.RECT_MAX_Y:
+                scrollSpeed = deltaTime * settings.SCROLL_SPEED_VERTICAL
+                newPos = self.currentRect.y + scrollSpeed
+                if newPos < settings.RECT_MAX_Y:
+                    deltaY += scrollSpeed
+                    self.currentRect.y = newPos
+                else:
+                    deltaY += settings.RECT_MAX_Y - self.currentRect.y
+                    self.currentRect.y = settings.RECT_MAX_Y
 
         if directionState[pygame.K_RIGHT]:
-            if self.currentRect.x < settings.MAP_WIDTH + settings.SCREEN_WIDTH:
-                deltaX += deltaTime * settings.SCROLL_SPEED_HORIZONTAL
-                self.currentRect.x += deltaTime * settings.SCROLL_SPEED_HORIZONTAL
+            if self.currentRect.x < settings.RECT_MAX_X:
+                scrollSpeed = deltaTime * settings.SCROLL_SPEED_HORIZONTAL
+                newPos = self.currentRect.x + scrollSpeed
+                if newPos < settings.RECT_MAX_X:
+                    deltaX += scrollSpeed
+                    self.currentRect.x = newPos
+                else:
+                    deltaX += settings.RECT_MAX_X - self.currentRect.x
+                    self.currentRect.x = settings.RECT_MAX_X
 
         return (deltaX, deltaY)
 

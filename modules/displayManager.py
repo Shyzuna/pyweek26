@@ -57,12 +57,9 @@ class DisplayManager:
         self.screen.blit(self.baseMapSurface, (0, 0), currentRect)
 
         # Display resources
-        tileW, tileH = settings.TILE_WIDTH, settings.TILE_HEIGHT
         for resource in resources:
             self.screen.blit(self.imgs[resource._category.value],
                              (resource.current_x, resource.current_y), rect)
-
-        pygame.display.flip()
 
 
 displayManager = DisplayManager()

@@ -21,8 +21,8 @@ class ObjectCategory(Enum):
     """
     Enum for object names
     """
-
     HYDROGEN = 'HYDROGEN'
     DIHYGROGEN = 'DIHYDROGEN'
     TRIHYGROGEN = 'TRIHYDROGEN'
     TRIHELIUM = 'TRIHELIUM'
+    ENERGY = 'ENERGY'
