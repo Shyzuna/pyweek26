@@ -1,4 +1,5 @@
 import pygame
+import uuid
 
 
 class Building(pygame.sprite.Sprite):
@@ -7,6 +8,7 @@ class Building(pygame.sprite.Sprite):
 
         pygame.sprite.Sprite.__init__(self)
 
+        self.id = uuid.uuid4()
         self.position = position
         self.size = size
         self.connections = connections
