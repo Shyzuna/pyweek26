@@ -14,6 +14,10 @@ class Crusher(Building):
         self.ratio = 1
         self.consumption = 1
 
+        self.networks = {
+            'electric': None
+        }
+
         Building.__init__(self, self.position, self.size, self.connections)
 
     def update(self):
