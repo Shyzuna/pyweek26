@@ -1,6 +1,7 @@
 import pygame
 
 from settings import settings
+import modules.guiManager
 
 class InputManager:
 
@@ -19,6 +20,9 @@ class InputManager:
 
     def loop(self):
         for event in pygame.event.get():
+
+            modules.guiManager.guiManager.checkMousePosition(pygame.mouse.get_pos())
+
             if event.type == pygame.QUIT:
                 self.done = True
             elif event.type == pygame.KEYDOWN:
@@ -29,6 +33,10 @@ class InputManager:
             elif event.type == pygame.KEYUP:
                 if event.key in self.directionState.keys():
                     self.directionState[event.key] = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                modules.guiManager.guiManager.handleMouseButton(True, pygame.mouse.get_pos())
+            elif event.type == pygame.MOUSEBUTTONUP:
+                modules.guiManager.guiManager.handleMouseButton(False, pygame.mouse.get_pos())
             else:
                 # Mouse scrolling
                 mouse_x, mouse_y = pygame.mouse.get_pos()

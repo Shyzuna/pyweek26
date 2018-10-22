@@ -16,6 +16,7 @@ class Colors(Enum):
     BLUE = (0,0,255)
     RED = (255, 0, 0)
     GREY = (125, 125, 125)
+    LIGHT_GREY = (200, 200, 200)
 
 class ObjectCategory(Enum):
     """
