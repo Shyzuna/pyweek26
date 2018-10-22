@@ -18,8 +18,8 @@ class GuiManager(object):
         self._fonts = []
         self._currentFont = 0
         self._topBar = None
-        self._sideButtons = []
-        self._currentSideMenu = None
+        self._sideButtons = {}
+        self._currentSideMenu = 'base'
 
     def init(self, buildList):
         pygame.font.init()
@@ -53,25 +53,51 @@ class GuiManager(object):
             lastLeft += (t.get_width() + widthSpaceByElem)
 
     def createSideButton(self):
+        buttonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
                       (settings.SCREEN_HEIGHT - self._topBar.get_height()) / len(self._buildingsList))
         buttonH = self._topBar.get_height()
         for cat, l in self._buildingsList.items():
-            self._sideButtons.append(UIButton(cat.value, buttonSize, (0, buttonH), self._fonts[self._currentFont]))
+            buttonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
+                                              self._fonts[self._currentFont], self.changeMenu))
             buttonH += buttonSize[1]
+
+            localButtonH = self._topBar.get_height()
+            localButtonList = []
+            localButtonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(l) + 1))
+            for e in l:
+                name,obj = e
+                localButtonList.append(UIButton(name.value, localButtonSize, (0, localButtonH),
+                                              self._fonts[self._currentFont], self.selectBuilding))
+                localButtonH += localButtonSize[1]
+            localButtonList.append(UIButton('back', localButtonSize, (0, localButtonH),
+                                            self._fonts[self._currentFont], self.resetMenu))
+            self._sideButtons[cat.value] = localButtonList
+        self._sideButtons['base'] = buttonList
+
 
     def displayGui(self, screen, player):
         self.updateTopBar(player)
         screen.blit(self._topBar, (0, 0))
-        for b in self._sideButtons:
+        for b in self._sideButtons[self._currentSideMenu]:
             b.draw(screen)
 
     def checkMousePosition(self, mPos):
-        for b in self._sideButtons:
+        for b in self._sideButtons[self._currentSideMenu]:
             b.checkHover(mPos)
 
     def handleMouseButton(self, pressed, mPos):
-        for b in self._sideButtons:
+        for b in self._sideButtons[self._currentSideMenu]:
             b.checkMousePressed(pressed, mPos)
+
+    def resetMenu(self, *arg):
+        self._currentSideMenu = 'base'
+
+    def changeMenu(self, *arg):
+        self._currentSideMenu = arg[0]
+
+    def selectBuilding(self, *arg):
+        print("Building {} selected".format(arg[0]))
 
 guiManager = GuiManager()

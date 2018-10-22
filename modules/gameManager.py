@@ -6,7 +6,7 @@ from modules.inputManager import inputManager
 from modules.guiManager import guiManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
-from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts
+from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,Buildings
 from objects.network import Network
 from state.player import Player
 from objects.headquarters import HeadQuarters
@@ -24,10 +24,10 @@ class GameManager:
     def init(self):
         self.buildingList = {
             BuildingTypes.GENERAL: [],
-            BuildingTypes.GATHERER: [Crusher, Drill],
+            BuildingTypes.GATHERER: [(Buildings.CRUSHER, Crusher), (Buildings.DRILL, Drill)],
             BuildingTypes.REFINER: [],
-            BuildingTypes.PRODUCER: [SolarPanel],
-            BuildingTypes.CAPACITOR: [Battery],
+            BuildingTypes.PRODUCER: [(Buildings.SOLARPANEL, SolarPanel)],
+            BuildingTypes.CAPACITOR: [(Buildings.BATTERY, Battery)],
             BuildingTypes.CONNECTOR: [],
         }
         self.clock = pygame.time.Clock()

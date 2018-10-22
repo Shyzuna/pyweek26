@@ -38,6 +38,15 @@ class BuildingShortcuts(Enum):
     DRILL = pygame.K_3
     CRUSHER = pygame.K_4
 
+class Buildings(Enum):
+    """
+    Enum for all buildings
+    """
+    BATTERY = "Battery"
+    SOLARPANEL = "Solar panel"
+    DRILL = "Drill"
+    CRUSHER = "Crusher"
+
 class BuildingTypes(Enum):
     """
     Enum for the several buildings types

@@ -11,9 +11,10 @@ from settings.enums import Colors
 
 
 class UIButton(object):
-    def __init__(self, title, size, pos, font, img=''):
+    def __init__(self, title, size, pos, font, clickFct=None, img=''):
         self._title = title
         self._img = img
+        self._clickFct = clickFct
         self._hover = False
         self._pressed = False
         self._pos = pos
@@ -54,3 +55,5 @@ class UIButton(object):
 
     def onClick(self):
         print("Click on " + self._title)
+        if self._clickFct is not None:
+            self._clickFct(self._title)
