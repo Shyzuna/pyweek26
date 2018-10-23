@@ -53,11 +53,10 @@ class GameManager:
             deltaTime = self.clock.get_time()
 
             inputManager.loop()
-            currentPosInTiles = self.computeAbsolutePosInTiles(inputManager.mousePos, mapManager.currentRect)
             mapManager.scroll(inputManager.directionState, deltaTime)
             if inputManager.keyPressed is not None:
-                self.processKeyPressed(inputManager.keyPressed, currentPosInTiles)
-                print("Current pos in tiles: ", currentPosInTiles)
+                self.processKeyPressed(inputManager.keyPressed, inputManager.mousePosInTiles)
+                print("Current pos in tiles: ", inputManager.mousePosInTiles)
 
             if inputManager.toDelete is not None:
                 inputManager.deleteMode = False
@@ -72,14 +71,6 @@ class GameManager:
             guiManager.displayGui(displayManager.screen, self._player)
             pygame.display.flip()
         pygame.quit()
-
-    def computeAbsolutePosInTiles(self, mousePos, currentWindowRect):
-        if mousePos == (0, 0) and currentWindowRect.topleft == (0, 0):
-            # Special case in topleft corner of map
-            return (1, 1)
-        else:
-            return (math.ceil((mousePos[0] + currentWindowRect.topleft[0]) / settings.TILE_WIDTH)-1,
-                    math.ceil((mousePos[1] + currentWindowRect.topleft[1]) / settings.TILE_HEIGHT)-1)
 
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)

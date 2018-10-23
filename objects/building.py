@@ -12,8 +12,8 @@ class Building(pygame.sprite.Sprite):
 
         self.id = uuid.uuid4()
         self.position = position
-        self.current_x = position[0] * settings.TILE_WIDTH
-        self.current_y = position[1] * settings.TILE_HEIGHT
+        self.current_x = (position[0] - 1) * settings.TILE_WIDTH
+        self.current_y = (position[1] - 1) * settings.TILE_HEIGHT
         self.size = size
         self.connections = connections
         self.img = img
@@ -31,8 +31,6 @@ class Building(pygame.sprite.Sprite):
             self.connections['outputs'][resource] = False
 
     def display(self, screen, currentRect):
-        #rect = pygame.Rect(0, 0, self.position[0], self.position[1])
-
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
 
