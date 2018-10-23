@@ -26,6 +26,15 @@ class DisplayManager:
             except Exception as e:
                 print(str(e))
 
+        # Load resources images
+        for resource in ObjectCategory:
+            try:
+                img = pygame.image.load(os.path.join(settings.RESOURCES_PATH, resource.value + ".png"))
+                self.imgs[resource.value] = pygame.transform.scale(img, (settings.TILE_WIDTH, settings.TILE_HEIGHT))
+            except:
+                pass
+
+        # Load buildings images
         for resource in ObjectCategory:
             try:
                 img = pygame.image.load(os.path.join(settings.RESOURCES_PATH, resource.value + ".png"))
@@ -47,7 +56,6 @@ class DisplayManager:
             startY += tileH
             startX = 0
 
-
     def display(self, currentRect, resources, buildings):
         rect = pygame.Rect(0, 0, settings.TILE_WIDTH, settings.TILE_HEIGHT)
 
@@ -62,8 +70,9 @@ class DisplayManager:
                              (resource.current_x, resource.current_y), rect)
 
         # Display buildings
-        for building in buildings:
-            # TODO: display here or in building.display()
-            pass
+        for y in buildings:
+            for x in buildings[y]:
+                buildings[y][x].display(self.screen, currentRect)
+
 
 displayManager = DisplayManager()

@@ -38,7 +38,7 @@ class GuiManager(object):
         self._buildingsList = buildList
         self.createSideButton()
 
-    def updateBtteryLevel(self, player):
+    def updateBatteryLevel(self, player):
         self._batteryLevel.fill(Colors.WHITE.value)
         batterySize = self._batteryLevel.get_size()
         energy = player.getResources()[ObjectCategory.ENERGY]
@@ -108,7 +108,7 @@ class GuiManager(object):
             b.draw(screen)
 
         batterySize = self._battery.get_size()
-        self.updateBtteryLevel(player)
+        self.updateBatteryLevel(player)
         screen.blit(self._batteryLevel, (settings.SCREEN_WIDTH - batterySize[0] - 10 + self._internBatteryPos[0],
                                          settings.SCREEN_HEIGHT - batterySize[1] - 10 + self._internBatteryPos[1]))
         screen.blit(self._battery, (settings.SCREEN_WIDTH - batterySize[0] - 10,

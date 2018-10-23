@@ -19,6 +19,7 @@ FPS = 60
 # Paths
 TILES_PATH = os.path.join('data', 'tiles')
 RESOURCES_PATH = os.path.join('data', 'resources')
+BUILDINGS_PATH = os.path.join('data', 'buildings')
 FONT_PATH = os.path.join('data', 'fonts')
 GUI_PATH = os.path.join('data', 'gui')
 

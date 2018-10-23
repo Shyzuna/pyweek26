@@ -69,28 +69,36 @@ class GameManager:
             # Special case in topleft corner of map
             return (1, 1)
         else:
-            return (math.ceil((mousePos[0] + currentWindowRect.topleft[0]) / settings.TILE_WIDTH),
-                    math.ceil((mousePos[1] + currentWindowRect.topleft[1]) / settings.TILE_HEIGHT))
+            return (math.ceil((mousePos[0] + currentWindowRect.topleft[0]) / settings.TILE_WIDTH)-1,
+                    math.ceil((mousePos[1] + currentWindowRect.topleft[1]) / settings.TILE_HEIGHT)-1)
 
     def scrollObjects(self, deltaX, deltaY):
+        # Scroll resources
         for resource in self._resources:
             resource.current_x -= deltaX
             resource.current_y -= deltaY
 
+        # Scroll buildings
+        for y in self._buildings:
+            for x in self._buildings[y]:
+                self._buildings[y][x].scroll(deltaX, deltaY)
+
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
-        if keyPressed in [shortcut.value for shortcut in BuildingShortcuts]:
-            print(keyPressed)
-            print(BuildingShortcuts['BATTERY'])
-            if keyPressed == BuildingShortcuts['BATTERY'].value:
-                self.addBuilding(buildingType='BATTERY', posInTiles=mousePosInTiles)
-            elif keyPressed == BuildingShortcuts['SOLARPANEL'].value:
-                self.addBuilding(buildingType='SOLARPANEL', posInTiles=mousePosInTiles)
-            elif keyPressed == BuildingShortcuts['DRILL'].value:
-                self.addBuilding(buildingType='DRILL', posInTiles=mousePosInTiles)
-            elif keyPressed == BuildingShortcuts['CRUSHER'].value:
-                self.addBuilding(buildingType='CRUSHER', posInTiles=mousePosInTiles)
+        if keyPressed in [shortcut.value for shortcut in BuildingShortcuts] and self.isPosInMap(mousePosInTiles):
+                print("key pressed: ", keyPressed)
+                if keyPressed == BuildingShortcuts['BATTERY'].value:
+                    self.addBuilding(buildingType='BATTERY', posInTiles=mousePosInTiles)
+                elif keyPressed == BuildingShortcuts['SOLARPANEL'].value:
+                    self.addBuilding(buildingType='SOLARPANEL', posInTiles=mousePosInTiles)
+                elif keyPressed == BuildingShortcuts['DRILL'].value:
+                    self.addBuilding(buildingType='DRILL', posInTiles=mousePosInTiles)
+                elif keyPressed == BuildingShortcuts['CRUSHER'].value:
+                    self.addBuilding(buildingType='CRUSHER', posInTiles=mousePosInTiles)
 
+
+    def isPosInMap(self, posInTiles):
+        return True
 
     def addBuilding(self, buildingType, posInTiles):
 
