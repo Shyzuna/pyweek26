@@ -1,4 +1,5 @@
 import pygame
+import numpy
 from settings import settings
 
 class MapManager:
@@ -22,6 +23,8 @@ class MapManager:
             for j in range(0, settings.TILES_NUM_WIDTH):
                 line.append(0)
             self.baseMap.append(line)
+
+        self.baseMap = numpy.pad(self.baseMap, pad_width=settings.BORDER_TILES_NUM, mode='constant', constant_values=1)
 
     def scroll(self, directionState, deltaTime):
         deltaX = 0

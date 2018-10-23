@@ -19,7 +19,7 @@ class DisplayManager:
 
     def loadImgs(self):
         self.imgs = {}
-        for i in range(0, 1):
+        for i in range(0, 2):
             try:
                 img = pygame.image.load(os.path.join(settings.TILES_PATH, str(i) + ".png"))
                 self.imgs[i] = pygame.transform.scale(img, (settings.TILE_WIDTH, settings.TILE_HEIGHT))
