@@ -3,17 +3,20 @@ from objects.building import Building
 
 class Battery(Building):
 
-    def __init__(self, position, uid):
+    def __init__(self, position):
 
         self.position = position
-        self.uid = uid
         self.size = [1, 1]
         self.connections = {'inputs': {'Electricity': False},
                             'outputs': {'Electricity': False}}
         self.max_capacity = 10
         self.cur_capacity = 0
 
-        Building.__init__(self, self.position, self.size, self.connections, self.uid)
+        self.networks = {
+            'electric': None
+        }
+
+        Building.__init__(self, self.position, self.size, self.connections)
 
     def update_capacity(self, value):
         overflow = 0

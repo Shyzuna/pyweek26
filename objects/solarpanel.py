@@ -3,17 +3,20 @@ from objects.building import Building
 
 class SolarPanel(Building):
 
-    def __init__(self, position, uid):
+    def __init__(self, position):
 
         self.position = position
-        self.uid = uid
         self.size = [1, 1]
         self.connections = {'inputs': None,
                             'outputs': {'Electricity': False}}
         self.max_prod = 2
         self.cur_prod = 0
 
-        Building.__init__(self, self.position, self.size, self.connections, self.uid)
+        self.networks = {
+            'electric': None
+        }
+
+        Building.__init__(self, self.position, self.size, self.connections)
 
     # def update(self):
     #     # Update production
