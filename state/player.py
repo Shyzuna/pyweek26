@@ -12,25 +12,28 @@ from settings.enums import ObjectCategory
 class Player(object):
     def __init__(self):
         self._resources = {
-            ObjectCategory.ENERGY: 0,
+            ObjectCategory.ENERGY: 5,
             ObjectCategory.HYDROGEN: 0,
             ObjectCategory.DIHYGROGEN: 0,
             ObjectCategory.TRIHYGROGEN: 0,
-            ObjectCategory.TRIHELIUM: 0
+            ObjectCategory.TRIHELIUM: 0,
+            ObjectCategory.CREDITS: 1000
         }
         self._resourcesCap = {
             ObjectCategory.ENERGY: 10,
             ObjectCategory.HYDROGEN: 10,
             ObjectCategory.DIHYGROGEN: 10,
             ObjectCategory.TRIHYGROGEN: 10,
-            ObjectCategory.TRIHELIUM: 10
+            ObjectCategory.TRIHELIUM: 10,
+            ObjectCategory.CREDITS: None
         }
         self._resourcesVisible = {
-            ObjectCategory.ENERGY: True,
+            ObjectCategory.ENERGY: False,
             ObjectCategory.HYDROGEN: True,
-            ObjectCategory.DIHYGROGEN: True,
-            ObjectCategory.TRIHYGROGEN: True,
-            ObjectCategory.TRIHELIUM: True
+            ObjectCategory.DIHYGROGEN: False,
+            ObjectCategory.TRIHYGROGEN: False,
+            ObjectCategory.TRIHELIUM: False,
+            ObjectCategory.CREDITS: True
         }
 
     def getResources(self):

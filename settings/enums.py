@@ -18,6 +18,7 @@ class Colors(Enum):
     RED = (255, 0, 0)
     GREY = (125, 125, 125)
     LIGHT_GREY = (200, 200, 200)
+    LIGHT_CYAN = (14, 174, 204)
 
 class ObjectCategory(Enum):
     """
@@ -28,6 +29,7 @@ class ObjectCategory(Enum):
     TRIHYGROGEN = 'TRIHYDROGEN'
     TRIHELIUM = 'TRIHELIUM'
     ENERGY = 'ENERGY'
+    CREDITS = 'CREDITS'
 
 class BuildingShortcuts(Enum):
     """

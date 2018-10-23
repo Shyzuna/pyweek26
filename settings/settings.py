@@ -19,6 +19,7 @@ FPS = 60
 TILES_PATH = os.path.join('data', 'tiles')
 RESOURCES_PATH = os.path.join('data', 'resources')
 FONT_PATH = os.path.join('data', 'fonts')
+GUI_PATH = os.path.join('data', 'gui')
 
 # Map parameters
 TILE_WIDTH = 60
