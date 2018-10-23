@@ -31,7 +31,8 @@ class Network():
 
         if secondBuildingId in self.nodes:
             self.nodes.pop(secondBuildingId)
-        self.nodes[firstBuildingId].remove(secondBuildingId)
+        if secondBuildingId in self.nodes[firstBuildingId]:
+            self.nodes[firstBuildingId].remove(secondBuildingId)
 
         if len(self.nodes[firstBuildingId]) < 1:
             self.nodes.pop(firstBuildingId)
@@ -42,7 +43,11 @@ class Network():
 
         # Init
         listKeys = list(self.nodes.keys())
-        if self.pathExistsRec(listKeys[0], listKeys[1]) is not None:
+
+        if len(listKeys) < 2:
+            return None
+
+        if self.pathExistsRec(listKeys[0], listKeys[1], []) is not None:
             firstNodes.append(listKeys[0])
             firstNodes.append(listKeys[1])
         else:
@@ -54,15 +59,15 @@ class Network():
             first = listKeys[i]
             for j in range(i + 1, len(listKeys)):
                 second = listKeys[j]
-                if self.pathExistsRec(first, second) is not None:
-                    if self.pathExistsRec(first, firstNodes[0]) is not None:
+                if self.pathExistsRec(first, second, []) is not None:
+                    if self.pathExistsRec(first, firstNodes[0], []) is not None:
                         firstNodes.append(first)
                         firstNodes.append(second)
                     else:
                         secondNodes.append(first)
                         secondNodes.append(second)
                 else:
-                    if self.pathExistsRec(first, firstNodes[0]) is not None:
+                    if self.pathExistsRec(first, firstNodes[0], []) is not None:
                         firstNodes.append(first)
                         secondNodes.append(second)
                     else:
@@ -90,17 +95,15 @@ class Network():
 
 
     def pathExists(self, firstBuilding, secondBuilding):
-        return (self.pathExistsRec(firstBuilding.id, secondBuilding.id) is not None)
+        return (self.pathExistsRec(firstBuilding.id, secondBuilding.id, []) is not None)
 
-    def pathExistsRec(self, firstId, secondId, path=[]):
-        path = path.append(firstId)
+    def pathExistsRec(self, firstId, secondId, path):
+        path.append(firstId)
         if firstId == secondId:
             return path
         if firstId not in self.nodes:
             return None
         for node in self.nodes[firstId]:
-            if path is None:
-                return None
             if node not in path:
                 newpath = self.pathExistsRec(node, secondId, path)
                 if newpath:

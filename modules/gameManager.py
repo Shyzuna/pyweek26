@@ -182,6 +182,15 @@ class GameManager:
                                                 print(str(self.networks[networkType]))
                                             bUpdate.networks[networkType] = otherBuilding.networks[networkType]
                                 building.networks[networkType] = otherBuilding.networks[networkType]
+                            # Else just update connections
+                            else:
+                                print("Update network ")
+                                print("Update network 1 " + str(building.position[0]) + " " + str(
+                                    building.position[1]))
+                                print("Update network 2 " + str(otherBuilding.position[0]) + " " + str(
+                                    otherBuilding.position[1]))
+                                otherBuilding.networks[networkType].addConnections(building, otherBuilding)
+
 
 
         if building.position[1] in self._buildings:
