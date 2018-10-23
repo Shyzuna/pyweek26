@@ -8,6 +8,7 @@ TODO:
 """
 
 import numpy
+
 from objects.resource import Resource
 from settings import settings
 
@@ -42,10 +43,13 @@ class MapGenerator(object):
             for j in range(0, spotNumber):
                 position = numpy.random.choice(cases, 1)
                 cases.remove(position)
-                resList.append(Resource((int(position/size[1]), int(position % size[1])), (1, 1), res, amountBySpot))
+                resList.append(Resource((int(position/size[1]) + settings.BORDER_TILES_NUM,
+                                         int(position % size[1]) + settings.BORDER_TILES_NUM),
+                                        (1, 1), res, amountBySpot))
         return resList
 
 
     def generateSettingsMap(self):
-        return self.generateMap(settings.MAP_SIZE, settings.RESOURCES, settings.SPOT_NUMBERS,
-                                settings.REPARTITION_NUMBERS, settings.TOTAL_RES, settings.DELTA_PERCENT)
+        return self.generateMap((settings.TILES_NUM_WIDTH, settings.TILES_NUM_HEIGHT),
+                                settings.RESOURCES, settings.SPOT_NUMBERS, settings.REPARTITION_NUMBERS,
+                                settings.TOTAL_RES, settings.DELTA_PERCENT)

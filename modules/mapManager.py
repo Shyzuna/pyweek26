@@ -18,13 +18,36 @@ class MapManager:
     def createBaseMap(self):
         self.baseMap = []
 
-        for i in range(0, settings.TILES_NUM_HEIGHT):
+        for i in range(0, settings.TILES_NUM_HEIGHT + 2 * settings.BORDER_TILES_NUM + 1):  # Col
             line = []
-            for j in range(0, settings.TILES_NUM_WIDTH):
-                line.append(0)
+            for j in range(0, settings.TILES_NUM_WIDTH + 2 * settings.BORDER_TILES_NUM + 1):  # Row
+                val = 0  # Moon
+                if i < (settings.BORDER_TILES_NUM - 1) or j < (settings.BORDER_TILES_NUM - 1)\
+                        or i > (settings.TILES_NUM_HEIGHT + settings.BORDER_TILES_NUM + 1)\
+                        or j > (settings.TILES_NUM_WIDTH + settings.BORDER_TILES_NUM + 1):
+                    val = 9  # Space
+                elif i == (settings.BORDER_TILES_NUM - 1) and j == (settings.BORDER_TILES_NUM - 1):
+                    val = 1  # TopLeft Corner
+                elif i == (settings.BORDER_TILES_NUM - 1)\
+                        and j == (settings.TILES_NUM_WIDTH + settings.BORDER_TILES_NUM + 1):
+                    val = 3  # TopRight Corner
+                elif i == (settings.TILES_NUM_HEIGHT + settings.BORDER_TILES_NUM + 1)\
+                        and j == (settings.TILES_NUM_WIDTH + settings.BORDER_TILES_NUM + 1):
+                    val = 8  # BottomRight Corner
+                elif i == (settings.TILES_NUM_HEIGHT + settings.BORDER_TILES_NUM + 1)\
+                        and j == (settings.BORDER_TILES_NUM - 1):
+                    val = 6  # BottomLeft Corner
+                elif i == (settings.BORDER_TILES_NUM - 1):
+                    val = 2  # Top
+                elif j == (settings.TILES_NUM_WIDTH + settings.BORDER_TILES_NUM + 1):
+                    val = 5  # Right
+                elif i == (settings.TILES_NUM_HEIGHT + settings.BORDER_TILES_NUM + 1):
+                    val = 7  # Bottom
+                elif j == (settings.BORDER_TILES_NUM - 1):
+                    val = 4  # Left
+                line.append(val)
             self.baseMap.append(line)
 
-        self.baseMap = numpy.pad(self.baseMap, pad_width=settings.BORDER_TILES_NUM, mode='constant', constant_values=1)
 
     def scroll(self, directionState, deltaTime):
         if directionState[pygame.K_LEFT]:
