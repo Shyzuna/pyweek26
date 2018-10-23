@@ -27,18 +27,13 @@ class MapManager:
         self.baseMap = numpy.pad(self.baseMap, pad_width=settings.BORDER_TILES_NUM, mode='constant', constant_values=1)
 
     def scroll(self, directionState, deltaTime):
-        deltaX = 0
-        deltaY = 0
-
         if directionState[pygame.K_LEFT]:
             if self.currentRect.x > 0:
                 scrollSpeed = deltaTime * settings.SCROLL_SPEED_HORIZONTAL
                 newPos = self.currentRect.x - scrollSpeed
                 if newPos > 0:
-                    deltaX -= scrollSpeed
                     self.currentRect.x = newPos
                 else:
-                    deltaX -= self.currentRect.x
                     self.currentRect.x = 0
 
         if directionState[pygame.K_UP]:
@@ -46,10 +41,8 @@ class MapManager:
                 scrollSpeed = deltaTime * settings.SCROLL_SPEED_VERTICAL
                 newPos = self.currentRect.y - scrollSpeed
                 if newPos > 0:
-                    deltaY -= scrollSpeed
                     self.currentRect.y = newPos
                 else:
-                    deltaY -= self.currentRect.y
                     self.currentRect.y = 0
 
         if directionState[pygame.K_DOWN]:
@@ -57,10 +50,8 @@ class MapManager:
                 scrollSpeed = deltaTime * settings.SCROLL_SPEED_VERTICAL
                 newPos = self.currentRect.y + scrollSpeed
                 if newPos < settings.RECT_MAX_Y:
-                    deltaY += scrollSpeed
                     self.currentRect.y = newPos
                 else:
-                    deltaY += settings.RECT_MAX_Y - self.currentRect.y
                     self.currentRect.y = settings.RECT_MAX_Y
 
         if directionState[pygame.K_RIGHT]:
@@ -68,12 +59,8 @@ class MapManager:
                 scrollSpeed = deltaTime * settings.SCROLL_SPEED_HORIZONTAL
                 newPos = self.currentRect.x + scrollSpeed
                 if newPos < settings.RECT_MAX_X:
-                    deltaX += scrollSpeed
                     self.currentRect.x = newPos
                 else:
-                    deltaX += settings.RECT_MAX_X - self.currentRect.x
                     self.currentRect.x = settings.RECT_MAX_X
-
-        return (deltaX, deltaY)
 
 mapManager = MapManager()

@@ -54,8 +54,7 @@ class GameManager:
 
             inputManager.loop()
             currentPosInTiles = self.computeAbsolutePosInTiles(inputManager.mousePos, mapManager.currentRect)
-            (deltaX, deltaY) = mapManager.scroll(inputManager.directionState, deltaTime)
-            self.scrollObjects(deltaX, deltaY)
+            mapManager.scroll(inputManager.directionState, deltaTime)
             if inputManager.keyPressed is not None:
                 self.processKeyPressed(inputManager.keyPressed, currentPosInTiles)
                 print("Current pos in tiles: ", currentPosInTiles)
@@ -81,12 +80,6 @@ class GameManager:
         else:
             return (math.ceil((mousePos[0] + currentWindowRect.topleft[0]) / settings.TILE_WIDTH)-1,
                     math.ceil((mousePos[1] + currentWindowRect.topleft[1]) / settings.TILE_HEIGHT)-1)
-
-    def scrollObjects(self, deltaX, deltaY):
-        # Scroll resources
-        for resource in self._resources:
-            resource.current_x -= deltaX
-            resource.current_y -= deltaY
 
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)

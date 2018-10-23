@@ -67,7 +67,7 @@ class DisplayManager:
         # Display resources
         for resource in resources:
             self.screen.blit(self.imgs[resource._category.value],
-                             (resource.current_x, resource.current_y), rect)
+                             (resource.current_x - currentRect.topleft[0], resource.current_y - currentRect.topleft[1]))
 
         # Display buildings
         for y in buildings:
