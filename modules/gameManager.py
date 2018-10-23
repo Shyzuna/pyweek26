@@ -46,7 +46,7 @@ class GameManager:
         }
 
     def start(self):
-        pygame.event.set_grab(True)
+        #pygame.event.set_grab(True)
 
         while not inputManager.done:
             self.clock.tick(settings.FPS)
