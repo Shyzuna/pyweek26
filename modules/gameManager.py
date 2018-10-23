@@ -88,11 +88,6 @@ class GameManager:
             resource.current_x -= deltaX
             resource.current_y -= deltaY
 
-        # Scroll buildings
-        for y in self._buildings:
-            for x in self._buildings[y]:
-                self._buildings[y][x].scroll(deltaX, deltaY)
-
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
         if keyPressed in [shortcut.value for shortcut in BuildingShortcuts] and self.isPosInMap(mousePosInTiles):

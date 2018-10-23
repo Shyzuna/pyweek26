@@ -36,7 +36,4 @@ class Building(pygame.sprite.Sprite):
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
 
-    def scroll(self, deltaX, deltaY):
-        self.current_x -= deltaX
-        self.current_y -= deltaY
 
