@@ -1,49 +1,59 @@
 import copy
 
-from objects.building import Building
+class Network():
 
+    def __init__(self):
+        self.nodes = {}
 
-class Network(Building):
-
-    def __init__(self, nodes={}):
-        self.nodes = nodes
-
-    def addConnections(self, firstBuilding, secondBuilding, networkType):
-        id = firstBuilding.id
-        if id in self.nodes:
-            self.nodes[id].append(secondBuilding.id)
+    def addConnections(self, firstBuilding, secondBuilding):
+        firstBuildingId = firstBuilding.id
+        secondBuildingId = secondBuilding.id
+        if firstBuildingId in self.nodes:
+            self.nodes[firstBuildingId].append(secondBuildingId)
         else:
-            self.nodes[id] = [secondBuilding.id]
+            self.nodes[firstBuildingId] = [secondBuildingId]
 
-        id = secondBuilding.id
-        if id in self.nodes:
-            self.nodes[id].append(firstBuilding.id)
+        if secondBuildingId in self.nodes:
+            self.nodes[secondBuildingId].append(firstBuildingId)
         else:
-            self.nodes[id] = [firstBuilding.id]
+            self.nodes[secondBuildingId] = [firstBuildingId]
+
+    def mergeConnections(self, otherNetwork):
+        for parentNode, childrenNode in otherNetwork.nodes.items():
+            if parentNode in self.nodes.keys():
+                self.nodes[parentNode].extend(copy.deepcopy(childrenNode))
+            else:
+                self.nodes.update({parentNode: copy.deepcopy(childrenNode)})
 
     def removeConnections(self, firstBuilding, secondBuilding):
         firstBuildingId = firstBuilding.id
         secondBuildingId = secondBuilding.id
-        self.nodes.pop(secondBuildingId, None)
+
+        if secondBuildingId in self.nodes:
+            self.nodes.pop(secondBuildingId)
         self.nodes[firstBuildingId].remove(secondBuildingId)
+
+        if len(self.nodes[firstBuildingId]) < 1:
+            self.nodes.pop(firstBuildingId)
 
     def splitNetworks(self):
         firstNodes = []
         secondNodes = []
 
         # Init
-        if self.pathExistsRec(self.nodes[0], self.nodes[1]) is not None:
-            firstNodes.append(self.nodes[0])
-            firstNodes.append(self.nodes[1])
+        listKeys = list(self.nodes.keys())
+        if self.pathExistsRec(listKeys[0], listKeys[1]) is not None:
+            firstNodes.append(listKeys[0])
+            firstNodes.append(listKeys[1])
         else:
-            firstNodes.append(self.nodes[0])
-            secondNodes.append(self.nodes[1])
+            firstNodes.append(listKeys[0])
+            secondNodes.append(listKeys[1])
 
         # Node repartition
-        for i in range(2, len(self.nodes.keys()) - 1):
-            first = self.nodes[i]
-            for j in range(i + 1, len(self.nodes.keys())):
-                second = self.nodes[j]
+        for i in range(2, len(listKeys) - 1):
+            first = listKeys[i]
+            for j in range(i + 1, len(listKeys)):
+                second = listKeys[j]
                 if self.pathExistsRec(first, second) is not None:
                     if self.pathExistsRec(first, firstNodes[0]) is not None:
                         firstNodes.append(first)
@@ -74,7 +84,7 @@ class Network(Building):
             newNetwork[node] = copy.deepcopy(self.nodes[node])
             for otherNode in otherNodes:
                 if otherNode in newNetwork[node]:
-                    newNetwork.remove(otherNode)
+                    newNetwork[node].remove(otherNode)
         return newNetwork
 
 
@@ -89,6 +99,8 @@ class Network(Building):
         if firstId not in self.nodes:
             return None
         for node in self.nodes[firstId]:
+            if path is None:
+                return None
             if node not in path:
                 newpath = self.pathExistsRec(node, secondId, path)
                 if newpath:
