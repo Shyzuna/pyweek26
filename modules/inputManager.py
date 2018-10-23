@@ -21,6 +21,8 @@ class InputManager:
         self.mousePosInTiles = (1, 1)
         self.keyPressed = None
         self.done = False
+        self.deleteMode = False
+        self.toDelete = None
 
     def loop(self):
         self.keyPressed = None
@@ -34,8 +36,11 @@ class InputManager:
                     self.directionState[event.key] = True
                 elif event.key == pygame.K_ESCAPE:
                     self.done = True
+                elif event.key == pygame.K_d:
+                    self.deleteMode = not self.deleteMode
                 else:
                     self.keyPressed = event.key
+
 
             elif event.type == pygame.KEYUP:
                 if event.key in self.directionState.keys():
@@ -43,7 +48,10 @@ class InputManager:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 modules.guiManager.guiManager.handleMouseButton(True, self.mousePos)
             elif event.type == pygame.MOUSEBUTTONUP:
-                modules.guiManager.guiManager.handleMouseButton(False, self.mousePos)
+                if self.deleteMode:
+                    self.toDelete = self.mousePosInTiles
+                else:
+                    modules.guiManager.guiManager.handleMouseButton(False, self.mousePos)
             else:
                 # Mouse scrolling
                 mouse_x, mouse_y = self.mousePos
