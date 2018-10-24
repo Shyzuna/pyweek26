@@ -3,7 +3,7 @@
 Title: ressource File
 Desc: Ressource class
 Creation Date:  21/10/18
-LastMod Date: 21/10/18
+LastMod Date: 24/10/18
 TODO:
 """
 
@@ -32,3 +32,5 @@ class Resource(object):
     def __str__(self):
         return "{} - {} -> {} ({})".format(self._position, self._size, self._category, self._amount)
 
+    def getPos(self):
+        return self._position

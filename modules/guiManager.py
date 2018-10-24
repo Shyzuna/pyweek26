@@ -139,7 +139,6 @@ class GuiManager(object):
         for b in self._sideButtons[self._currentSideMenu]:
             onGui = onGui or b.checkHover(mPos)
         self._onGui = onGui
-        print(onGui)
 
     def handleMouseButton(self, pressed, mPos, button):
         if button == 1:
