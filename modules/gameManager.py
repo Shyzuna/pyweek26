@@ -89,6 +89,23 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
+    def checkTileValid(self, tilePos):
+        # in Map
+        tx, ty = tilePos
+        borderSize = settings.BORDER_TILES_NUM
+        if (borderSize + settings.TILES_NUM_WIDTH) > tx > borderSize and (borderSize + settings.TILES_NUM_HEIGHT) > ty > borderSize:
+            # check res
+            for r in self._resources:
+                if r.getPos() == tilePos:
+                    return False
+            if tx in self._buildings.keys() and tx in self._buildings[tx].keys():
+                return False
+            return True
+        return False
+
+
+
+
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
         if keyPressed in [shortcut.value for shortcut in BuildingShortcuts] and self.isPosInMap(mousePosInTiles):

@@ -8,6 +8,9 @@ TODO:
 
 import pygame
 from settings.enums import Colors
+from settings import settings
+import modules.mapManager
+import modules.gameManager
 
 class UIBuildingMouseSnap(object):
     def __init__(self, building, guiManager):
@@ -30,4 +33,10 @@ class UIBuildingMouseSnap(object):
         if self._guiManager.isOnGui():
             self._validPos = False
         else:
-            self._validPos = True
+            currentRect = modules.mapManager.mapManager.currentRect
+            tilePos = modules.mapManager.mapManager.getTilePosFromReal(mPos)
+            self._validPos = modules.gameManager.gameManager.checkTileValid(tilePos)
+
+            self._pos = (tilePos[0] * settings.TILE_WIDTH - currentRect.x,
+                         tilePos[1] * settings.TILE_HEIGHT - currentRect.y)
+

@@ -48,6 +48,10 @@ class MapManager:
                 line.append(val)
             self.baseMap.append(line)
 
+    def getTilePosFromReal(self, rPos):
+        tilePos = (int((rPos[0] + self.currentRect.x) / settings.TILE_WIDTH),
+                   int((rPos[1] + self.currentRect.y) / settings.TILE_HEIGHT))
+        return tilePos
 
     def scroll(self, directionState, deltaTime):
         if directionState[pygame.K_LEFT]:
