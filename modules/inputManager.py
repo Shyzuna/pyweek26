@@ -49,7 +49,7 @@ class InputManager:
                 modules.guiManager.guiManager.handleMouseButton(True, event.pos, event.button)
             elif event.type == pygame.MOUSEBUTTONUP:
                 if self.deleteMode:
-                    self.toDelete = self.mousePosInTiles
+                    self.toDelete = self.absoluteMousePosInTiles
                 else:
                     modules.guiManager.guiManager.handleMouseButton(False, event.pos, event.button)
             else:
