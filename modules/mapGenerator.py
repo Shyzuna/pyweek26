@@ -2,7 +2,7 @@
 Title: mapGenerator File
 Desc: Procedural generation of a map (ressources)
 Creation Date:  21/10/18
-LastMod Date: 21/10/18
+LastMod Date: 24/10/18
 TODO:
     - Make a better distribution fct
 """

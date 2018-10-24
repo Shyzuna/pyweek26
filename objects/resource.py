@@ -34,3 +34,6 @@ class Resource(object):
 
     def getPos(self):
         return self._position
+
+    def getCategory(self):
+        return self._category

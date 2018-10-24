@@ -142,8 +142,12 @@ class GuiManager(object):
 
     def handleMouseButton(self, pressed, mPos, button):
         if button == 1:
-            for b in self._sideButtons[self._currentSideMenu]:
-                b.checkMousePressed(pressed, mPos)
+            if self._onGui:
+                for b in self._sideButtons[self._currentSideMenu]:
+                    b.checkMousePressed(pressed, mPos)
+            elif not pressed and self._buildingSelected is not None:
+                self._buildingSelected.tryBuild()
+
         elif button == 3:
             self._buildingSelected = None
 

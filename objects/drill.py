@@ -4,6 +4,9 @@ import os
 from settings import settings
 from objects.building import Building
 from settings.enums import BuildingStates
+from settings.enums import ObjectCategory
+import modules.gameManager
+
 
 class Drill(Building):
 
@@ -26,7 +29,9 @@ class Drill(Building):
         self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
                                                      settings.TILE_HEIGHT * self.size[1]))
 
-        Building.__init__(self, self.position, self.size, self.connections, self.img)
+        self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
+
+        Building.__init__(self, self.position, self.size, self.connections, self.img, [ObjectCategory.HYDROGEN])
 
     def updateProduction(self, deltaTime):
         pass

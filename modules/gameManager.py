@@ -40,7 +40,9 @@ class GameManager:
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
         self._player = Player()
-        self._buildings = {settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}}
+        self._buildings = {  # Col / Row
+            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}
+        }
         self.networks = {
             'electric': []
         }
@@ -89,23 +91,38 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
-    def checkTileValid(self, tilePos):
+    def checkTileValid(self, tilePos, allowedSpot):
         # in Map
         tx, ty = tilePos
         borderSize = settings.BORDER_TILES_NUM
-        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
-
-            # check res
-            for r in self._resources:
-                if r.getPos() == tilePos:
+        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and\
+                (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
+            if allowedSpot is None:
+                # check res
+                for r in self._resources:
+                    if r.getPos() == tilePos:
+                        return False
+                # check buildings
+                if ty in self._buildings and tx in self._buildings[ty]:
+                    return False
+                return True
+            else:
+                # check buildings
+                if ty in self._buildings and tx in self._buildings[ty]:
                     return False
 
-            if tx in self._buildings.keys() and ty in self._buildings[tx].keys():
-                return False
-            return True
+                # check allowed resource
+                for r in self._resources:
+                    if r.getPos() == tilePos and r.getCategory() in allowedSpot:
+                        return True
         return False
 
 
+    def getResourceAt(self, tilePos):
+        # get resource at
+        for r in self._resources:
+            if r.getPos() == tilePos:
+                return r
 
 
     def processKeyPressed(self, keyPressed, mousePosInTiles):
