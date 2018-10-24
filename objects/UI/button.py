@@ -11,7 +11,7 @@ from settings.enums import Colors
 
 
 class UIButton(object):
-    def __init__(self, title, size, pos, font, clickFct=None, img='', building = None, prevContext=''):
+    def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext=''):
         self._title = title
         self._building = building
         self._img = img
@@ -30,12 +30,20 @@ class UIButton(object):
         self._hoverSurface.fill(Colors.LIGHT_GREY.value)
         pygame.draw.rect(self._hoverSurface, Colors.BLACK.value, self._hoverSurface.get_rect(), 2)
         self._text = font.render(title, 1, Colors.BLACK.value)
-        self._baseSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
-                                            (size[1] - self._text.get_height()) / 2))
-        self._hoverSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
-                                            (size[1] - self._text.get_height()) / 2))
-        self._pressedSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
-                                            (size[1] - self._text.get_height()) / 2))
+        if self._img is not None:
+            self._baseSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
+                                                (size[1] - self._img.get_height()) / 2))
+            self._hoverSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
+                                                (size[1] - self._img.get_height()) / 2))
+            self._pressedSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
+                                                (size[1] - self._img.get_height()) / 2))
+        else:
+            self._baseSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
+                                                (size[1] - self._text.get_height()) / 2))
+            self._hoverSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
+                                                (size[1] - self._text.get_height()) / 2))
+            self._pressedSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
+                                                (size[1] - self._text.get_height()) / 2))
         self._rect = pygame.Rect(pos[0], pos[1], size[0], size[1])
 
     def draw(self, screen):

@@ -2,7 +2,7 @@
 Title: buildingMouseSnap File
 Desc: UIBuildingMouseSnap class
 Creation Date:  24/10/18
-LastMod Date: 24/10/18
+LastMod Date: 25/10/18
 TODO:
 """
 
@@ -11,7 +11,6 @@ from settings.enums import Colors
 from settings import settings
 import modules.mapManager
 import modules.gameManager
-import copy
 
 class UIBuildingMouseSnap(object):
     def __init__(self, building, guiManager):

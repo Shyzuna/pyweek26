@@ -10,6 +10,7 @@ from settings import settings
 from settings.enums import Colors, ObjectCategory
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
+from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
 import pygame
 import os
 
@@ -25,6 +26,7 @@ class GuiManager(object):
         self._batteryLevel = None  #44x28
         self._internBatteryPos = (10, 24)
         self._buildingSelected = None
+        self._buildingDestroy = None
         self._onGui = False
         self._menuList = {
             'Build': self.changeMenu,
@@ -32,6 +34,7 @@ class GuiManager(object):
             'Contract': None,
             'Earth': None
         }
+        self._guiImg = {}
 
     def init(self, buildList):
         pygame.font.init()
@@ -45,6 +48,12 @@ class GuiManager(object):
         self._batteryLevel = pygame.Surface((int(44 * factor), int(28 * factor)))
         self._internBatteryPos = (int(self._internBatteryPos[0] * factor), int(self._internBatteryPos[1] * factor))
         self._buildingsList = buildList
+
+        self._guiImg['destructor'] = pygame.image.load(os.path.join(settings.GUI_PATH, 'destroy.png'))
+        self._guiImg['destructorMini'] = pygame.transform.scale(self._guiImg['destructor'],
+                                                               (int(self._guiImg['destructor'].get_width() / 2),
+                                                                int(self._guiImg['destructor'].get_height() / 2)))
+
         self.createSideButton()
 
     def updateBatteryLevel(self, player):
@@ -56,7 +65,7 @@ class GuiManager(object):
             ratioEnergy = player.getResources()[ObjectCategory.ENERGY] / player.getResourcesCap()[ObjectCategory.ENERGY]
         else:
             ratioEnergy = 0
-        
+
         if ratioEnergy > 0:
             rect = pygame.Rect(0, batterySize[1] - int(batterySize[1] * ratioEnergy),
                                batterySize[0], int(batterySize[1] * ratioEnergy))
@@ -72,6 +81,8 @@ class GuiManager(object):
         self.updateBatteryLevel(player)
         if self._buildingSelected is not None:
             self._buildingSelected.updatePosition(mPos)
+        if self._buildingDestroy is not None:
+            self._buildingDestroy.updatePosition(mPos)
 
     def updateTopBar(self,  player):
         self._topBar.fill(Colors.WHITE.value)
@@ -101,7 +112,7 @@ class GuiManager(object):
         # build menu and child
         buildButtonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 1))
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 2))
         buttonH = self._topBar.get_height()
         for cat, l in self._buildingsList.items():
             buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
@@ -120,8 +131,12 @@ class GuiManager(object):
             localButtonList.append(UIButton('Back', localButtonSize, (0, localButtonH),
                                             self._fonts[self._currentFont], self.resetMenu, prevContext='Build'))
             self._sideButtons[cat.value] = localButtonList
-            buildButtonList.append(UIButton('Back', buttonSize, (0, buttonH),
-                                        self._fonts[self._currentFont], self.resetMenu, prevContext='base'))
+
+        buildButtonList.append(UIButton('Remove', buttonSize, (0, buttonH),
+                                    self._fonts[self._currentFont], self.destroyBuilding, img=self._guiImg['destructor']))
+        buttonH += buttonSize[1]
+        buildButtonList.append(UIButton('Back', buttonSize, (0, buttonH),
+                                    self._fonts[self._currentFont], self.resetMenu, prevContext='base'))
 
         self._sideButtons['Build'] = buildButtonList
 
@@ -152,6 +167,9 @@ class GuiManager(object):
         if self._buildingSelected is not None:
             self._buildingSelected.display(screen)
 
+        if self._buildingDestroy is not None:
+            self._buildingDestroy.display(screen)
+
     def isOnGui(self):
         return self._onGui
 
@@ -177,15 +195,23 @@ class GuiManager(object):
                     b.checkMousePressed(pressed, mPos)
             elif not pressed and self._buildingSelected is not None:
                 self._buildingSelected.tryBuild()
+            elif not pressed and self._buildingDestroy is not None:
+                self._buildingDestroy.tryDestroy()
 
         elif button == 3:
+            pygame.mouse.set_visible(True)
             self._buildingSelected = None
+            self._buildingDestroy = None
 
     def resetMenu(self, *arg):
         self._currentSideMenu = arg[2]
 
     def changeMenu(self, *arg):
         self._currentSideMenu = arg[0]
+
+    def destroyBuilding(self, *arg):
+        pygame.mouse.set_visible(False)
+        self._buildingDestroy = UIBuildingDestroySnap(self._guiImg['destructorMini'], self)
 
     def selectBuilding(self, *arg):
         print("Building {} selected".format(arg[0]))

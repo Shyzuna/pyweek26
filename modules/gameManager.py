@@ -108,6 +108,16 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
+    def checkIsBuildingTile(self, tilePos):
+        tx, ty = tilePos
+        borderSize = settings.BORDER_TILES_NUM
+        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and \
+                (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
+            # check buildings
+            if ty in self._buildings and tx in self._buildings[ty]:
+                return True
+        return False
+
     def checkTileValid(self, tilePos, allowedSpot):
         # in Map
         tx, ty = tilePos
@@ -140,7 +150,13 @@ class GameManager:
         for r in self._resources:
             if r.getPos() == tilePos:
                 return r
+        return None
 
+    def getBuildingAt(self, tilePos):
+        tx, ty = tilePos
+        if ty in self._buildings and tx in self._buildings[ty]:
+            return self._buildings[ty][tx]
+        return None
 
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
