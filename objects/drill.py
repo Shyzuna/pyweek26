@@ -3,7 +3,7 @@ import os
 
 from settings import settings
 from objects.building import Building
-
+from settings.enums import BuildingStates
 
 class Drill(Building):
 
@@ -16,7 +16,7 @@ class Drill(Building):
         self.max_prod = 2
         self.cur_prod = 0
         self.ratio = 1
-        self.consumption = 1
+        self.consumption = 5
 
         self.networks = {
             'electric': None
@@ -28,7 +28,19 @@ class Drill(Building):
 
         Building.__init__(self, self.position, self.size, self.connections, self.img)
 
-    def update(self):
-        # TODO: drain electricity from batteries and give ore if
-        # TODO: all connections' conditions are satisfied
+    def updateProduction(self, deltaTime):
         pass
+
+    def updateConsumption(self, deltaTime):
+        if self.networks['electric'] is not None:
+            nbElectricity = self.networks['electric'].nbResources
+            nbCons = self.consumption * deltaTime
+            print("drill consomme " + str(self.consumption * deltaTime))
+            print("reste dans le reseau " + str(self.networks['electric'].nbResources))
+            if nbCons <= nbElectricity:
+                self.networks['electric'].nbResources -= nbCons
+                self.state = BuildingStates.ON
+                print("reste apres conso " + str(self.networks['electric'].nbResources))
+            else:
+                self.state = BuildingStates.OFF
+                print("drill OFF")

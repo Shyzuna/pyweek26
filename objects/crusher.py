@@ -28,7 +28,8 @@ class Crusher(Building):
 
         Building.__init__(self, self.position, self.size, self.connections, self.img)
 
-    def update(self):
-        # TODO: drain electricity from batteries and give ore if
-        # TODO: all connections' conditions are satisfied
+    def updateProduction(self, deltaTime):
+        pass
+
+    def updateConsumption(self, deltaTime):
         pass

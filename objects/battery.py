@@ -52,3 +52,9 @@ class Battery(Building):
 
     def empty(self):
         self.cur_capacity = 0
+
+    def updateProduction(self, deltaTime):
+        pass
+
+    def updateConsumption(self, deltaTime):
+        pass

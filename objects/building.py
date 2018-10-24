@@ -2,6 +2,7 @@ import pygame
 import uuid
 
 from settings import settings
+from settings.enums import BuildingStates
 
 
 class Building(pygame.sprite.Sprite):
@@ -17,6 +18,7 @@ class Building(pygame.sprite.Sprite):
         self.size = size
         self.connections = connections
         self.img = img
+        self.state = BuildingStates.OFF
 
     def connection(self, resource):
         if resource in self.connections['inputs']:

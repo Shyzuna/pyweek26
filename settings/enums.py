@@ -60,3 +60,10 @@ class BuildingTypes(Enum):
     PRODUCER = 'Producer'
     CAPACITOR = 'Capacitor'
     CONNECTOR = 'Connector'
+
+class BuildingStates(Enum):
+    """
+    Enum for the several buildings states
+    """
+    ON = 'ON'
+    OFF = 'OFF'

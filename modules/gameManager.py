@@ -70,6 +70,19 @@ class GameManager:
 
             guiManager.updateGui(self._player, inputManager.mousePos)
 
+            for networkList in self.networks.values():
+                for network in networkList:
+                    network.update()
+
+            # Update buildings
+            for y in self._buildings:
+                for x in self._buildings[y]:
+                    self._buildings[y][x].updateProduction(deltaTime)
+
+            for y in self._buildings:
+                for x in self._buildings[y]:
+                    self._buildings[y][x].updateConsumption(deltaTime)
+
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
             guiManager.displayGui(displayManager.screen)

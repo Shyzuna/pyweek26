@@ -3,6 +3,7 @@ import os
 
 from settings import settings
 from objects.building import Building
+from settings.enums import BuildingStates
 
 
 class SolarPanel(Building):
@@ -13,8 +14,8 @@ class SolarPanel(Building):
         self.size = [1, 1]
         self.connections = {'inputs': None,
                             'outputs': {'Electricity': False}}
-        self.max_prod = 2
-        self.cur_prod = 0
+
+        self.production = 10
 
         self.networks = {
             'electric': None
@@ -25,6 +26,16 @@ class SolarPanel(Building):
                                                      settings.TILE_HEIGHT * self.size[1]))
 
         Building.__init__(self, self.position, self.size, self.connections, self.img)
+
+        self.state = BuildingStates.ON
+
+    def updateProduction(self, deltaTime):
+        if self.networks['electric'] is not None:
+            self.networks['electric'].nbResources += self.production * deltaTime
+            print("solarpanel genere " + str(self.production * deltaTime))
+
+    def updateConsumption(self, deltaTime):
+        pass
 
     # def update(self):
     #     # Update production

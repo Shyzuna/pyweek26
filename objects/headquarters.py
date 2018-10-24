@@ -25,3 +25,9 @@ class HeadQuarters(Building):
                                                      settings.TILE_HEIGHT * self.size[1]))
 
         Building.__init__(self, self.position, self.size, self.connections, self.img)
+
+    def updateProduction(self, deltaTime):
+        pass
+
+    def updateConsumption(self, deltaTime):
+        pass

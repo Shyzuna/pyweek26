@@ -4,6 +4,7 @@ class Network():
 
     def __init__(self):
         self.nodes = {}
+        self.nbResources = 0
 
     def addConnections(self, firstBuilding, secondBuilding):
         firstBuildingId = firstBuilding.id
@@ -109,3 +110,6 @@ class Network():
                 if newpath:
                     return newpath
         return None
+
+    def update(self):
+        self.nbResources = 0
