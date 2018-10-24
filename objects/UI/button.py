@@ -11,7 +11,7 @@ from settings.enums import Colors
 
 
 class UIButton(object):
-    def __init__(self, title, size, pos, font, clickFct=None, img='', building = None):
+    def __init__(self, title, size, pos, font, clickFct=None, img='', building = None, prevContext=''):
         self._title = title
         self._building = building
         self._img = img
@@ -19,6 +19,7 @@ class UIButton(object):
         self._hover = False
         self._pressed = False
         self._pos = pos
+        self._prevContext = prevContext
         self._baseSurface = pygame.Surface(size)
         self._baseSurface.fill(Colors.WHITE.value)
         pygame.draw.rect(self._baseSurface, Colors.BLACK.value, self._baseSurface.get_rect(), 2)
@@ -58,4 +59,4 @@ class UIButton(object):
     def onClick(self):
         print("Click on " + self._title)
         if self._clickFct is not None:
-            self._clickFct(self._title, self._building)
+            self._clickFct(self._title, self._building, self._prevContext)

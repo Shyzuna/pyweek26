@@ -26,6 +26,12 @@ class GuiManager(object):
         self._internBatteryPos = (10, 24)
         self._buildingSelected = None
         self._onGui = False
+        self._menuList = {
+            'Build': self.changeMenu,
+            'Research': None,
+            'Contract': None,
+            'Earth': None
+        }
 
     def init(self, buildList):
         pygame.font.init()
@@ -85,12 +91,13 @@ class GuiManager(object):
             lastLeft += (t.get_width() + widthSpaceByElem)
 
     def createSideButton(self):
-        buttonList = []
+        # build menu and child
+        buildButtonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / len(self._buildingsList))
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 1))
         buttonH = self._topBar.get_height()
         for cat, l in self._buildingsList.items():
-            buttonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
+            buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
                                               self._fonts[self._currentFont], self.changeMenu))
             buttonH += buttonSize[1]
 
@@ -103,10 +110,26 @@ class GuiManager(object):
                 localButtonList.append(UIButton(name.value, localButtonSize, (0, localButtonH),
                                                 self._fonts[self._currentFont], self.selectBuilding, building=obj))
                 localButtonH += localButtonSize[1]
-            localButtonList.append(UIButton('back', localButtonSize, (0, localButtonH),
-                                            self._fonts[self._currentFont], self.resetMenu))
+            localButtonList.append(UIButton('Back', localButtonSize, (0, localButtonH),
+                                            self._fonts[self._currentFont], self.resetMenu, prevContext='Build'))
             self._sideButtons[cat.value] = localButtonList
-        self._sideButtons['base'] = buttonList
+            buildButtonList.append(UIButton('Back', buttonSize, (0, buttonH),
+                                        self._fonts[self._currentFont], self.resetMenu, prevContext='base'))
+
+        self._sideButtons['Build'] = buildButtonList
+
+        # base menu
+        baseButtonList = []
+        buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / len(self._menuList))
+        buttonH = self._topBar.get_height()
+        for menu, fct in self._menuList.items():
+            baseButtonList.append(UIButton(menu, buttonSize, (0, buttonH),
+                                        self._fonts[self._currentFont], fct))
+            buttonH += buttonSize[1]
+
+        self._sideButtons['base'] = baseButtonList
+
 
     def displayGui(self, screen):
         screen.blit(self._topBar, (0, 0))
@@ -152,7 +175,7 @@ class GuiManager(object):
             self._buildingSelected = None
 
     def resetMenu(self, *arg):
-        self._currentSideMenu = 'base'
+        self._currentSideMenu = arg[2]
 
     def changeMenu(self, *arg):
         self._currentSideMenu = arg[0]
