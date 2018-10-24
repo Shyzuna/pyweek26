@@ -20,12 +20,12 @@ class UIBuildingMouseSnap(object):
         self._guiManager = guiManager
         self._tilePos = (-1, -1)
         size = self._building.img.get_size()
-        self._bgSurf = pygame.Surface((size[0] + 4, size[1] + 4))
+        self._bgSurf = pygame.Surface(size).convert_alpha()
 
     def display(self, screen):
         # should use second image
-        self._bgSurf.fill(Colors.GREEN.value if self._validPos else Colors.RED.value)
-        self._bgSurf.blit(self._building.img, (2, 2))
+        self._bgSurf.fill((0, 255, 0, 80) if self._validPos else (255, 0, 0, 80))
+        screen.blit(self._building.img, self._pos)
         screen.blit(self._bgSurf, self._pos)
 
     def updatePosition(self, mPos):
