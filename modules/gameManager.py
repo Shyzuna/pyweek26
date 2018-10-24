@@ -93,12 +93,14 @@ class GameManager:
         # in Map
         tx, ty = tilePos
         borderSize = settings.BORDER_TILES_NUM
-        if (borderSize + settings.TILES_NUM_WIDTH) > tx > borderSize and (borderSize + settings.TILES_NUM_HEIGHT) > ty > borderSize:
+        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
+
             # check res
             for r in self._resources:
                 if r.getPos() == tilePos:
                     return False
-            if tx in self._buildings.keys() and tx in self._buildings[tx].keys():
+
+            if tx in self._buildings.keys() and ty in self._buildings[tx].keys():
                 return False
             return True
         return False
