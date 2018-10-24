@@ -56,8 +56,12 @@ class GuiManager(object):
             ratioEnergy = player.getResources()[ObjectCategory.ENERGY] / player.getResourcesCap()[ObjectCategory.ENERGY]
         else:
             ratioEnergy = 0
-        rect = pygame.Rect(0, int(batterySize[1] * ratioEnergy), batterySize[0], int(batterySize[1] * ratioEnergy))
-        pygame.draw.rect(self._batteryLevel, Colors.LIGHT_CYAN.value, rect)
+        
+        if ratioEnergy > 0:
+            rect = pygame.Rect(0, batterySize[1] - int(batterySize[1] * ratioEnergy),
+                               batterySize[0], int(batterySize[1] * ratioEnergy))
+            pygame.draw.rect(self._batteryLevel, Colors.LIGHT_CYAN.value, rect)
+
         text = self._fonts[self._currentFont].render('{}/{}'.format(
             str(energy),
             str(maxEnergy)), 1, Colors.BLACK.value)
