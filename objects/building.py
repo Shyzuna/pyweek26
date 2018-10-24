@@ -36,4 +36,11 @@ class Building(pygame.sprite.Sprite):
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
 
+    def updateProduction(self):
+        pass
 
+    def update(self):
+        pass
+
+    def updateStock(self):
+        pass
