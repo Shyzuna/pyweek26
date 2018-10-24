@@ -53,11 +53,11 @@ class GameManager:
             deltaTime = self.clock.get_time()
 
             # Update
-            inputManager.loop()
+            inputManager.loop(mapManager.currentRect)
             mapManager.scroll(inputManager.directionState, deltaTime)
             if inputManager.keyPressed is not None:
-                self.processKeyPressed(inputManager.keyPressed, inputManager.mousePosInTiles)
-                print("Current pos in tiles: ", inputManager.mousePosInTiles)
+                self.processKeyPressed(inputManager.keyPressed, inputManager.absoluteMousePosInTiles)
+                print("Current pos in tiles: ", inputManager.absoluteMousePosInTiles)
 
             if inputManager.toDelete is not None:
                 inputManager.deleteMode = False

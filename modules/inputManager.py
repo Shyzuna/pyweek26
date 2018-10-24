@@ -24,10 +24,10 @@ class InputManager:
         self.deleteMode = False
         self.toDelete = None
 
-    def loop(self):
+    def loop(self, currentRect):
         self.keyPressed = None
         for event in pygame.event.get():
-            self.refreshMousePos()
+            self.refreshMousePos(currentRect)
             modules.guiManager.guiManager.checkMousePosition(self.mousePos)
             if event.type == pygame.QUIT:
                 self.done = True
@@ -75,9 +75,11 @@ class InputManager:
                 else:
                     self.directionState[pygame.K_DOWN] = False
 
-    def refreshMousePos(self):
+    def refreshMousePos(self, currentRect):
         self.mousePos = pygame.mouse.get_pos()
         self.mousePosInTiles = (math.ceil(self.mousePos[0] / settings.TILE_WIDTH),
                                 math.ceil(self.mousePos[1] / settings.TILE_HEIGHT))
+        self.absoluteMousePosInTiles = (math.ceil((self.mousePos[0] + currentRect.topleft[0]) / settings.TILE_WIDTH)-1,
+                    math.ceil((self.mousePos[1] + currentRect.topleft[1]) / settings.TILE_HEIGHT)-1)
 
 inputManager = InputManager()
