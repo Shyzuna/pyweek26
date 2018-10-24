@@ -31,8 +31,8 @@ class Crusher(Building):
 
         Building.__init__(self, self.position, self.size, self.connections, self.img, [ObjectCategory.TRIHELIUM])
 
-    def updateProduction(self, deltaTime):
+    def updateProduction(self):
         pass
 
-    def updateConsumption(self, deltaTime):
+    def update(self):
         pass

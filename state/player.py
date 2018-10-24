@@ -20,7 +20,7 @@ class Player(object):
             ObjectCategory.CREDITS: 1000
         }
         self._resourcesCap = {
-            ObjectCategory.ENERGY: 10,
+            ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 10,
             ObjectCategory.DIHYGROGEN: 10,
             ObjectCategory.TRIHYGROGEN: 10,

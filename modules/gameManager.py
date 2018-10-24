@@ -50,9 +50,12 @@ class GameManager:
     def start(self):
         #pygame.event.set_grab(True)
 
+        time_since_update_res = 0
+
         while not inputManager.done:
             self.clock.tick(settings.FPS)
             deltaTime = self.clock.get_time()
+            time_since_update_res += deltaTime
 
             # Update
             inputManager.loop(mapManager.currentRect)
@@ -76,14 +79,28 @@ class GameManager:
                 for network in networkList:
                     network.update()
 
-            # Update buildings
-            for y in self._buildings:
-                for x in self._buildings[y]:
-                    self._buildings[y][x].updateProduction(deltaTime)
+            if time_since_update_res > 1000:
+                time_since_update_res = 0
+                # Update buildings
+                # First compute instant prod, stock
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        self._buildings[y][x].updateProduction()
 
-            for y in self._buildings:
-                for x in self._buildings[y]:
-                    self._buildings[y][x].updateConsumption(deltaTime)
+                # Then apply consumption
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        self._buildings[y][x].update()
+
+                # Then apply stock
+                self._player._resources[ObjectCategory.ENERGY] = 0
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        building = self._buildings[y][x]
+                        building.updateStock()
+
+                        if isinstance(building, Battery):
+                            self._player._resources[ObjectCategory.ENERGY] += building.cur_capacity
 
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
@@ -150,6 +167,7 @@ class GameManager:
         if buildingType == 'BATTERY':
             print("battery")
             building = Battery(position=posInTiles)
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
         if buildingType == 'SOLARPANEL':
             print("SOLARPANEL")
             building = SolarPanel(position=posInTiles)
@@ -251,6 +269,9 @@ class GameManager:
         else:
             self._buildings.update({building.position[1]: {building.position[0]: building}})
 
+        if isinstance(building, Battery):
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
+
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
         y_tobuild = building.position[1]
@@ -315,5 +336,8 @@ class GameManager:
         print("remove en " + str(building.position[0]) + " " + str(building.position[1]))
         self._buildings[building.position[1]].pop(building.position[0])
         print(self._buildings)
+
+        if isinstance(building, Battery):
+            self._player._resourcesCap[ObjectCategory.ENERGY] -= building.max_capacity
 
 gameManager = GameManager()
