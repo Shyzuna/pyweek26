@@ -65,7 +65,7 @@ class Battery(Building):
                 if self.cur_capacity + network.instantProduction > self.max_capacity:
                     toFill = self.max_capacity - self.cur_capacity
                     self.cur_capacity += toFill
-                    network.instantroduction -= toFill
+                    network.instantProduction -= toFill
                     print("Recharge batterie", toFill)
                 else:
                     self.cur_capacity += network.instantProduction
