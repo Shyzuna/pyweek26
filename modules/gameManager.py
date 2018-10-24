@@ -87,11 +87,6 @@ class GameManager:
                     for x in self._buildings[y]:
                         self._buildings[y][x].updateProduction()
 
-                # TODO: delete
-                for network in self.networks['electric']:
-                    print("Prod et Stock ", network.instantProduction, network.instantStock)
-
-
                 # Then apply consumption
                 for y in self._buildings:
                     for x in self._buildings[y]:
@@ -273,6 +268,9 @@ class GameManager:
             self._buildings[building.position[1]].update({building.position[0]: building})
         else:
             self._buildings.update({building.position[1]: {building.position[0]: building}})
+
+        if isinstance(building, Battery):
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
