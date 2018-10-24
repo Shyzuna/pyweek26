@@ -52,6 +52,7 @@ class GameManager:
             self.clock.tick(settings.FPS)
             deltaTime = self.clock.get_time()
 
+            # Update
             inputManager.loop()
             mapManager.scroll(inputManager.directionState, deltaTime)
             if inputManager.keyPressed is not None:
@@ -67,8 +68,11 @@ class GameManager:
                 if toDeleteY in self._buildings and toDeleteX in self._buildings[toDeleteY]:
                     self.removeBuilding(self._buildings[toDeleteY][toDeleteX])
 
+            guiManager.updateGui(self._player, inputManager.mousePos)
+
+            # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
-            guiManager.displayGui(displayManager.screen, self._player)
+            guiManager.displayGui(displayManager.screen)
             pygame.display.flip()
         pygame.quit()
 

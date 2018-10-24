@@ -2,7 +2,7 @@
 Title: button File
 Desc: UIButton class
 Creation Date:  22/10/18
-LastMod Date: 22/10/18
+LastMod Date: 24/10/18
 TODO:
 """
 
@@ -11,8 +11,9 @@ from settings.enums import Colors
 
 
 class UIButton(object):
-    def __init__(self, title, size, pos, font, clickFct=None, img=''):
+    def __init__(self, title, size, pos, font, clickFct=None, img='', building = None):
         self._title = title
+        self._building = building
         self._img = img
         self._clickFct = clickFct
         self._hover = False
@@ -44,6 +45,7 @@ class UIButton(object):
         self._hover = self._rect.collidepoint(mPos[0], mPos[1])
         if not self._hover:
             self._pressed = False
+        return self._hover
 
     def checkMousePressed(self, pressed, mPos):
         isInside = self._rect.collidepoint(mPos[0], mPos[1])
@@ -56,4 +58,4 @@ class UIButton(object):
     def onClick(self):
         print("Click on " + self._title)
         if self._clickFct is not None:
-            self._clickFct(self._title)
+            self._clickFct(self._title, self._building)
