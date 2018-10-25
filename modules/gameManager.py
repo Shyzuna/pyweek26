@@ -33,16 +33,18 @@ class GameManager:
             BuildingTypes.CONNECTOR: [],
         }
         self.clock = pygame.time.Clock()
+        displayManager.init()
         mapManager.init()
         inputManager.init()
-        displayManager.init()
         contractManager.init()
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
         self._player = Player()
-        self._buildings = {settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}}
+        self._buildings = {  # Col / Row
+            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}
+        }
         self.networks = {
             'electric': []
         }
@@ -50,9 +52,12 @@ class GameManager:
     def start(self):
         #pygame.event.set_grab(True)
 
+        time_since_update_res = 0
+
         while not inputManager.done:
             self.clock.tick(settings.FPS)
             deltaTime = self.clock.get_time()
+            time_since_update_res += deltaTime
 
             # Update
             inputManager.loop(mapManager.currentRect)
@@ -76,14 +81,28 @@ class GameManager:
                 for network in networkList:
                     network.update()
 
-            # Update buildings
-            for y in self._buildings:
-                for x in self._buildings[y]:
-                    self._buildings[y][x].updateProduction(deltaTime)
+            if time_since_update_res > 1000:
+                time_since_update_res = 0
+                # Update buildings
+                # First compute instant prod, stock
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        self._buildings[y][x].updateProduction()
 
-            for y in self._buildings:
-                for x in self._buildings[y]:
-                    self._buildings[y][x].updateConsumption(deltaTime)
+                # Then apply consumption
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        self._buildings[y][x].update()
+
+                # Then apply stock
+                self._player._resources[ObjectCategory.ENERGY] = 0
+                for y in self._buildings:
+                    for x in self._buildings[y]:
+                        building = self._buildings[y][x]
+                        building.updateStock()
+
+                        if isinstance(building, Battery):
+                            self._player._resources[ObjectCategory.ENERGY] += building.cur_capacity
 
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
@@ -92,21 +111,54 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
-    def checkTileValid(self, tilePos):
+    def checkIsBuildingTile(self, tilePos):
+        tx, ty = tilePos
+        borderSize = settings.BORDER_TILES_NUM
+        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and \
+                (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
+            # check buildings
+            if ty in self._buildings and tx in self._buildings[ty]:
+                return True
+        return False
+
+    def checkTileValid(self, tilePos, allowedSpot):
         # in Map
         tx, ty = tilePos
         borderSize = settings.BORDER_TILES_NUM
-        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
-
-            # check res
-            for r in self._resources:
-                if r.getPos() == tilePos:
+        if (borderSize + settings.TILES_NUM_WIDTH + 1) > tx > (borderSize - 1) and\
+                (borderSize + settings.TILES_NUM_HEIGHT + 1) > ty > (borderSize - 1):
+            if allowedSpot is None:
+                # check res
+                for r in self._resources:
+                    if r.getPos() == tilePos:
+                        return False
+                # check buildings
+                if ty in self._buildings and tx in self._buildings[ty]:
+                    return False
+                return True
+            else:
+                # check buildings
+                if ty in self._buildings and tx in self._buildings[ty]:
                     return False
 
-            if tx in self._buildings.keys() and ty in self._buildings[tx].keys():
-                return False
-            return True
+                # check allowed resource
+                for r in self._resources:
+                    if r.getPos() == tilePos and r.getCategory() in allowedSpot:
+                        return True
         return False
+
+    def getResourceAt(self, tilePos):
+        # get resource at
+        for r in self._resources:
+            if r.getPos() == tilePos:
+                return r
+        return None
+
+    def getBuildingAt(self, tilePos):
+        tx, ty = tilePos
+        if ty in self._buildings and tx in self._buildings[ty]:
+            return self._buildings[ty][tx]
+        return None
 
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
@@ -137,6 +189,7 @@ class GameManager:
         if buildingType == 'BATTERY':
             print("battery")
             building = Battery(position=posInTiles)
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
         if buildingType == 'SOLARPANEL':
             print("SOLARPANEL")
             building = SolarPanel(position=posInTiles)
@@ -238,6 +291,9 @@ class GameManager:
         else:
             self._buildings.update({building.position[1]: {building.position[0]: building}})
 
+        if isinstance(building, Battery):
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
+
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
         y_tobuild = building.position[1]
@@ -302,5 +358,8 @@ class GameManager:
         print("remove en " + str(building.position[0]) + " " + str(building.position[1]))
         self._buildings[building.position[1]].pop(building.position[0])
         print(self._buildings)
+
+        if isinstance(building, Battery):
+            self._player._resourcesCap[ObjectCategory.ENERGY] -= building.max_capacity
 
 gameManager = GameManager()

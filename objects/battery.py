@@ -13,7 +13,8 @@ class Battery(Building):
         self.size = [1, 1]
         self.connections = {'inputs': {'Electricity': False},
                             'outputs': {'Electricity': False}}
-        self.max_capacity = 10
+
+        self.max_capacity = 50
         self.cur_capacity = 0
 
         self.networks = {
@@ -53,8 +54,28 @@ class Battery(Building):
     def empty(self):
         self.cur_capacity = 0
 
-    def updateProduction(self, deltaTime):
-        pass
+    def updateProduction(self):
+        if self.networks['electric'] is not None:
+            self.networks['electric'].instantStock += self.cur_capacity
 
-    def updateConsumption(self, deltaTime):
-        pass
+    def updateStock(self):
+        if self.networks['electric'] is not None:
+            network = self.networks['electric']
+            if network.instantProduction > 0 and not self.is_full():
+                if self.cur_capacity + network.instantProduction > self.max_capacity:
+                    toFill = self.max_capacity - self.cur_capacity
+                    self.cur_capacity += toFill
+                    network.instantProduction -= toFill
+                    print("Recharge batterie", toFill)
+                else:
+                    self.cur_capacity += network.instantProduction
+                    print("Recharge batterie", network.instantProduction)
+                    network.instantProduction = 0
+            elif not self.is_empty():
+                if self.cur_capacity - network.consumedStock > 0:
+                    self.cur_capacity -= network.consumedStock
+                    print("Decharge batterie 1", network.consumedStock)
+                else:
+                    network.consumedStock -= self.cur_capacity
+                    print("Decharge batterie 2", self.cur_capacity)
+                    self.cur_capacity = 0

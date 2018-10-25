@@ -26,8 +26,8 @@ class HeadQuarters(Building):
 
         Building.__init__(self, self.position, self.size, self.connections, self.img)
 
-    def updateProduction(self, deltaTime):
+    def updateProduction(self):
         pass
 
-    def updateConsumption(self, deltaTime):
+    def update(self):
         pass

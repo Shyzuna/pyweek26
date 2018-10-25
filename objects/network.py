@@ -4,7 +4,10 @@ class Network():
 
     def __init__(self):
         self.nodes = {}
-        self.nbResources = 0
+        self.instantProduction = 0
+        self.instantConsumption = 0
+        self.instantStock = 0
+        self.consumedStock = 0
 
     def addConnections(self, firstBuilding, secondBuilding):
         firstBuildingId = firstBuilding.id
@@ -112,4 +115,7 @@ class Network():
         return None
 
     def update(self):
-        self.nbResources = 0
+        self.instantProduction = 0
+        self.instantConsumption = 0
+        self.instantStock = 0
+        self.consumedStock = 0

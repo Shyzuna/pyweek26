@@ -11,6 +11,13 @@ class DisplayManager:
     def init(self):
         self.flags = pygame.DOUBLEBUF
         pygame.display.init()
+        infoObject = pygame.display.Info()
+        settings.SCREEN_WIDTH = infoObject.current_w - 200
+        settings.SCREEN_HEIGHT = infoObject.current_h - 100
+        settings.RECT_MAX_X = settings.MAP_WIDTH - settings.SCREEN_WIDTH
+        settings.RECT_MAX_Y = settings.MAP_HEIGHT - settings.SCREEN_HEIGHT
+        settings.SCROLL_MOUSE_MAX_X = settings.SCREEN_WIDTH - settings.SCROLL_MOUSE_MARGIN
+        settings.SCROLL_MOUSE_MAX_Y = settings.SCREEN_HEIGHT - settings.SCROLL_MOUSE_MARGIN
         self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT),
                                               self.flags)
         pygame.display.set_caption("Operation MoonLight")

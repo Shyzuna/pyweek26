@@ -4,6 +4,9 @@ import os
 from settings import settings
 from objects.building import Building
 from settings.enums import BuildingStates
+from settings.enums import ObjectCategory
+import modules.gameManager
+
 
 class Drill(Building):
 
@@ -26,21 +29,32 @@ class Drill(Building):
         self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
                                                      settings.TILE_HEIGHT * self.size[1]))
 
-        Building.__init__(self, self.position, self.size, self.connections, self.img)
+        self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
 
-    def updateProduction(self, deltaTime):
-        pass
+        Building.__init__(self, self.position, self.size, self.connections, self.img, [ObjectCategory.HYDROGEN])
 
-    def updateConsumption(self, deltaTime):
+    def updateProduction(self):
         if self.networks['electric'] is not None:
-            nbElectricity = self.networks['electric'].nbResources
-            nbCons = self.consumption * deltaTime
-            print("drill consomme " + str(self.consumption * deltaTime))
-            print("reste dans le reseau " + str(self.networks['electric'].nbResources))
-            if nbCons <= nbElectricity:
-                self.networks['electric'].nbResources -= nbCons
-                self.state = BuildingStates.ON
-                print("reste apres conso " + str(self.networks['electric'].nbResources))
+            self.networks['electric'].instantConsumption += self.consumption
+
+    def update(self):
+        network = self.networks['electric']
+        if network is not None:
+            self.state = BuildingStates.ON
+            if self.consumption <= network.instantProduction:
+                network.instantProduction -= self.consumption
+                print("Batiment ON")
             else:
-                self.state = BuildingStates.OFF
-                print("drill OFF")
+                leftToConsume = self.consumption - network.instantProduction
+                if network.consumedStock + leftToConsume <= network.instantStock:
+                    network.consumedStock += leftToConsume
+                    print("Batiment sur batterie")
+                else:
+                    print("Batiment OFF")
+                    self.state = BuildingStates.OFF
+
+
+
+
+
+

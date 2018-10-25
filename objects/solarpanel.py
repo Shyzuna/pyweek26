@@ -29,12 +29,12 @@ class SolarPanel(Building):
 
         self.state = BuildingStates.ON
 
-    def updateProduction(self, deltaTime):
+    def updateProduction(self):
         if self.networks['electric'] is not None:
-            self.networks['electric'].nbResources += self.production * deltaTime
-            print("solarpanel genere " + str(self.production * deltaTime))
+            self.networks['electric'].instantProduction += self.production
+            print("solarpanel genere " + str(self.production))
 
-    def updateConsumption(self, deltaTime):
+    def update(self):
         pass
 
     # def update(self):
