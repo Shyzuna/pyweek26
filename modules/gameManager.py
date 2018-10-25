@@ -32,9 +32,9 @@ class GameManager:
             BuildingTypes.CONNECTOR: [],
         }
         self.clock = pygame.time.Clock()
+        displayManager.init()
         mapManager.init()
         inputManager.init()
-        displayManager.init()
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._mg = MapGenerator()
