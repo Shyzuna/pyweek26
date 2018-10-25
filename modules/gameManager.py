@@ -5,6 +5,7 @@ from modules.displayManager import displayManager
 from modules.mapManager import mapManager
 from modules.inputManager import inputManager
 from modules.guiManager import guiManager
+from modules.contractManager import contractManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
 from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,Buildings
@@ -35,6 +36,7 @@ class GameManager:
         mapManager.init()
         inputManager.init()
         displayManager.init()
+        contractManager.init()
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._mg = MapGenerator()
@@ -85,6 +87,7 @@ class GameManager:
 
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
+            if contractManager.showGui: contractManager.display(displayManager.screen)
             guiManager.displayGui(displayManager.screen)
             pygame.display.flip()
         pygame.quit()
@@ -105,9 +108,6 @@ class GameManager:
             return True
         return False
 
-
-
-
     def processKeyPressed(self, keyPressed, mousePosInTiles):
         print(self._buildings)
         if keyPressed in [shortcut.value for shortcut in BuildingShortcuts] and self.isPosInMap(mousePosInTiles):
@@ -120,6 +120,10 @@ class GameManager:
                     self.addBuilding(buildingType='DRILL', posInTiles=mousePosInTiles)
                 elif keyPressed == BuildingShortcuts['CRUSHER'].value:
                     self.addBuilding(buildingType='CRUSHER', posInTiles=mousePosInTiles)
+        elif keyPressed == pygame.K_7:
+            contractManager.showGui = True
+        elif keyPressed == pygame.K_8:
+            contractManager.showGui = False
 
 
     def isPosInMap(self, posInTiles):

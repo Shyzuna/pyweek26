@@ -54,6 +54,7 @@ class GuiManager(object):
             str(maxEnergy)), 1, Colors.BLACK.value)
         self._batteryLevel.blit(text, ((batterySize[0] - text.get_width()) / 2,
                                        (batterySize[1] - text.get_height()) / 2))
+
     def updateGui(self, player, mPos):
         self.updateTopBar(player)
         self.updateBatteryLevel(player)
