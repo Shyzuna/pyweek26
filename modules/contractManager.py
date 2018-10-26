@@ -34,6 +34,15 @@ class ContractManager:
                                  self.CONTRACTS_WINDOW_HEIGHT)
         self.popupContour = pygame.Surface((self.CONTRACTS_WINDOW_WIDTH + 2 * self.contour,
                                             self.CONTRACTS_WINDOW_HEIGHT + 2 * self.contour))
+
+        self.QUIT_BUTTON_SIZE = 20
+        self.quitButtonTopLeft = self.popupTopLeft
+        self.quitButton = pygame.Rect(self.contour, self.contour,
+                                      self.QUIT_BUTTON_SIZE, self.QUIT_BUTTON_SIZE)
+
+        self.quitButtonContour = pygame.Surface((self.QUIT_BUTTON_SIZE + 2 * self.contour,
+                                                 self.QUIT_BUTTON_SIZE + 2 * self.contour))
+
         self.fonts = {
             'small': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 12),
             'medium': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 15),
@@ -41,12 +50,20 @@ class ContractManager:
         }
 
     def display(self, screen):
+        # Display white background window with black edges
         self.popupContour.fill(Colors.BLACK.value)
         self.popupContour.fill(Colors.WHITE.value, self.popup)
         screen.blit(self.popupContour, self.popupTopLeft)
+
+        # Display title
         text = self.fonts['large'].render('Contracts', 1, Colors.BLACK.value)
         screen.blit(text, (self.popupTopLeft[0] + self.CONTRACTS_WINDOW_WIDTH / 2 - text.get_width() / 2,
                            self.popupTopLeft[1] + self.contour))
+
+        # Display quit button
+        self.quitButtonContour.fill(Colors.BLACK.value)
+        self.quitButtonContour.fill(Colors.RED.value, self.quitButton)
+        screen.blit(self.quitButtonContour, self.quitButtonTopLeft)
 
         # Display available contracts
         x = self.popupTopLeft[0]
