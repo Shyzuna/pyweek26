@@ -11,6 +11,7 @@ from settings.enums import Colors, ObjectCategory, TooltipType
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
+from modules.contractManager import contractManager
 import modules.gameManager
 import pygame
 import os
@@ -58,6 +59,7 @@ class GuiManager(object):
                                                                 int(self._guiImg['destructor'].get_height() / 2)))
 
         self.createSideButton()
+        contractManager.init()
 
     def updateBatteryLevel(self, player):
         self._batteryLevel.fill(Colors.WHITE.value)
@@ -220,7 +222,7 @@ class GuiManager(object):
     def isOnGui(self):
         return self._onGui
 
-    def checkMousePosition(self, mPos):
+    def checkMousePosition(self, mPos, ):
         onGui = False
         hoveredElem = False
         # Check battery
@@ -231,6 +233,7 @@ class GuiManager(object):
         # Check TopBar
         rect = pygame.Rect(0, 0, self._topBar.get_width(), self._topBar.get_height())
         onGui = onGui or rect.collidepoint(mPos[0], mPos[1])
+
         # Check button
         for b in self._sideButtons[self._currentSideMenu]:
             if b.checkHover(mPos):
