@@ -11,9 +11,10 @@ class DisplayManager:
     def init(self):
         self.flags = pygame.DOUBLEBUF
         pygame.display.init()
-        infoObject = pygame.display.Info()
-        settings.SCREEN_WIDTH = infoObject.current_w - 200
-        settings.SCREEN_HEIGHT = infoObject.current_h - 100
+        if settings.AUTO_SIZE:
+            infoObject = pygame.display.Info()
+            settings.SCREEN_WIDTH = infoObject.current_w - 200
+            settings.SCREEN_HEIGHT = infoObject.current_h - 100
         settings.RECT_MAX_X = settings.MAP_WIDTH - settings.SCREEN_WIDTH
         settings.RECT_MAX_Y = settings.MAP_HEIGHT - settings.SCREEN_HEIGHT
         settings.SCROLL_MOUSE_MAX_X = settings.SCREEN_WIDTH - settings.SCROLL_MOUSE_MARGIN

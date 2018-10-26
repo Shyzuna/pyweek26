@@ -15,7 +15,7 @@ TOTAL_RES = 1000
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 800
 FPS = 60
-
+AUTO_SIZE = True
 
 # Paths
 TILES_PATH = os.path.join('data', 'tiles')

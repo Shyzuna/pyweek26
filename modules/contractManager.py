@@ -63,4 +63,11 @@ class ContractManager:
             y = self.popupTopLeft[1] + settings.TILE_HEIGHT
             self.current_contract.display(screen, (x, y), self.fonts, Colors.RED.value)
 
+    def isOn(self, mPos):
+        return self.popup.collidepoint(mPos[0], mPos[1])
+
+    def checkMousePressed(self, pressed, mPos):
+        pass
+
+
 contractManager = ContractManager()

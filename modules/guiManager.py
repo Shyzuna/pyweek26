@@ -34,8 +34,14 @@ class GuiManager(object):
         self._tooltipPos = None
         self._menuList = {
             'Build': self.changeMenu,
+            'Research': self.changeCentralFrame,
+            'Contract': self.changeCentralFrame,
+            'Earth': self.changeCentralFrame
+        }
+        self._centralFrame = None
+        self._frameList = {
             'Research': None,
-            'Contract': None,
+            'Contract': contractManager,
             'Earth': None
         }
         self._guiImg = {}
@@ -219,12 +225,20 @@ class GuiManager(object):
         if self._tooltipSurf is not None:
             screen.blit(self._tooltipSurf, self._tooltipPos)
 
+        if self._centralFrame is not None:
+            self._frameList[self._centralFrame].display(screen)
+
     def isOnGui(self):
         return self._onGui
 
     def checkMousePosition(self, mPos, ):
         onGui = False
         hoveredElem = False
+
+        # Check central frame
+        if self._centralFrame is not None:
+            onGui = onGui or self._frameList[self._centralFrame].isOn(mPos)
+
         # Check battery
         batterySize = self._battery.get_size()
         rect = pygame.Rect(settings.SCREEN_WIDTH - batterySize[0] - 10,
@@ -259,6 +273,8 @@ class GuiManager(object):
             if self._onGui:
                 for b in self._sideButtons[self._currentSideMenu]:
                     b.checkMousePressed(pressed, mPos)
+                if self._centralFrame is not None:
+                    self._frameList[self._centralFrame].checkMousePressed(pressed, mPos)
             elif not pressed and self._buildingSelected is not None:
                 self._buildingSelected.tryBuild()
             elif not pressed and self._buildingDestroy is not None:
@@ -286,5 +302,10 @@ class GuiManager(object):
             self._buildingSelected = UIBuildingMouseSnap(arg[1]((-1, -1)), self)
             self._buildingDestroy = None
 
+    def changeCentralFrame(self, *arg):
+        self._centralFrame = arg[0]
+
+    def closeCentralFrame(self):
+        self._centralFrame = None
 
 guiManager = GuiManager()
