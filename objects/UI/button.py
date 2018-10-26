@@ -8,21 +8,21 @@ TODO:
 
 import pygame
 from settings.enums import Colors
+from objects.UI.hoverable import UIHoverable
 
 
-class UIButton(object):
-    def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext=''):
+class UIButton(UIHoverable):
+    def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext='', tooltipType=None):
+        super().__init__(pos, size, tooltipType)
         self._title = title
         self._building = building
+        self._tmpBuild = None
         if building is not None:
-            tmpBuild = building((-1, -1))
-            self._img = tmpBuild.buildingData['uiImg']
+            self._tmpBuild = building((-1, -1))
+            self._img = self._tmpBuild.buildingData['uiImg']
         else:
             self._img = img
         self._clickFct = clickFct
-        self._hover = False
-        self._pressed = False
-        self._pos = pos
         self._prevContext = prevContext
         self._baseSurface = pygame.Surface(size)
         self._baseSurface.fill(Colors.WHITE.value)
@@ -48,17 +48,17 @@ class UIButton(object):
                                                 (size[1] - self._text.get_height()) / 2))
             self._pressedSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
                                                 (size[1] - self._text.get_height()) / 2))
-        self._rect = pygame.Rect(pos[0], pos[1], size[0], size[1])
+
+    def getBuildingData(self):
+        if self._tmpBuild:
+            return self._tmpBuild.buildingData
+        else:
+            return None
 
     def draw(self, screen):
         surface = self._pressedSurface if self._pressed else self._hoverSurface if self._hover else self._baseSurface
         screen.blit(surface, self._pos)
 
-    def checkHover(self, mPos):
-        self._hover = self._rect.collidepoint(mPos[0], mPos[1])
-        if not self._hover:
-            self._pressed = False
-        return self._hover
 
     def checkMousePressed(self, pressed, mPos):
         isInside = self._rect.collidepoint(mPos[0], mPos[1])

@@ -69,3 +69,11 @@ class BuildingStates(Enum):
     """
     ON = 'ON'
     OFF = 'OFF'
+
+class TooltipType(Enum):
+    """
+    Enum for tooltip type
+    """
+    TEXT_TIP = 0
+    GUI_BUILDING = 1
+    IG_BUILDING = 2

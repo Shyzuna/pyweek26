@@ -121,6 +121,14 @@ class GameManager:
                 return True
         return False
 
+    def checkElementAt(self, mPos):
+        tPos = mapManager.getTilePosFromReal(mPos)
+        res = self.getResourceAt(tPos)
+        if res is not None:
+            return res
+        build = self.getBuildingAt(tPos)
+        return build
+
     def checkTileValid(self, tilePos, allowedSpot):
         # in Map
         tx, ty = tilePos

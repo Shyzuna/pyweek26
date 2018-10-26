@@ -7,10 +7,11 @@ TODO:
 """
 
 from settings import settings
-from settings.enums import Colors, ObjectCategory
+from settings.enums import Colors, ObjectCategory, TooltipType
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
+import modules.gameManager
 import pygame
 import os
 
@@ -28,6 +29,8 @@ class GuiManager(object):
         self._buildingSelected = None
         self._buildingDestroy = None
         self._onGui = False
+        self._tooltipSurf = None
+        self._tooltipPos = None
         self._menuList = {
             'Build': self.changeMenu,
             'Research': None,
@@ -77,6 +80,43 @@ class GuiManager(object):
         self._batteryLevel.blit(text, ((batterySize[0] - text.get_width()) / 2,
                                        (batterySize[1] - text.get_height()) / 2))
 
+    def createTooltipUIElem(self, hoveredElem):
+        tooltipT = hoveredElem.getTooltipType()
+        if tooltipT is not None:
+            self._tooltipSurf = pygame.Surface((200, 100))
+            self._tooltipSurf.fill(Colors.WHITE.value)
+            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 199, 99), 2)
+            if tooltipT == TooltipType.GUI_BUILDING:
+                building = hoveredElem.getBuildingData()
+                text = self._fonts[self._currentFont].render(building['name'], 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5))
+        else:
+            self._tooltipSurf = None
+
+    def createTooltipIGBuilding(self, element):
+        if element is not None:
+            self._tooltipSurf = pygame.Surface((200, 100))
+            self._tooltipSurf.fill(Colors.WHITE.value)
+            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 199, 99), 2)
+        else:
+            self._tooltipSurf = None
+
+    def updateTooltipPos(self, mPos):
+        offsetX = 0
+        offsetY = 0
+        size = self._tooltipSurf.get_size()
+        # width
+        if (mPos[0] + size[0]) > settings.SCREEN_WIDTH:  # Left
+            offsetX = -size[0] - 10
+        else:  # Right
+            offsetX = 10
+        # height
+        if (mPos[1] + size[1]) > settings.SCREEN_HEIGHT:  # Above
+            offsetY = -size[1] - 10
+        else:  # Bellow
+            offsetY = 10
+        self._tooltipPos = (mPos[0] + offsetX, mPos[1] + offsetY)
+
     def updateGui(self, player, mPos):
         self.updateTopBar(player)
         self.updateBatteryLevel(player)
@@ -84,6 +124,8 @@ class GuiManager(object):
             self._buildingSelected.updatePosition(mPos)
         if self._buildingDestroy is not None:
             self._buildingDestroy.updatePosition(mPos)
+        if self._tooltipSurf is not None:
+            self.updateTooltipPos(mPos)
 
     def updateTopBar(self,  player):
         self._topBar.fill(Colors.WHITE.value)
@@ -127,7 +169,8 @@ class GuiManager(object):
             for e in l:
                 name, obj = e
                 localButtonList.append(UIButton(name.value, localButtonSize, (0, localButtonH),
-                                                self._fonts[self._currentFont], self.selectBuilding, building=obj))
+                                                self._fonts[self._currentFont], self.selectBuilding, building=obj,
+                                                tooltipType=TooltipType.GUI_BUILDING))
                 localButtonH += localButtonSize[1]
             localButtonList.append(UIButton('Back', localButtonSize, (0, localButtonH),
                                             self._fonts[self._currentFont], self.resetMenu, prevContext='Build'))
@@ -171,11 +214,15 @@ class GuiManager(object):
         if self._buildingDestroy is not None:
             self._buildingDestroy.display(screen)
 
+        if self._tooltipSurf is not None:
+            screen.blit(self._tooltipSurf, self._tooltipPos)
+
     def isOnGui(self):
         return self._onGui
 
     def checkMousePosition(self, mPos):
         onGui = False
+        hoveredElem = False
         # Check battery
         batterySize = self._battery.get_size()
         rect = pygame.Rect(settings.SCREEN_WIDTH - batterySize[0] - 10,
@@ -186,8 +233,23 @@ class GuiManager(object):
         onGui = onGui or rect.collidepoint(mPos[0], mPos[1])
         # Check button
         for b in self._sideButtons[self._currentSideMenu]:
-            onGui = onGui or b.checkHover(mPos)
+            if b.checkHover(mPos):
+                hoveredElem = True
+                onGui = True
+                if b.isNewHover():
+                    self.createTooltipUIElem(b)
+
+        if not hoveredElem:
+            self._tooltipSurf = None
+
         self._onGui = onGui
+
+        # Check game board
+        if not onGui:
+            element = modules.gameManager.gameManager.checkElementAt(mPos)
+            if element is not None:
+                self.createTooltipIGBuilding(element)
+
 
     def handleMouseButton(self, pressed, mPos, button):
         if button == 1:
