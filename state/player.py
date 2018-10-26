@@ -45,3 +45,14 @@ class Player(object):
     def getResourcesVisible(self):
         return self._resourcesVisible
 
+    def tryPay(self, resList):
+        # check first
+        for r, value in resList.items():
+            if self._resources[r] < value:
+                return False
+
+        # then pay
+        for r, value in resList.items():
+            self._resources[r] -= value
+
+        return True

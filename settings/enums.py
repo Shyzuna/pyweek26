@@ -80,3 +80,10 @@ class TooltipType(Enum):
     TEXT_TIP = 0
     GUI_BUILDING = 1
     IG_BUILDING = 2
+
+class ResearchType(Enum):
+    """
+    Enum for research Type
+    """
+    UNLOCK = 0
+    UPGRADE = 1

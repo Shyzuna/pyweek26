@@ -69,5 +69,7 @@ class ContractManager:
     def checkMousePressed(self, pressed, mPos):
         pass
 
+    def checkHover(self, mPos):
+        pass
 
 contractManager = ContractManager()

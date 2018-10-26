@@ -4,6 +4,7 @@ from modules.displayManager import displayManager
 from modules.mapManager import mapManager
 from modules.inputManager import inputManager
 from modules.guiManager import guiManager
+from modules.researchManager import researchManager
 from modules.contractManager import contractManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
@@ -43,6 +44,7 @@ class GameManager:
         displayManager.init()
         mapManager.init()
         inputManager.init()
+        researchManager.init()
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._player = Player()
@@ -62,6 +64,7 @@ class GameManager:
             time_since_update_res += deltaTime
 
             # Update
+            researchManager.update(deltaTime)
             inputManager.loop(mapManager.currentRect)
             mapManager.scroll(inputManager.directionState, deltaTime)
             if inputManager.keyPressed is not None:
