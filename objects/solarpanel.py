@@ -14,4 +14,4 @@ class SolarPanel(Building, ProducingBuilding):
         Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.SOLARPANEL])
 
         self.state = BuildingStates.ON
-        ProducingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.SOLARPANEL], self.state)
+        ProducingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)

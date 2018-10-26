@@ -14,4 +14,4 @@ class Crusher(Building, ConsumingBuilding):
         self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
 
         Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER])
-        ConsumingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER], self.state)
+        ConsumingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)

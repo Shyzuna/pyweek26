@@ -15,5 +15,5 @@ class Battery(Building, ProducingBuilding, StockingBuilding):
         Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.BATTERY])
 
         self.state = BuildingStates.ON
-        ProducingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.BATTERY], self.state)
-        StockingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.BATTERY], ObjectCategory.ENERGY)
+        ProducingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
+        StockingBuilding.__init__(self, self.network, self.buildingData, ObjectCategory.ENERGY, self.level)

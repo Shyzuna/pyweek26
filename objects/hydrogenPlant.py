@@ -15,5 +15,5 @@ class HydrogenPlant(Building, ConsumingBuilding, ProducingBuilding):
         self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
 
         Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.HYDROGEN_PLANT])
-        ConsumingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.HYDROGEN_PLANT], self.state)
-        ProducingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.HYDROGEN_PLANT], self.state)
+        ConsumingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
+        ProducingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
