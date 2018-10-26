@@ -3,14 +3,15 @@ from settings.enums import ObjectCategory
 
 class StockingBuilding():
 
-    def __init__(self, network, buildingData, type):
+    def __init__(self, network, buildingData, type, level):
         self.network = network
         self.buildingData = buildingData
         self.cur_capacity = {type: 0}
         self.type = type
+        self.level = level
 
     def is_full(self):
-        max_capacity = self.buildingData['stock'][self.type]
+        max_capacity = self.buildingData['stock'][self.type][self.level]
         if self.cur_capacity[self.type] == max_capacity:
             return True
         else:
@@ -23,7 +24,7 @@ class StockingBuilding():
             return False
 
     def fill(self):
-        max_capacity = self.buildingData['stock'][self.type]
+        max_capacity = self.buildingData['stock'][self.type][self.level]
         self.cur_capacity[self.type] = max_capacity
 
     def empty(self):

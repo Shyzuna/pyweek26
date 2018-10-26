@@ -19,6 +19,8 @@ class Building(pygame.sprite.Sprite):
         self.img = buildingData['animImg'][0]
         self.buildingData = buildingData
         self.state = BuildingStates.OFF
+        self.network = None
+        self.level = 0
 
     def setPos(self, pos):
         self.position = pos

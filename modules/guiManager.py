@@ -79,7 +79,7 @@ class GuiManager(object):
             int((settings.SCREEN_HEIGHT - self._topBar.get_height() - frameSize[1]) / 2) + self._topBar.get_height()
         )
 
-        contractManager.init()
+        contractManager.init(frameSize, framePos)
         self._frameList['Research'] = UIResearchFrame(frameSize, framePos, self._fonts[self._currentFont], self)
         self._frameList['Earth'] = UIEarthFrame(frameSize, framePos, self._fonts[self._currentFont], self)
 
