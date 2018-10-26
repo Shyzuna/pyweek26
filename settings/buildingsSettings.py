@@ -165,5 +165,24 @@ ALL_BUILDINGS_SETTINGS = {
         'animImg': [
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'CONNECTOR.png'))
         ]
+    },
+    BuildingsName.TRANSMITTER: {
+        'name': BuildingsName.TRANSMITTER.value,
+        'desc': 'Building connector.',
+        'cost': {ObjectCategory.CREDITS: [10, 0, 0]},
+        'produce': {},
+        'consume': {},
+        'stock': {},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': False,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'TRANSMITTER.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'TRANSMITTER.png'))
+        ]
     }
 }

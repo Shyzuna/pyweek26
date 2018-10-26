@@ -54,6 +54,7 @@ class BuildingsName(Enum):
     WAREHOUSE_HYDROGEN = 'Warehouse Hydrogen'
     HYDROGEN_PLANT = 'Hydrogen Plant'
     CONNECTOR = 'Connector'
+    TRANSMITTER = 'Transmitter'
 
 class BuildingTypes(Enum):
     """
@@ -80,3 +81,14 @@ class TooltipType(Enum):
     TEXT_TIP = 0
     GUI_BUILDING = 1
     IG_BUILDING = 2
+
+class Towns(Enum):
+    """
+    Enum for towns
+    """
+    MOSCOW = 'Moscow',
+    NEW_YORK = 'New York',
+    SHANGAI = 'Shangai',
+    PARIS = 'Paris',
+    LONDON = 'London',
+    SYDNEY = 'Sydney'

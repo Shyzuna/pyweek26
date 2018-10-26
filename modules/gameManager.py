@@ -12,6 +12,8 @@ from objects.network import Network
 from objects.producingBuilding import ProducingBuilding
 from objects.consumingBuilding import ConsumingBuilding
 from objects.stockingBuilding import StockingBuilding
+from objects.transmitter import Transmitter
+from objects.earth import Earth
 from state.player import Player
 
 from objects.battery import Battery
@@ -30,13 +32,14 @@ class GameManager:
 
     def init(self):
         self.buildingList = {
-            BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters)],
+            BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters), (BuildingsName.TRANSMITTER, Transmitter)],
             BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
             BuildingTypes.REFINER: [],
             BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), (BuildingsName.HYDROGEN_PLANT, HydrogenPlant)],
             BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
             BuildingTypes.CONNECTOR: [(BuildingsName.CONNECTOR, Connector)],
         }
+        self._earth = Earth()
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
@@ -55,11 +58,13 @@ class GameManager:
         #pygame.event.set_grab(True)
 
         time_since_update_res = 0
+        time_since_hour_changed = 0
 
         while not inputManager.done:
             self.clock.tick(settings.FPS)
             deltaTime = self.clock.get_time()
             time_since_update_res += deltaTime
+            time_since_hour_changed += deltaTime
 
             # Update
             inputManager.loop(mapManager.currentRect)
@@ -108,6 +113,11 @@ class GameManager:
                         if isinstance(building, StockingBuilding):
                             building.stock()
                             self._player._resources[building.type] += building.cur_capacity[building.type]
+
+            # Earth
+            if time_since_hour_changed > settings.EARTH_HOUR_ROTATING_FREQ:
+                time_since_hour_changed = 0
+                self._earth.changeHour()
 
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
