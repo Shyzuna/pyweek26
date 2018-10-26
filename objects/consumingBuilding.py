@@ -1,6 +1,5 @@
-from settings.enums import ObjectCategory
 from settings.enums import BuildingStates
-
+from objects.miningBuilding import MiningBuilding
 
 class ConsumingBuilding():
 
@@ -16,6 +15,9 @@ class ConsumingBuilding():
             for consumingType, consumeValue in self.buildingData['consume'].items():
                 if tempState == BuildingStates.OFF:
                     break
-                tempState = self.network.consumeResources(consumeValue[self.level], consumingType)
+                if isinstance(self, MiningBuilding):
+                    tempState = self.network.consumeResources(consumeValue[self.level], consumingType, self.linkedRes)
+                else:
+                    tempState = self.network.consumeResources(consumeValue[self.level], consumingType)
                 print("Consommation de ", consumeValue[self.level], consumingType, tempState)
             self.state = tempState

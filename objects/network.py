@@ -142,17 +142,45 @@ class Network():
     def produceStock(self, num, type):
         self.instantStock[type] += num
 
-    def consumeResources(self, num, type):
+    def consumeResources(self, num, type, resource=None):
         state = BuildingStates.ON
-        if num <= self.instantProduction[type]:
-            self.instantProduction[type] -= num
-        else:
-            leftToConsume = num - self.instantProduction[type]
-            if self.consumedStock[type] + leftToConsume <= self.instantStock[type]:
-                self.consumedStock[type] += leftToConsume
-                self.instantProduction[type] = 0
-            else:
+
+        # Resource
+        if resource is not None:
+            if resource.isEmpty():
                 state = BuildingStates.OFF
+            elif num <= resource.getAmount():
+                newResourceAmount = resource.getAmount() - num
+            else:
+                newResourceAmount = 0
+                num = newResourceAmount
+
+        # Production
+        newInstantProduction = self.instantProduction[type]
+        newConsumedStock = self.consumedStock[type]
+        newInstantStock = self.instantStock[type]
+
+        if state == BuildingStates.ON:
+            if num <= self.instantProduction[type]:
+                newInstantProduction = self.instantProduction[type] - num
+            else:
+                leftToConsume = num - self.instantProduction[type]
+                if self.consumedStock[type] + leftToConsume <= self.instantStock[type]:
+                    newConsumedStock = self.consumedStock[type] + leftToConsume
+                    newInstantProduction = 0
+                else:
+                    state = BuildingStates.OFF
+
+        if resource is not None:
+            if state == BuildingStates.ON:
+                resource.setAmount(newResourceAmount)
+                self.instantProduction[type] = newInstantProduction
+                self.consumedStock[type] = newConsumedStock
+                self.instantStock[type] = newInstantStock
+        else:
+            self.instantProduction[type] = newInstantProduction
+            self.consumedStock[type] = newConsumedStock
+            self.instantStock[type] = newInstantStock
 
         return state
 

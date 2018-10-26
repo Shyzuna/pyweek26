@@ -24,7 +24,7 @@ class Resource(object):
         self._position = position
         self._size = size
         self._category = category
-        self._amount = amount
+        self._amount = int(amount)
 
         self.current_x = position[0] * settings.TILE_WIDTH
         self.current_y = position[1] * settings.TILE_HEIGHT
@@ -37,3 +37,12 @@ class Resource(object):
 
     def getCategory(self):
         return self._category
+
+    def isEmpty(self):
+        return self._amount <= 0
+
+    def getAmount(self):
+        return self._amount
+
+    def setAmount(self, amount):
+        self._amount = amount
