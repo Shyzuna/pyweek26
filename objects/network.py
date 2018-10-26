@@ -157,7 +157,7 @@ class Network():
         return state
 
     def fillStock(self, warehouse, type):
-        max_capacity = warehouse.buildingData['stock'][type]
+        max_capacity = warehouse.buildingData['stock'][type][warehouse.level]
         print("stock", type)
         if self.instantProduction[type] > 0 and not warehouse.is_full():
             if warehouse.cur_capacity[type] + self.instantProduction[type] > max_capacity:

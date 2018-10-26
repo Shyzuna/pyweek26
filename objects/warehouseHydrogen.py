@@ -15,5 +15,5 @@ class WarehouseHydrogen(Building, ProducingBuilding, StockingBuilding):
         Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.WAREHOUSE_HYDROGEN])
 
         self.state = BuildingStates.ON
-        ProducingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.WAREHOUSE_HYDROGEN], self.state)
-        StockingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.WAREHOUSE_HYDROGEN], ObjectCategory.HYDROGEN)
+        ProducingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
+        StockingBuilding.__init__(self, self.network, self.buildingData, ObjectCategory.HYDROGEN, self.level)
