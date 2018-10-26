@@ -41,6 +41,7 @@ class MapGenerator(object):
             # compute spot number
             spotNumber = self.getRandomDelta(totalSize * spots[i], delta)
             amountBySpot = self.getRandomDelta(totalRes * repartition[i], delta) / spotNumber  # uniform distribution
+            print(amountBySpot)
             for j in range(0, spotNumber):
                 position = numpy.random.choice(cases, 1)
                 cases.remove(position)

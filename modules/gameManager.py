@@ -46,7 +46,7 @@ class GameManager:
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}
         }
         self.networks = {
-            'electric': []
+            ObjectCategory.ENERGY: []
         }
 
     def start(self):
@@ -292,7 +292,7 @@ class GameManager:
             self._buildings.update({building.position[1]: {building.position[0]: building}})
 
         if isinstance(building, Battery):
-            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
+            self._player._resourcesCap[ObjectCategory.ENERGY] += building.buildingData['capacity'][ObjectCategory.ENERGY]
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]

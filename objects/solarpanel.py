@@ -2,6 +2,7 @@ import pygame
 import os
 
 from settings import settings
+from settings.enums import ObjectCategory
 from objects.building import Building
 from settings.enums import BuildingStates, BuildingsName
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
@@ -16,24 +17,18 @@ class SolarPanel(Building):
         self.connections = {'inputs': None,
                             'outputs': {'Electricity': False}}
 
-        self.production = 10
-
         self.networks = {
-            'electric': None
+            ObjectCategory.ENERGY: None
         }
-
-        #self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "SOLARPANEL.png"))
-        #self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
-        #                                             settings.TILE_HEIGHT * self.size[1]))
 
         Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.SOLARPANEL])
 
         self.state = BuildingStates.ON
 
     def updateProduction(self):
-        if self.networks['electric'] is not None:
-            self.networks['electric'].instantProduction += self.production
-            print("solarpanel genere " + str(self.production))
+        if self.networks[ObjectCategory.ENERGY] is not None:
+            self.networks[ObjectCategory.ENERGY].instantProduction += self.buildingData['produce'][ObjectCategory.ENERGY]
+            print("solarpanel genere " + str(self.buildingData['produce'][ObjectCategory.ENERGY]))
 
     def update(self):
         pass

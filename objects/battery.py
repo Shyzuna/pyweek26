@@ -2,6 +2,7 @@ import pygame
 import os
 
 from settings import settings
+from settings.enums import ObjectCategory
 from objects.building import Building
 from settings.enums import BuildingsName
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
@@ -16,30 +17,27 @@ class Battery(Building):
         self.connections = {'inputs': {'Electricity': False},
                             'outputs': {'Electricity': False}}
 
-        self.max_capacity = 50
         self.cur_capacity = 0
 
         self.networks = {
-            'electric': None
+            ObjectCategory.ENERGY: None
         }
-
-        #self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "BATTERY.png"))
-        #self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH*self.size[0],
-        #                                             settings.TILE_HEIGHT*self.size[1]))
 
         Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.BATTERY])
 
     def update_capacity(self, value):
         overflow = 0
+        max_capacity = self.buildingData['capacity'][ObjectCategory.ENERGY]
 
-        if self.max_capacity >= self.cur_capacity + value:
-            overflow = self.cur_capacity - self.max_capacity + value
+        if max_capacity >= self.cur_capacity + value:
+            overflow = self.cur_capacity - max_capacity + value
             self.cur_capacity += value
 
         return overflow
 
     def is_full(self):
-        if self.cur_capacity == self.max_capacity:
+        max_capacity = self.buildingData['capacity'][ObjectCategory.ENERGY]
+        if self.cur_capacity == max_capacity:
             return True
         else:
             return False
@@ -51,21 +49,23 @@ class Battery(Building):
             return False
 
     def fill(self):
-        self.cur_capacity = self.max_capacity
+        max_capacity = self.buildingData['capacity'][ObjectCategory.ENERGY]
+        self.cur_capacity = max_capacity
 
     def empty(self):
         self.cur_capacity = 0
 
     def updateProduction(self):
-        if self.networks['electric'] is not None:
-            self.networks['electric'].instantStock += self.cur_capacity
+        if self.networks[ObjectCategory.ENERGY] is not None:
+            self.networks[ObjectCategory.ENERGY].instantStock += self.cur_capacity
 
     def updateStock(self):
-        if self.networks['electric'] is not None:
-            network = self.networks['electric']
+        if self.networks[ObjectCategory.ENERGY] is not None:
+            max_capacity = self.buildingData['capacity'][ObjectCategory.ENERGY]
+            network = self.networks[ObjectCategory.ENERGY]
             if network.instantProduction > 0 and not self.is_full():
-                if self.cur_capacity + network.instantProduction > self.max_capacity:
-                    toFill = self.max_capacity - self.cur_capacity
+                if self.cur_capacity + network.instantProduction > max_capacity:
+                    toFill = max_capacity - self.cur_capacity
                     self.cur_capacity += toFill
                     network.instantProduction -= toFill
                     print("Recharge batterie", toFill)

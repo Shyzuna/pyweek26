@@ -1,9 +1,8 @@
-import pygame
-import os
 
-from settings import settings
 from settings.enums import BuildingsName
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
+from settings.enums import ObjectCategory
+
 from objects.building import Building
 
 
@@ -17,12 +16,8 @@ class HeadQuarters(Building):
                             'outputs': None}
 
         self.networks = {
-            'electric': None
+            ObjectCategory.ENERGY: None
         }
-
-        #self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "HEADQUARTERS.png"))
-        #self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
-        #                                             settings.TILE_HEIGHT * self.size[1]))
 
         Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.HEADQUARTERS])
 
