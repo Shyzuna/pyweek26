@@ -35,6 +35,8 @@ class MapGenerator(object):
     def generateMap(self, size, resources, spots, repartition, totalRes, delta):
         totalSize = size[0] * size[1]
         cases = list(range(0, totalSize))
+        hqX, hqY = settings.DEFAULT_HQ_POS
+        cases.remove(hqX * hqY)
         numpy.random.seed(self._seed)
         resList = []
         for i, res in enumerate(resources):
