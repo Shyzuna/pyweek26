@@ -35,7 +35,8 @@ class UIBuildingMouseSnap(object):
         else:
             currentRect = modules.mapManager.mapManager.currentRect
             self._tilePos = modules.mapManager.mapManager.getTilePosFromReal(mPos)
-            self._validPos = modules.gameManager.gameManager.checkTileValid(self._tilePos, self._building.allowedSpot)
+            self._validPos = modules.gameManager.gameManager.checkTileValid(self._tilePos,
+                                                                            self._building.buildingData['allowedSpot'])
 
             self._pos = (self._tilePos[0] * settings.TILE_WIDTH - currentRect.x,
                          self._tilePos[1] * settings.TILE_HEIGHT - currentRect.y)

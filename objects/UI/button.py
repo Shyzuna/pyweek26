@@ -16,7 +16,7 @@ class UIButton(object):
         self._building = building
         if building is not None:
             tmpBuild = building((-1, -1))
-            self._img = tmpBuild.img
+            self._img = tmpBuild.buildingData['uiImg']
         else:
             self._img = img
         self._clickFct = clickFct

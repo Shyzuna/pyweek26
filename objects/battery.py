@@ -3,6 +3,8 @@ import os
 
 from settings import settings
 from objects.building import Building
+from settings.enums import BuildingsName
+from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 
 
 class Battery(Building):
@@ -21,11 +23,11 @@ class Battery(Building):
             'electric': None
         }
 
-        self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "BATTERY.png"))
-        self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH*self.size[0],
-                                                     settings.TILE_HEIGHT*self.size[1]))
+        #self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "BATTERY.png"))
+        #self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH*self.size[0],
+        #                                             settings.TILE_HEIGHT*self.size[1]))
 
-        Building.__init__(self, self.position, self.size, self.connections, self.img)
+        Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.BATTERY])
 
     def update_capacity(self, value):
         overflow = 0

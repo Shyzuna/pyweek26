@@ -3,8 +3,10 @@ import os
 
 from settings import settings
 from objects.building import Building
-from settings.enums import ObjectCategory
+from settings.enums import ObjectCategory, BuildingsName
 import modules.gameManager
+from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
+
 
 class Crusher(Building):
 
@@ -23,13 +25,13 @@ class Crusher(Building):
             'electric': None
         }
 
-        self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "CRUSHER.png"))
-        self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
-                                                     settings.TILE_HEIGHT * self.size[1]))
+        #self.img = pygame.image.load(os.path.join(settings.BUILDINGS_PATH, "CRUSHER.png"))
+        #self.img = pygame.transform.scale(self.img, (settings.TILE_WIDTH * self.size[0],
+        #                                             settings.TILE_HEIGHT * self.size[1]))
 
         self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
 
-        Building.__init__(self, self.position, self.size, self.connections, self.img, [ObjectCategory.TRIHELIUM])
+        Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER])
 
     def updateProduction(self):
         pass

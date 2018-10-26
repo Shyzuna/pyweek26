@@ -7,7 +7,7 @@ from settings.enums import BuildingStates
 
 class Building(pygame.sprite.Sprite):
 
-    def __init__(self, position, size, connections, img, allowedSpot=None):
+    def __init__(self, position, connections, buildingData):
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -15,12 +15,11 @@ class Building(pygame.sprite.Sprite):
         self.position = position
         self.current_x = (position[0]) * settings.TILE_WIDTH
         self.current_y = (position[1]) * settings.TILE_HEIGHT
-        self.size = size
+        self.size = buildingData['size']
         self.connections = connections
-        self.img = img
+        self.img = buildingData['animImg'][0]
+        self.buildingData = buildingData
         self.state = BuildingStates.OFF
-        # if None on empty space only
-        self.allowedSpot = allowedSpot
 
     def setPos(self, pos):
         self.position = pos
@@ -50,4 +49,11 @@ class Building(pygame.sprite.Sprite):
         pass
 
     def updateStock(self):
+        pass
+
+    def getGuiTipInfo(self):
+        pass
+        #return self.name, self.desc, self.cost, self.creationTime, self.constructable
+
+    def getGameTip(self):
         pass

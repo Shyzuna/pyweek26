@@ -42,7 +42,7 @@ class BuildingShortcuts(Enum):
     DRILL = pygame.K_3
     CRUSHER = pygame.K_4
 
-class Buildings(Enum):
+class BuildingsName(Enum):
     """
     Enum for all buildings
     """

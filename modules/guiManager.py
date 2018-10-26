@@ -117,7 +117,7 @@ class GuiManager(object):
         buttonH = self._topBar.get_height()
         for cat, l in self._buildingsList.items():
             buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
-                                              self._fonts[self._currentFont], self.changeMenu))
+                                            self._fonts[self._currentFont], self.changeMenu))
             buttonH += buttonSize[1]
 
             localButtonH = self._topBar.get_height()
@@ -134,10 +134,11 @@ class GuiManager(object):
             self._sideButtons[cat.value] = localButtonList
 
         buildButtonList.append(UIButton('Remove', buttonSize, (0, buttonH),
-                                    self._fonts[self._currentFont], self.destroyBuilding, img=self._guiImg['destructor']))
+                                        self._fonts[self._currentFont], self.destroyBuilding,
+                                        img=self._guiImg['destructor']))
         buttonH += buttonSize[1]
         buildButtonList.append(UIButton('Back', buttonSize, (0, buttonH),
-                                    self._fonts[self._currentFont], self.resetMenu, prevContext='base'))
+                                        self._fonts[self._currentFont], self.resetMenu, prevContext='base'))
 
         self._sideButtons['Build'] = buildButtonList
 
@@ -147,8 +148,7 @@ class GuiManager(object):
                       (settings.SCREEN_HEIGHT - self._topBar.get_height()) / len(self._menuList))
         buttonH = self._topBar.get_height()
         for menu, fct in self._menuList.items():
-            baseButtonList.append(UIButton(menu, buttonSize, (0, buttonH),
-                                        self._fonts[self._currentFont], fct))
+            baseButtonList.append(UIButton(menu, buttonSize, (0, buttonH), self._fonts[self._currentFont], fct))
             buttonH += buttonSize[1]
 
         self._sideButtons['base'] = baseButtonList
