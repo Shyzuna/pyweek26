@@ -8,31 +8,28 @@ class Contract:
 
     def __init__(self, contractor, reward, objective):
 
-        self.CONTRACTS_WINDOW_WIDTH = settings.SCREEN_WIDTH - settings.TILE_WIDTH * settings.CONTRACTS_WINDOW_GAP_X
-        self.CONTRACTS_WINDOW_HEIGHT = settings.SCREEN_HEIGHT - settings.TILE_HEIGHT * settings.CONTRACTS_WINDOW_GAP_Y
         self.contractor = contractor
         self.reward = reward
         self.objective = objective
         self.contour = 5
-        self.window = pygame.Rect(self.contour,
-                                  self.contour,
-                                  self.CONTRACTS_WINDOW_WIDTH,
-                                  (self.CONTRACTS_WINDOW_HEIGHT - 1 * settings.TILE_HEIGHT) / settings.MAX_AVAILABLE_CONTRACTS)
-        self.windowContour = pygame.Surface((self.CONTRACTS_WINDOW_WIDTH + 2 * self.contour,
-                                             (self.CONTRACTS_WINDOW_HEIGHT - 1 * settings.TILE_HEIGHT) / settings.MAX_AVAILABLE_CONTRACTS
-                                             + 2 * self.contour))
+        self.left = objective
 
-    def display(self, screen, topLeft, fonts, color):
-        self.windowContour.fill(color)
-        self.windowContour.fill(Colors.WHITE.value, self.window)
-        screen.blit(self.windowContour, topLeft)
+    def display(self, screen, windowContour, window, topLeft, fonts, color):
+        # Display white window of contract with colored edges
+        windowContour.fill(color)
+        windowContour.fill(Colors.WHITE.value, window)
+        screen.blit(windowContour, topLeft)
 
+        # Display info of contract
+        # Replace 200 with length of contract image
         contractorText = fonts['medium'].render('Contractor: ' + self.contractor, 1, Colors.BLACK.value)
         screen.blit(contractorText, (topLeft[0] + 200, topLeft[1] + self.contour * 2))
 
         rewardText = fonts['medium'].render('Reward: {}'.format(self.reward), 1, Colors.BLACK.value)
-        screen.blit(rewardText, (topLeft[0] + 200, topLeft[1] + self.contour * 2 + self.window.height / 4))
+        screen.blit(rewardText, (topLeft[0] + 200, topLeft[1] + self.contour * 2 + window.height / 4))
 
         objectiveText = fonts['medium'].render('Objective: {}'.format(self.objective), 1, Colors.BLACK.value)
-        screen.blit(objectiveText, (topLeft[0] + 200, topLeft[1] + self.contour * 2 + 2 * self.window.height / 4))
+        screen.blit(objectiveText, (topLeft[0] + 200, topLeft[1] + self.contour * 2 + 2 * window.height / 4))
 
+        leftText = fonts['medium'].render('Left: {}'.format(self.left), 1, Colors.BLACK.value)
+        screen.blit(leftText, (topLeft[0] + 200, topLeft[1] + self.contour * 2 + 3 * window.height / 4))
