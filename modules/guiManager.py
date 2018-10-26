@@ -12,6 +12,8 @@ from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
 from modules.contractManager import contractManager
+from objects.UI.earthFrame import UIEarthFrame
+from objects.UI.researchFrame import UIResearchFrame
 import modules.gameManager
 import pygame
 import os
@@ -65,7 +67,21 @@ class GuiManager(object):
                                                                 int(self._guiImg['destructor'].get_height() / 2)))
 
         self.createSideButton()
+
+        frameSize = (
+            int((settings.SCREEN_WIDTH - (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR)) * settings.UI_CENTRAL_FRAME[0]),
+            int((settings.SCREEN_HEIGHT - self._topBar.get_height()) * settings.UI_CENTRAL_FRAME[1])
+        )
+
+        framePos = (
+            int(((settings.SCREEN_WIDTH - (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR)) - frameSize[0]) / 2)
+            + (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR),
+            int((settings.SCREEN_HEIGHT - self._topBar.get_height() - frameSize[1]) / 2) + self._topBar.get_height()
+        )
+
         contractManager.init()
+        self._frameList['Research'] = UIResearchFrame(frameSize, framePos)
+        self._frameList['Earth'] = UIEarthFrame(frameSize, framePos)
 
     def updateBatteryLevel(self, player):
         self._batteryLevel.fill(Colors.WHITE.value)
