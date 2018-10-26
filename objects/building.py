@@ -7,7 +7,7 @@ from settings.enums import BuildingStates
 
 class Building(pygame.sprite.Sprite):
 
-    def __init__(self, position, connections, buildingData):
+    def __init__(self, position, buildingData):
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -16,7 +16,6 @@ class Building(pygame.sprite.Sprite):
         self.current_x = (position[0]) * settings.TILE_WIDTH
         self.current_y = (position[1]) * settings.TILE_HEIGHT
         self.size = buildingData['size']
-        self.connections = connections
         self.img = buildingData['animImg'][0]
         self.buildingData = buildingData
         self.state = BuildingStates.OFF
@@ -26,30 +25,9 @@ class Building(pygame.sprite.Sprite):
         self.current_x = (pos[0]) * settings.TILE_WIDTH
         self.current_y = (pos[1]) * settings.TILE_HEIGHT
 
-    def connection(self, resource):
-        if resource in self.connections['inputs']:
-            self.connections['inputs'][resource] = True
-        if resource in self.connections['outputs']:
-            self.connections['outputs'][resource] = True
-
-    def disconnection(self, resource):
-        if resource in self.connections['inputs']:
-            self.connections['inputs'][resource] = False
-        if resource in self.connections['outputs']:
-            self.connections['outputs'][resource] = False
-
     def display(self, screen, currentRect):
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
-
-    def updateProduction(self):
-        pass
-
-    def update(self):
-        pass
-
-    def updateStock(self):
-        pass
 
     def getGuiTipInfo(self):
         pass
