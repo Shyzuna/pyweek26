@@ -21,10 +21,10 @@ class Player(object):
         }
         self._resourcesCap = {
             ObjectCategory.ENERGY: 0,
-            ObjectCategory.HYDROGEN: 10,
-            ObjectCategory.DIHYGROGEN: 10,
-            ObjectCategory.TRIHYGROGEN: 10,
-            ObjectCategory.TRIHELIUM: 10,
+            ObjectCategory.HYDROGEN: 0,
+            ObjectCategory.DIHYGROGEN: 0,
+            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.TRIHELIUM: 0,
             ObjectCategory.CREDITS: None
         }
         self._resourcesVisible = {

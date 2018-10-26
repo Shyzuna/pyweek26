@@ -121,5 +121,23 @@ ALL_BUILDINGS_SETTINGS = {
         'animImg': [
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_HYDROGEN.png'))
         ]
+    },
+    BuildingsName.HYDROGEN_PLANT: {
+        'name': BuildingsName.HYDROGEN_PLANT.value,
+        'desc': 'Produce energy with hydrogen.',
+        'cost': {ObjectCategory.CREDITS: 200},
+        'produce': {ObjectCategory.ENERGY: 15},
+        'consume': {ObjectCategory.HYDROGEN: 20},
+        'stock': {},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HYDROGEN_PLANT.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HYDROGEN_PLANT.png'))
+        ]
     }
 }

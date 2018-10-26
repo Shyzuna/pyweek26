@@ -150,6 +150,7 @@ class Network():
             leftToConsume = num - self.instantProduction[type]
             if self.consumedStock[type] + leftToConsume <= self.instantStock[type]:
                 self.consumedStock[type] += leftToConsume
+                self.instantProduction[type] = 0
             else:
                 state = BuildingStates.OFF
 
@@ -157,7 +158,7 @@ class Network():
 
     def fillStock(self, warehouse, type):
         max_capacity = warehouse.buildingData['stock'][type]
-        print("stock")
+        print("stock", type)
         if self.instantProduction[type] > 0 and not warehouse.is_full():
             if warehouse.cur_capacity[type] + self.instantProduction[type] > max_capacity:
                 toFill = max_capacity - warehouse.cur_capacity[type]

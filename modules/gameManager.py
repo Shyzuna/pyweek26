@@ -20,6 +20,7 @@ from objects.drill import Drill
 from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
 from objects.warehouseHydrogen import WarehouseHydrogen
+from objects.hydrogenPlant import HydrogenPlant
 
 class GameManager:
 
@@ -29,9 +30,9 @@ class GameManager:
     def init(self):
         self.buildingList = {
             BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters)],
-            BuildingTypes.GATHERER: [(BuildingsName.CRUSHER, Crusher), (BuildingsName.DRILL, Drill)],
+            BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
             BuildingTypes.REFINER: [],
-            BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel)],
+            BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), {BuildingsName.HYDROGEN_PLANT, HydrogenPlant}],
             BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
             BuildingTypes.CONNECTOR: [],
         }
