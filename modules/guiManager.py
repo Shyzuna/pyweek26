@@ -79,9 +79,9 @@ class GuiManager(object):
             int((settings.SCREEN_HEIGHT - self._topBar.get_height() - frameSize[1]) / 2) + self._topBar.get_height()
         )
 
-        contractManager.init()
-        self._frameList['Research'] = UIResearchFrame(frameSize, framePos)
-        self._frameList['Earth'] = UIEarthFrame(frameSize, framePos)
+        contractManager.init(frameSize, framePos)
+        self._frameList['Research'] = UIResearchFrame(frameSize, framePos, self._fonts[self._currentFont], self)
+        self._frameList['Earth'] = UIEarthFrame(frameSize, framePos, self._fonts[self._currentFont], self)
 
     def updateBatteryLevel(self, player):
         self._batteryLevel.fill(Colors.WHITE.value)
@@ -238,11 +238,11 @@ class GuiManager(object):
         if self._buildingDestroy is not None:
             self._buildingDestroy.display(screen)
 
-        if self._tooltipSurf is not None:
-            screen.blit(self._tooltipSurf, self._tooltipPos)
-
         if self._centralFrame is not None:
             self._frameList[self._centralFrame].display(screen)
+
+        if self._tooltipSurf is not None:
+            screen.blit(self._tooltipSurf, self._tooltipPos)
 
     def isOnGui(self):
         return self._onGui
@@ -254,6 +254,7 @@ class GuiManager(object):
         # Check central frame
         if self._centralFrame is not None:
             onGui = onGui or self._frameList[self._centralFrame].isOn(mPos)
+            self._frameList[self._centralFrame].checkHover(mPos)
 
         # Check battery
         batterySize = self._battery.get_size()
@@ -321,7 +322,7 @@ class GuiManager(object):
     def changeCentralFrame(self, *arg):
         self._centralFrame = arg[0]
 
-    def closeCentralFrame(self):
+    def closeCentralFrame(self, *arg):
         self._centralFrame = None
 
 guiManager = GuiManager()

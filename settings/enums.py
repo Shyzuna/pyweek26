@@ -82,6 +82,13 @@ class TooltipType(Enum):
     GUI_BUILDING = 1
     IG_BUILDING = 2
 
+class ResearchType(Enum):
+    """
+    Enum for research Type
+    """
+    UNLOCK = 0
+    UPGRADE = 1
+
 class Towns(Enum):
     """
     Enum for towns

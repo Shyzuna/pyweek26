@@ -55,9 +55,9 @@ class UIButton(UIHoverable):
         else:
             return None
 
-    def draw(self, screen):
+    def draw(self, screen, offset=(0,0)):
         surface = self._pressedSurface if self._pressed else self._hoverSurface if self._hover else self._baseSurface
-        screen.blit(surface, self._pos)
+        screen.blit(surface, (self._pos[0] + offset[0], self._pos[1] + offset[1]))
 
 
     def checkMousePressed(self, pressed, mPos):
