@@ -64,9 +64,6 @@ class GameManager:
             # Update
             inputManager.loop(mapManager.currentRect)
             mapManager.scroll(inputManager.directionState, deltaTime)
-            if inputManager.keyPressed is not None:
-                self.processKeyPressed(inputManager.keyPressed, inputManager.absoluteMousePosInTiles)
-                print("Current pos in tiles: ", inputManager.absoluteMousePosInTiles)
 
             if inputManager.toDelete is not None:
                 inputManager.deleteMode = False
@@ -174,23 +171,6 @@ class GameManager:
         if ty in self._buildings and tx in self._buildings[ty]:
             return self._buildings[ty][tx]
         return None
-
-    def processKeyPressed(self, keyPressed, mousePosInTiles):
-        print(self._buildings)
-        if keyPressed in [shortcut.value for shortcut in BuildingShortcuts] and self.isPosInMap(mousePosInTiles):
-                print("key pressed: ", keyPressed)
-                if keyPressed == BuildingShortcuts['BATTERY'].value:
-                    self.addBuilding(buildingType='BATTERY', posInTiles=mousePosInTiles)
-                elif keyPressed == BuildingShortcuts['SOLARPANEL'].value:
-                    self.addBuilding(buildingType='SOLARPANEL', posInTiles=mousePosInTiles)
-                elif keyPressed == BuildingShortcuts['DRILL'].value:
-                    self.addBuilding(buildingType='DRILL', posInTiles=mousePosInTiles)
-                elif keyPressed == BuildingShortcuts['CRUSHER'].value:
-                    self.addBuilding(buildingType='CRUSHER', posInTiles=mousePosInTiles)
-
-
-    def isPosInMap(self, posInTiles):
-        return True
 
     def addBuilding(self, buildingType, posInTiles):
 
