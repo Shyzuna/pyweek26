@@ -1,5 +1,4 @@
 import pygame
-import math
 
 from modules.displayManager import displayManager
 from modules.mapManager import mapManager

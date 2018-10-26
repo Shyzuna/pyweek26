@@ -15,6 +15,6 @@ class ConsumingBuilding():
             for consumingType, consumeValue in self.buildingData['consume'].items():
                 if tempState == BuildingStates.OFF:
                     break
-                self.network.consumeResources(consumeValue, consumingType)
+                tempState = self.network.consumeResources(consumeValue, consumingType)
                 print("Consommation de ", consumeValue, consumingType, tempState)
             self.state = tempState
