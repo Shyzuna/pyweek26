@@ -21,6 +21,7 @@ from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
 from objects.warehouseHydrogen import WarehouseHydrogen
 from objects.hydrogenPlant import HydrogenPlant
+from objects.connector import Connector
 
 class GameManager:
 
@@ -34,7 +35,7 @@ class GameManager:
             BuildingTypes.REFINER: [],
             BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), (BuildingsName.HYDROGEN_PLANT, HydrogenPlant)],
             BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
-            BuildingTypes.CONNECTOR: [],
+            BuildingTypes.CONNECTOR: [(BuildingsName.CONNECTOR, Connector)],
         }
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()

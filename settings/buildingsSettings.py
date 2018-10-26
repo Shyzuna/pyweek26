@@ -139,5 +139,23 @@ ALL_BUILDINGS_SETTINGS = {
         'animImg': [
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HYDROGEN_PLANT.png'))
         ]
+    },
+    BuildingsName.CONNECTOR: {
+        'name': BuildingsName.CONNECTOR.value,
+        'desc': 'Building connector.',
+        'cost': {ObjectCategory.CREDITS: 10},
+        'produce': {},
+        'consume': {},
+        'stock': {},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'CONNECTOR.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'CONNECTOR.png'))
+        ]
     }
 }
