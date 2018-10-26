@@ -1,30 +1,17 @@
 from objects.building import Building
-from settings.enums import ObjectCategory, BuildingsName
-from objects.electricBuilding import ElectricBuilding
+from settings.enums import BuildingsName
+from objects.consumingBuilding import ConsumingBuilding
 import modules.gameManager
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 
 
-class Crusher(Building, ElectricBuilding):
+class Crusher(Building, ConsumingBuilding):
 
     def __init__(self, position):
 
         self.position = position
-        self.size = [1, 1]
-        self.connections = {'inputs': {'helium_rock': False, 'Electricity': False},
-                            'outputs': {'helium_gaz': False}}
-        self.ratio = 1
-
-        self.networks = {
-            ObjectCategory.ENERGY: None
-        }
-
+        self.network = None
         self.linkedRes = modules.gameManager.gameManager.getResourceAt(self.position)
 
-        Building.__init__(self, self.position, self.connections, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER])
-        ElectricBuilding.__init__(self, self.networks, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER])
-    def updateProduction(self):
-        pass
-
-    def update(self):
-        pass
+        Building.__init__(self, self.position, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER])
+        ConsumingBuilding.__init__(self, self.network, ALL_BUILDINGS_SETTINGS[BuildingsName.CRUSHER], self.state)

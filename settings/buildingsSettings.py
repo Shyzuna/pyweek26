@@ -20,7 +20,7 @@ ALL_BUILDINGS_SETTINGS = {
         'cost': {ObjectCategory.CREDITS: 100},
         'produce': {},
         'consume': {},
-        'capacity': {ObjectCategory.ENERGY: 50},
+        'stock': {ObjectCategory.ENERGY: 50},
         'allowedSpot': None,
         'deletable': True,
         'constructable': True,
@@ -36,9 +36,9 @@ ALL_BUILDINGS_SETTINGS = {
         'name': BuildingsName.DRILL.value,
         'desc': 'Collect Hydrogen in exchange of energy.',
         'cost': {ObjectCategory.CREDITS: 100},
-        'produce': {ObjectCategory.HYDROGEN: 1},
+        'produce': {ObjectCategory.HYDROGEN: 2},
         'consume': {ObjectCategory.ENERGY: 5},
-        'capacity': {},
+        'stock': {},
         'allowedSpot': [ObjectCategory.HYDROGEN],
         'deletable': True,
         'constructable': True,
@@ -56,7 +56,7 @@ ALL_BUILDINGS_SETTINGS = {
         'cost': {ObjectCategory.CREDITS: 100},
         'produce': {ObjectCategory.TRIHELIUM: 1},
         'consume': {ObjectCategory.ENERGY: 1},
-        'capacity': {},
+        'stock': {},
         'allowedSpot': [ObjectCategory.TRIHELIUM],
         'deletable': True,
         'constructable': True,
@@ -74,7 +74,7 @@ ALL_BUILDINGS_SETTINGS = {
         'cost': {ObjectCategory.CREDITS: 100},
         'produce': {ObjectCategory.ENERGY: 10},
         'consume': {},
-        'capacity': {},
+        'stock': {},
         'allowedSpot': None,
         'deletable': True,
         'constructable': True,
@@ -92,7 +92,7 @@ ALL_BUILDINGS_SETTINGS = {
         'cost': {ObjectCategory.CREDITS: 100},
         'produce': {},
         'consume': {},
-        'capacity': {},
+        'stock': {},
         'allowedSpot': None,
         'deletable': False,
         'constructable': False,
@@ -104,4 +104,22 @@ ALL_BUILDINGS_SETTINGS = {
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HEADQUARTERS.png'))
         ]
     },
+    BuildingsName.WAREHOUSE_HYDROGEN: {
+        'name': BuildingsName.WAREHOUSE_HYDROGEN.value,
+        'desc': 'Contains hydrogen.',
+        'cost': {ObjectCategory.CREDITS: 150},
+        'produce': {},
+        'consume': {},
+        'stock': {ObjectCategory.HYDROGEN: 50},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_HYDROGEN.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_HYDROGEN.png'))
+        ]
+    }
 }

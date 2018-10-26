@@ -1,33 +1,20 @@
-import pygame
-import uuid
-
 from settings.enums import ObjectCategory
 from settings.enums import BuildingStates
 
 
-class ElectricBuilding():
+class ConsumingBuilding():
 
-    def __init__(self, network, buildingData):
+    def __init__(self, network, buildingData, state):
         self.network = network
         self.buildingData = buildingData
+        self.state = state
 
-    def updateProduction(self):
-        if self.networks[ObjectCategory.ENERGY] is not None:
-            self.networks[ObjectCategory.ENERGY].instantConsumption += self.buildingData['consume'][ObjectCategory.ENERGY]
-
-    def update(self):
-        consumption = self.buildingData['consume'][ObjectCategory.ENERGY]
-        network = self.networks[ObjectCategory.ENERGY]
-        if network is not None:
-            self.state = BuildingStates.ON
-            if self.consumption <= network.instantProduction:
-                network.instantProduction -= consumption
-                print("Batiment ON")
-            else:
-                leftToConsume = consumption - network.instantProduction
-                if network.consumedStock + leftToConsume <= network.instantStock:
-                    network.consumedStock += leftToConsume
-                    print("Batiment sur batterie")
-                else:
-                    print("Batiment OFF")
-                    self.state = BuildingStates.OFF
+    def consume(self):
+        if self.network is not None:
+            tempState = BuildingStates.ON
+            for consumingType, consumeValue in self.buildingData['consume'].items():
+                if tempState == BuildingStates.OFF:
+                    break
+                self.network.consumeResources(consumeValue, consumingType)
+                print("Consommation de ", consumeValue, consumingType, tempState)
+            self.state = tempState

@@ -1,13 +1,12 @@
 import copy
+from settings.enums import ObjectCategory, BuildingStates
 
 class Network():
 
     def __init__(self):
         self.nodes = {}
-        self.instantProduction = 0
-        self.instantConsumption = 0
-        self.instantStock = 0
-        self.consumedStock = 0
+
+        self.update()
 
     def addConnections(self, firstBuilding, secondBuilding):
         firstBuildingId = firstBuilding.id
@@ -115,7 +114,66 @@ class Network():
         return None
 
     def update(self):
-        self.instantProduction = 0
-        self.instantConsumption = 0
-        self.instantStock = 0
-        self.consumedStock = 0
+        self.instantProduction = {
+            ObjectCategory.ENERGY: 0,
+            ObjectCategory.HYDROGEN: 0,
+            ObjectCategory.DIHYGROGEN: 0,
+            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.TRIHELIUM: 0
+        }
+        self.instantStock = {
+            ObjectCategory.ENERGY: 0,
+            ObjectCategory.HYDROGEN: 0,
+            ObjectCategory.DIHYGROGEN: 0,
+            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.TRIHELIUM: 0
+        }
+        self.consumedStock = {
+            ObjectCategory.ENERGY: 0,
+            ObjectCategory.HYDROGEN: 0,
+            ObjectCategory.DIHYGROGEN: 0,
+            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.TRIHELIUM: 0
+        }
+
+    def produceResources(self, num, type):
+        self.instantProduction[type] += num
+
+    def produceStock(self, num, type):
+        self.instantStock[type] += num
+
+    def consumeResources(self, num, type):
+        state = BuildingStates.ON
+        if num <= self.instantProduction[type]:
+            self.instantProduction[type] -= num
+        else:
+            leftToConsume = num - self.instantProduction[type]
+            if self.consumedStock[type] + leftToConsume <= self.instantStock[type]:
+                self.consumedStock[type] += leftToConsume
+            else:
+                state = BuildingStates.OFF
+
+        return state
+
+    def fillStock(self, warehouse, type):
+        max_capacity = warehouse.buildingData['stock'][type]
+        print("stock")
+        if self.instantProduction[type] > 0 and not warehouse.is_full():
+            if warehouse.cur_capacity[type] + self.instantProduction[type] > max_capacity:
+                toFill = max_capacity - warehouse.cur_capacity[type]
+                warehouse.cur_capacity[type] += toFill
+                self.instantProduction[type] -= toFill
+                print("Recharge batterie", toFill)
+            else:
+                warehouse.cur_capacity[type] += self.instantProduction[type]
+                print("Recharge batterie", self.instantProduction[type])
+                self.instantProduction[type] = 0
+        elif not warehouse.is_empty():
+            if warehouse.cur_capacity[type] - self.consumedStock[type] > 0:
+                warehouse.cur_capacity[type] -= self.consumedStock[type]
+                print("Decharge batterie 1", self.consumedStock[type])
+            else:
+                self.consumedStock[type] -= warehouse.cur_capacity[type]
+                print("Decharge batterie 2", warehouse.cur_capacity[type])
+                warehouse.cur_capacity[type] = 0
+

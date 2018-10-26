@@ -51,6 +51,7 @@ class BuildingsName(Enum):
     DRILL = "Drill"
     CRUSHER = "Crusher"
     HEADQUARTERS = 'Head Quarters'
+    WAREHOUSE_HYDROGEN = 'Warehouse Hydrogen'
 
 class BuildingTypes(Enum):
     """

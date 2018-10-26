@@ -10,6 +10,9 @@ from settings import settings
 from modules.mapGenerator import MapGenerator
 from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,BuildingsName
 from objects.network import Network
+from objects.producingBuilding import ProducingBuilding
+from objects.consumingBuilding import ConsumingBuilding
+from objects.stockingBuilding import StockingBuilding
 from state.player import Player
 
 from objects.battery import Battery
@@ -17,6 +20,7 @@ from objects.crusher import Crusher
 from objects.drill import Drill
 from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
+from objects.warehouseHydrogen import WarehouseHydrogen
 
 class GameManager:
 
@@ -29,7 +33,7 @@ class GameManager:
             BuildingTypes.GATHERER: [(BuildingsName.CRUSHER, Crusher), (BuildingsName.DRILL, Drill)],
             BuildingTypes.REFINER: [],
             BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel)],
-            BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery)],
+            BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
             BuildingTypes.CONNECTOR: [],
         }
         self.clock = pygame.time.Clock()
@@ -45,9 +49,7 @@ class GameManager:
         self._buildings = {  # Col / Row
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}
         }
-        self.networks = {
-            ObjectCategory.ENERGY: []
-        }
+        self.networks = []
 
     def start(self):
         #pygame.event.set_grab(True)
@@ -77,9 +79,8 @@ class GameManager:
 
             guiManager.updateGui(self._player, inputManager.mousePos)
 
-            for networkList in self.networks.values():
-                for network in networkList:
-                    network.update()
+            for network in self.networks:
+                network.update()
 
             if time_since_update_res > 1000:
                 time_since_update_res = 0
@@ -87,22 +88,29 @@ class GameManager:
                 # First compute instant prod, stock
                 for y in self._buildings:
                     for x in self._buildings[y]:
-                        self._buildings[y][x].updateProduction()
+                        if isinstance(self._buildings[y][x], ProducingBuilding):
+                            self._buildings[y][x].produce()
+                        if isinstance(self._buildings[y][x], StockingBuilding):
+                            self._buildings[y][x].produceStock()
 
                 # Then apply consumption
                 for y in self._buildings:
                     for x in self._buildings[y]:
-                        self._buildings[y][x].update()
+                        if isinstance(self._buildings[y][x], ConsumingBuilding):
+                            self._buildings[y][x].consume()
 
                 # Then apply stock
-                self._player._resources[ObjectCategory.ENERGY] = 0
+                for objectType in ObjectCategory:
+                    if objectType != ObjectCategory.CREDITS:
+                        self._player._resources[objectType] = 0
+
                 for y in self._buildings:
                     for x in self._buildings[y]:
                         building = self._buildings[y][x]
-                        building.updateStock()
 
-                        if isinstance(building, Battery):
-                            self._player._resources[ObjectCategory.ENERGY] += building.cur_capacity
+                        if isinstance(building, StockingBuilding):
+                            building.stock()
+                            self._player._resources[building.type] += building.cur_capacity[building.type]
 
             # Display
             displayManager.display(mapManager.currentRect, self._resources, self._buildings)
@@ -228,79 +236,74 @@ class GameManager:
             y = otherBuildingsPosition[i][1]
             if y in self._buildings and x in self._buildings[y]:
                 otherBuilding = self._buildings[y][x]
-                for networkType, network in building.networks.items():
-                    # Check if other building has same network types
-                    if networkType in otherBuilding.networks:
-                        # If other building network is None create one with the two buildings
-                        if otherBuilding.networks[networkType] is None:
-                            # If current building has no network yet create one with the two buildings
-                            if building.networks[networkType] is None:
-                                network = Network()
-                                network.addConnections(building, otherBuilding)
-                                otherBuilding.networks[networkType] = network
-                                building.networks[networkType] = network
-                                print("Création d'un nouveau network")
-                                print("Nouveau 1 " + str(building.position[0]) + " " + str(
-                                    building.position[1]))
-                                print("Nouveau 2 " + str(otherBuilding.position[0]) + " " + str(
-                                    otherBuilding.position[1]))
-                                self.networks[networkType].append(network)
-                            # Else add other building to existing network
-                            else:
-                                print("Ajout network other 1")
-                                print("Ajout network other 1 1 " + str(building.position[0]) + " " + str(
-                                    building.position[1]))
-                                print("Ajout network other 1 2 " + str(otherBuilding.position[0]) + " " + str(
-                                    otherBuilding.position[1]))
-                                building.networks[networkType].addConnections(otherBuilding, building)
-                                otherBuilding.networks[networkType] = building.networks[networkType]
-                        # Else connect the new building
-                        else:
-                            # If current building has no network yet add to existing one
-                            if building.networks[networkType] is None:
-                                print("Ajout network other 2 ")
-                                print("Ajout network other 2 1 " + str(building.position[0]) + " " + str(
-                                    building.position[1]))
-                                print("Ajout network other 2 2 " + str(otherBuilding.position[0]) + " " + str(
-                                    otherBuilding.position[1]))
-                                otherBuilding.networks[networkType].addConnections(building, otherBuilding)
-                                building.networks[networkType] = otherBuilding.networks[networkType]
-                            # Else merge the two networks if differents
-                            elif otherBuilding.networks[networkType] != building.networks[networkType]:
-                                otherBuilding.networks[networkType].mergeConnections(building.networks[networkType])
-                                otherBuilding.networks[networkType].addConnections(building, otherBuilding)
-                                print("Merge network ")
-                                print("Merge network 1 " + str(building.position[0]) + " " + str(
-                                    building.position[1]))
-                                print("Merge network 2 " + str(otherBuilding.position[0]) + " " + str(
-                                    otherBuilding.position[1]))
-                                # Update other buildings network
-                                for abs in self._buildings.values():
-                                    for bUpdate in abs.values():
-                                        if bUpdate.id in building.networks[networkType].nodes.keys():
-                                            if bUpdate.networks[networkType] in self.networks[networkType]:
-                                                self.networks[networkType].remove(bUpdate.networks[networkType])
-                                                print(str(self.networks[networkType]))
-                                            bUpdate.networks[networkType] = otherBuilding.networks[networkType]
-                                building.networks[networkType] = otherBuilding.networks[networkType]
-                            # Else just update connections
-                            else:
-                                print("Update network ")
-                                print("Update network 1 " + str(building.position[0]) + " " + str(
-                                    building.position[1]))
-                                print("Update network 2 " + str(otherBuilding.position[0]) + " " + str(
-                                    otherBuilding.position[1]))
-                                otherBuilding.networks[networkType].addConnections(building, otherBuilding)
-
-
+                # If other building network is None create one with the two buildings
+                if otherBuilding.network is None:
+                    # If current building has no network yet create one with the two buildings
+                    if building.network is None:
+                        network = Network()
+                        network.addConnections(building, otherBuilding)
+                        otherBuilding.network = network
+                        building.network = network
+                        print("Création d'un nouveau network")
+                        print("Nouveau 1 " + str(building.position[0]) + " " + str(
+                            building.position[1]))
+                        print("Nouveau 2 " + str(otherBuilding.position[0]) + " " + str(
+                            otherBuilding.position[1]))
+                        self.networks.append(network)
+                    # Else add other building to existing network
+                    else:
+                        print("Ajout network other 1")
+                        print("Ajout network other 1 1 " + str(building.position[0]) + " " + str(
+                            building.position[1]))
+                        print("Ajout network other 1 2 " + str(otherBuilding.position[0]) + " " + str(
+                            otherBuilding.position[1]))
+                        building.network.addConnections(otherBuilding, building)
+                        otherBuilding.network = building.network
+                # Else connect the new building
+                else:
+                    # If current building has no network yet add to existing one
+                    if building.network is None:
+                        print("Ajout network other 2 ")
+                        print("Ajout network other 2 1 " + str(building.position[0]) + " " + str(
+                            building.position[1]))
+                        print("Ajout network other 2 2 " + str(otherBuilding.position[0]) + " " + str(
+                            otherBuilding.position[1]))
+                        otherBuilding.network.addConnections(building, otherBuilding)
+                        building.network = otherBuilding.network
+                    # Else merge the two networks if differents
+                    elif otherBuilding.network != building.network:
+                        otherBuilding.network.mergeConnections(building.network)
+                        otherBuilding.network.addConnections(building, otherBuilding)
+                        print("Merge network ")
+                        print("Merge network 1 " + str(building.position[0]) + " " + str(
+                            building.position[1]))
+                        print("Merge network 2 " + str(otherBuilding.position[0]) + " " + str(
+                            otherBuilding.position[1]))
+                        # Update other buildings network
+                        for abs in self._buildings.values():
+                            for bUpdate in abs.values():
+                                if bUpdate.id in building.network.nodes.keys():
+                                    if bUpdate.network in self.networks:
+                                        self.networks.remove(bUpdate.network)
+                                        print(str(self.networks))
+                                    bUpdate.network = otherBuilding.network
+                        building.network = otherBuilding.network
+                    # Else just update connections
+                    else:
+                        print("Update network ")
+                        print("Update network 1 " + str(building.position[0]) + " " + str(
+                            building.position[1]))
+                        print("Update network 2 " + str(otherBuilding.position[0]) + " " + str(
+                            otherBuilding.position[1]))
+                        otherBuilding.network.addConnections(building, otherBuilding)
 
         if building.position[1] in self._buildings:
             self._buildings[building.position[1]].update({building.position[0]: building})
         else:
             self._buildings.update({building.position[1]: {building.position[0]: building}})
 
-        if isinstance(building, Battery):
-            self._player._resourcesCap[ObjectCategory.ENERGY] += building.buildingData['capacity'][ObjectCategory.ENERGY]
+        if isinstance(building, StockingBuilding):
+            self._player._resourcesCap[building.type] += building.buildingData['stock'][building.type]
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
@@ -322,24 +325,21 @@ class GameManager:
             if y in self._buildings and x in self._buildings[y]:
                 otherBuilding = self._buildings[y][x]
 
-                for networkType, network in building.networks.items():
-                    # Check if other building has same network types
-                    if networkType in otherBuilding.networks:
-                        # Remove the connections if not already None
-                        print("test connection adjacente " + str(otherBuilding.position[0]) + " " + str(
-                            otherBuilding.position[1]))
-                        if otherBuilding.networks[networkType] is not None:
-                            print("remove connection adjacente " + str(otherBuilding.position[0]) + " " + str(otherBuilding.position[1]))
-                            otherBuilding.networks[networkType].removeConnections(otherBuilding, building)
+                # Remove the connections if not already None
+                print("test connection adjacente " + str(otherBuilding.position[0]) + " " + str(
+                    otherBuilding.position[1]))
+                if otherBuilding.network is not None:
+                    print("remove connection adjacente " + str(otherBuilding.position[0]) + " " + str(otherBuilding.position[1]))
+                    otherBuilding.network.removeConnections(otherBuilding, building)
 
-                            # If no buildings left, remove network
-                            if len(otherBuilding.networks[networkType].nodes.keys()) < 2:
-                                if otherBuilding.networks[networkType] in self.networks[networkType]:
-                                    self.networks[networkType].remove(otherBuilding.networks[networkType])
-                                otherBuilding.networks[networkType] = None
-                            # Else network has to split
-                            else:
-                                otherBuildingsList.append(otherBuilding)
+                    # If no buildings left, remove network
+                    if len(otherBuilding.network.nodes.keys()) < 2:
+                        if otherBuilding.network in self.networks:
+                            self.networks.remove(otherBuilding.network)
+                        otherBuilding.network = None
+                    # Else network has to split
+                    else:
+                        otherBuildingsList.append(otherBuilding)
 
 
         # For all neighbors check if path still exists
@@ -347,27 +347,24 @@ class GameManager:
             for j in range(i + 1, len(otherBuildingsList)):
                 other1 = otherBuildingsList[i]
                 other2 = otherBuildingsList[j]
+                # If not exists split the two networks
+                if not other2.network.pathExists(other1, other2):
+                    newNetwork = Network()
+                    newNetwork.nodes = other2.network.splitNetworks()
+                    self.networks.append(newNetwork)
 
-                for networkType, network in other1.networks.items():
-                    if networkType in other2.networks and networkType in building.networks:
-                        # If not exists split the two networks
-                        if not other2.networks[networkType].pathExists(other1, other2):
-                            newNetwork = Network()
-                            newNetwork.nodes = other2.networks[networkType].splitNetworks()
-                            self.networks[networkType].append(newNetwork)
-
-                            # Update buildings
-                            for buildingToUpdate in newNetwork.nodes.keys():
-                                for abs in self._buildings.values():
-                                    for build in abs.values():
-                                        if build.id == buildingToUpdate:
-                                            build.networks[networkType] = newNetwork
+                    # Update buildings
+                    for buildingToUpdate in newNetwork.nodes.keys():
+                        for abs in self._buildings.values():
+                            for build in abs.values():
+                                if build.id == buildingToUpdate:
+                                    build.network = newNetwork
 
         print("remove en " + str(building.position[0]) + " " + str(building.position[1]))
         self._buildings[building.position[1]].pop(building.position[0])
         print(self._buildings)
 
-        if isinstance(building, Battery):
-            self._player._resourcesCap[ObjectCategory.ENERGY] -= building.max_capacity
+        if isinstance(building, StockingBuilding):
+            self._player._resourcesCap[building.type] -= building.buildingData['stock'][building.type]
 
 gameManager = GameManager()
