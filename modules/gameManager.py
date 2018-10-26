@@ -32,7 +32,7 @@ class GameManager:
             BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters)],
             BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
             BuildingTypes.REFINER: [],
-            BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), {BuildingsName.HYDROGEN_PLANT, HydrogenPlant}],
+            BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), (BuildingsName.HYDROGEN_PLANT, HydrogenPlant)],
             BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
             BuildingTypes.CONNECTOR: [],
         }
