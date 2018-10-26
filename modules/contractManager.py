@@ -3,6 +3,7 @@ import os
 
 from settings import settings
 from settings.enums import Colors
+from objects.UI.button import UIButton
 from objects.contract import Contract
 
 
@@ -11,9 +12,15 @@ class ContractManager:
     def __init__(self):
         pass
 
-    def init(self, frameSize, framePos):
+    def init(self, frameSize, framePos, guiManager):
 
         pygame.font.init()
+
+        self.fonts = {
+            'small': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 12),
+            'medium': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 15),
+            'large': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 20)
+        }
 
         self.CONTRACTS_WINDOW_WIDTH = frameSize[0]
         self.CONTRACTS_WINDOW_HEIGHT = frameSize[1]
@@ -42,13 +49,16 @@ class ContractManager:
         self.topBarContour = pygame.Surface((self.CONTRACTS_WINDOW_WIDTH + 2 * self.contour,
                                              self.CONTRACTS_WINDOW_HEIGHT / 10 + 2 * self.contour))
 
-        self.QUIT_BUTTON_SIZE = self.topBarHeight
+        self.QUIT_BUTTON_SIZE = (self.CONTRACTS_WINDOW_WIDTH / 10, self.topBarHeight)
         self.quitButtonTopLeft = self.popupTopLeft
         self.quitButton = pygame.Rect(self.contour, self.contour,
-                                      self.QUIT_BUTTON_SIZE, self.QUIT_BUTTON_SIZE)
+                                      self.QUIT_BUTTON_SIZE[0], self.QUIT_BUTTON_SIZE[1])
 
-        self.quitButtonContour = pygame.Surface((self.QUIT_BUTTON_SIZE + 2 * self.contour,
-                                                 self.QUIT_BUTTON_SIZE + 2 * self.contour))
+        self.quitButtonContour = pygame.Surface((self.QUIT_BUTTON_SIZE[0] + 2 * self.contour,
+                                                 self.QUIT_BUTTON_SIZE[1] + 2 * self.contour))
+
+        self.exitButton = UIButton('Close', (int(self.CONTRACTS_WINDOW_WIDTH / 10), int(self.topBarHeight)),
+                                   self.popupTopLeft, self.fonts['medium'], guiManager.closeCentralFrame)
 
         self.contractWindow = \
             pygame.Rect(self.contour,
@@ -60,12 +70,6 @@ class ContractManager:
                             (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS + 2 * self.contour
             )
         )
-
-        self.fonts = {
-            'small': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 12),
-            'medium': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 15),
-            'large': pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 20)
-        }
 
     def display(self, screen):
         # Display white background window with black edges
@@ -84,9 +88,7 @@ class ContractManager:
                            self.popupTopLeft[1] + self.topBarHeight / 2 - text.get_height() / 2))
 
         # Display quit button
-        self.quitButtonContour.fill(Colors.BLACK.value)
-        self.quitButtonContour.fill(Colors.RED.value, self.quitButton)
-        screen.blit(self.quitButtonContour, self.quitButtonTopLeft)
+        self.exitButton.draw(screen)
 
         # Display available contracts
         x = self.popupTopLeft[0]
@@ -106,10 +108,13 @@ class ContractManager:
     def isOn(self, mPos):
         return self.popup.collidepoint(mPos[0], mPos[1])
 
-    def checkMousePressed(self, pressed, mPos):
-        pass
-
     def checkHover(self, mPos):
+        self.exitButton.checkHover(mPos)
+
+    def checkMousePressed(self, pressed, mPos):
+        self.exitButton.checkMousePressed(pressed, mPos)
+
+    def update(self):
         pass
 
 contractManager = ContractManager()
