@@ -195,6 +195,11 @@ class GameManager:
         print(self._buildings)
 
     def createBuilding(self, building):
+        if self._player._resources[ObjectCategory.CREDITS] > building.buildingData['cost'][ObjectCategory.CREDITS]:
+            self._player._resources[ObjectCategory.CREDITS] -= building.buildingData['cost'][ObjectCategory.CREDITS]
+        else:
+            return
+
         x_tobuild = building.position[0]
         y_tobuild = building.position[1]
 
@@ -279,6 +284,7 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] += building.buildingData['stock'][building.type]
+
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
