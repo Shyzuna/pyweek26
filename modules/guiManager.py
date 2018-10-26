@@ -2,7 +2,7 @@
 Title: guiManager File
 Desc: GuiManager class
 Creation Date:  22/10/18
-LastMod Date: 24/10/18
+LastMod Date: 25/10/18
 TODO:
 """
 
@@ -212,11 +212,13 @@ class GuiManager(object):
     def destroyBuilding(self, *arg):
         pygame.mouse.set_visible(False)
         self._buildingDestroy = UIBuildingDestroySnap(self._guiImg['destructorMini'], self)
+        self._buildingSelected = None
 
     def selectBuilding(self, *arg):
         print("Building {} selected".format(arg[0]))
         if arg[1] is not None:
             self._buildingSelected = UIBuildingMouseSnap(arg[1]((-1, -1)), self)
+            self._buildingDestroy = None
 
 
 guiManager = GuiManager()

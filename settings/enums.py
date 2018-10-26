@@ -2,7 +2,7 @@
 Title: colors File
 Desc: Colors enumeration
 Creation Date: 22/10/17
-LastMod Date: 22/10/17
+LastMod Date: 25/10/17
 TODO:
 *
 """
@@ -32,6 +32,7 @@ class ObjectCategory(Enum):
     ENERGY = 'ENERGY'
     CREDITS = 'CREDITS'
 
+
 class BuildingShortcuts(Enum):
     """
     Enum for building shortcuts
@@ -49,6 +50,7 @@ class Buildings(Enum):
     SOLARPANEL = "Solar panel"
     DRILL = "Drill"
     CRUSHER = "Crusher"
+    HEADQUARTERS = 'Head Quarters'
 
 class BuildingTypes(Enum):
     """

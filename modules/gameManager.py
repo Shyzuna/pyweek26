@@ -10,12 +10,12 @@ from modules.mapGenerator import MapGenerator
 from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,Buildings
 from objects.network import Network
 from state.player import Player
-from objects.headquarters import HeadQuarters
 
 from objects.battery import Battery
 from objects.crusher import Crusher
 from objects.drill import Drill
 from objects.solarpanel import SolarPanel
+from objects.headquarters import HeadQuarters
 
 class GameManager:
 
@@ -24,7 +24,7 @@ class GameManager:
 
     def init(self):
         self.buildingList = {
-            BuildingTypes.GENERAL: [],
+            BuildingTypes.GENERAL: [(Buildings.HEADQUARTERS, HeadQuarters)],
             BuildingTypes.GATHERER: [(Buildings.CRUSHER, Crusher), (Buildings.DRILL, Drill)],
             BuildingTypes.REFINER: [],
             BuildingTypes.PRODUCER: [(Buildings.SOLARPANEL, SolarPanel)],
@@ -32,13 +32,13 @@ class GameManager:
             BuildingTypes.CONNECTOR: [],
         }
         self.clock = pygame.time.Clock()
+        self._mg = MapGenerator()
+        self._resources = self._mg.generateSettingsMap()
         mapManager.init()
         inputManager.init()
         displayManager.init()
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
-        self._mg = MapGenerator()
-        self._resources = self._mg.generateSettingsMap()
         self._player = Player()
         self._buildings = {  # Col / Row
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}

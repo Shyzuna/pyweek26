@@ -2,9 +2,10 @@
 Title: mapGenerator File
 Desc: Procedural generation of a map (ressources)
 Creation Date:  21/10/18
-LastMod Date: 24/10/18
+LastMod Date: 25/10/18
 TODO:
     - Make a better distribution fct
+    - Remove hq init pos from spawn
 """
 
 import numpy

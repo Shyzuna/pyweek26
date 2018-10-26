@@ -6,7 +6,7 @@ SEED = None  #93917774  # None for random
 SEED_POWER = 8
 DELTA_PERCENT = 0.1
 RESOURCES = [ObjectCategory.HYDROGEN, ObjectCategory.DIHYGROGEN, ObjectCategory.TRIHYGROGEN, ObjectCategory.TRIHELIUM]
-SPOT_NUMBERS = [0.01, 0.06, 0.03, 0.02]  # percent
+SPOT_NUMBERS = [0.08, 0.05, 0.03, 0.02]  # percent
 REPARTITION_NUMBERS = [0.04, 0.02, 0.014, 0.06]  # percent
 TOTAL_RES = 1000
 

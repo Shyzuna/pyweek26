@@ -2,7 +2,7 @@
 Title: button File
 Desc: UIButton class
 Creation Date:  22/10/18
-LastMod Date: 24/10/18
+LastMod Date: 25/10/18
 TODO:
 """
 
@@ -14,7 +14,11 @@ class UIButton(object):
     def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext=''):
         self._title = title
         self._building = building
-        self._img = img
+        if building is not None:
+            tmpBuild = building((-1, -1))
+            self._img = tmpBuild.img
+        else:
+            self._img = img
         self._clickFct = clickFct
         self._hover = False
         self._pressed = False
