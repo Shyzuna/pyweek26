@@ -48,7 +48,7 @@ class GameManager:
         mapManager.init()
         inputManager.init()
         researchManager.init()
-        guiManager.init(self.buildingList)
+        guiManager.init(self.buildingList, self._earth)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._player = Player()
         self._buildings = {  # Col / Row

@@ -48,7 +48,7 @@ class GuiManager(object):
         }
         self._guiImg = {}
 
-    def init(self, buildList):
+    def init(self, buildList, earth):
         pygame.font.init()
         self._fonts.append(pygame.font.Font(os.path.join(settings.FONT_PATH, 'VCR_OSD.ttf'), 15))
         self._topBar = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT * settings.UI_TOP_BAR))
@@ -81,7 +81,7 @@ class GuiManager(object):
 
         contractManager.init(frameSize, framePos, guiManager)
         self._frameList['Research'] = UIResearchFrame(frameSize, framePos, self._fonts[self._currentFont], self)
-        self._frameList['Earth'] = UIEarthFrame(frameSize, framePos, self._fonts[self._currentFont], self)
+        self._frameList['Earth'] = UIEarthFrame(frameSize, framePos, self._fonts[self._currentFont], self, earth)
 
     def updateBatteryLevel(self, player):
         self._batteryLevel.fill(Colors.WHITE.value)
