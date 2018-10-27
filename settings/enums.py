@@ -49,16 +49,23 @@ class BuildingsName(Enum):
     """
     BATTERY = "Battery"
     SOLARPANEL = "Solar panel"
-    DRILL = "Drill"
+    DRILL_HYDROGEN = "Drill Hydrogen"
+    DRILL_DIHYDROGEN = "Drill Dihydrogen"
+    DRILL_TRIHYDROGEN = "Drill Trihydrogen"
     CRUSHER = "Crusher"
     HEADQUARTERS = 'Head Quarters'
     WAREHOUSE_HYDROGEN = 'Warehouse Hydrogen'
+    WAREHOUSE_DIHYDROGEN = 'Warehouse Dihydrogen'
+    WAREHOUSE_TRIHYDROGEN = 'Warehouse Trihydrogen'
+    WAREHOUSE_TRIHELIUM= 'Warehouse Trihelium'
     HYDROGEN_PLANT = 'Hydrogen Plant'
     DIHYDROGEN_PLANT = 'Dihydrogen Plant'
+    TRIHYDROGEN_PLANT = 'Trihydrogen Plant'
+    TRIHELIUM_PLANT = 'Trihelium Plant'
     CONNECTOR = 'Connector'
     TRANSMITTER = 'Transmitter'
     HYDROGEN_COMBINER = 'Hydrogen Combiner'
-    WAREHOUSE_DIHYDROGEN = 'Warehouse Dihydrogen'
+    DIHYDROGEN_COMBINER = 'Dihydrogen Combiner'
 
 class BuildingTypes(Enum):
     """

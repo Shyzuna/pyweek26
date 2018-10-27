@@ -22,60 +22,42 @@ ALL_RESEARCH = {
             'param': 'stock'
         },
         {
-            'name': 'Unlock Hydrogen stuff',
+            'name': 'Unlock Hydrogen facilities',
             'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
             'time': 10,
-            'unlocked': [BuildingsName.HYDROGEN_PLANT, BuildingsName.DRILL, BuildingsName.WAREHOUSE_HYDROGEN],
+            'unlocked': [BuildingsName.HYDROGEN_PLANT, BuildingsName.DRILL_HYDROGEN, BuildingsName.WAREHOUSE_HYDROGEN],
             'resUnlocked': ObjectCategory.HYDROGEN
-        },
-        {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
-            'cost': {ObjectCategory.CREDITS: 100},
-            'time': 10,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2,
-            'param': 'stock'
-        },
-        {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
-            'cost': {ObjectCategory.CREDITS: 100},
-            'time': 10,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2,
-            'param': 'stock'
         }
     ],
     '2': [
         {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
+            'name': 'Unlock Dihydrogen facilities',
+            'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
             'time': 10,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2
+            'unlocked': [BuildingsName.DIHYDROGEN_PLANT, BuildingsName.DRILL_DIHYDROGEN, BuildingsName.WAREHOUSE_DIHYDROGEN, BuildingsName.HYDROGEN_COMBINER],
+            'resUnlocked': ObjectCategory.DIHYDROGEN
         }
     ],
     '3': [
         {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
+            'name': 'Unlock Trihydrogen facilities',
+            'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
-            'time': 100,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2
+            'time': 10,
+            'unlocked': [BuildingsName.TRIHYDROGEN_PLANT, BuildingsName.DRILL_TRIHYDROGEN, BuildingsName.WAREHOUSE_TRIHYDROGEN, BuildingsName.DIHYDROGEN_COMBINER],
+            'resUnlocked': ObjectCategory.TRIHYDROGEN
         }
     ],
     '4': [
         {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
+            'name': 'Unlock Trihelium facilities',
+            'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
             'time': 100,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2
+            'unlocked': [BuildingsName.TRIHELIUM_PLANT, BuildingsName.WAREHOUSE_TRIHELIUM, BuildingsName.CRUSHER],
+            'resUnlocked': ObjectCategory.TRIHELIUM
         }
     ]
 }

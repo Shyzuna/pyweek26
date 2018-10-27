@@ -7,7 +7,7 @@ from modules.guiManager import guiManager
 from modules.researchManager import researchManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
-from settings.enums import ObjectCategory,BuildingTypes,BuildingStates,BuildingsName
+from settings.enums import ObjectCategory, BuildingTypes, BuildingStates, BuildingsName
 from objects.network import Network
 from objects.producingBuilding import ProducingBuilding
 from objects.consumingBuilding import ConsumingBuilding
@@ -18,15 +18,19 @@ from state.player import Player
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 from objects.battery import Battery
 from objects.crusher import Crusher
-from objects.drill import Drill
+from objects.drillHydrogen import DrillHydrogen
+from objects.drillDihydrogen import DrillDiHydrogen
+from objects.drillTrihydrogen import DrillTriHydrogen
 from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
 from objects.warehouseHydrogen import WarehouseHydrogen
 from objects.hydrogenPlant import HydrogenPlant
-from objects.dihydrogenPlant import DihydrogenPlant
+from objects.dihydrogenPlant import DiHydrogenPlant
 from objects.hydrogenCombiner import HydrogenCombiner
-from objects.warehouseDihydrogen import WarehouseDihydrogen
-from objects.connector import Connector
+from objects.dihydrogenCombiner import DiHydrogenCombiner
+from objects.warehouseDihydrogen import WarehouseDiHydrogen
+from objects.warehouseTrihydrogen import WarehouseTriHydrogen
+from objects.warehouseTrihelium import WarehouseTriHelium
 
 class GameManager:
 
@@ -38,10 +42,20 @@ class GameManager:
         baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
         #            BuildingTypes.CONNECTOR: {BuildingsName.CONNECTOR: (Connector, True)},
         self.buildingList = {
-            BuildingTypes.GATHERER: {BuildingsName.DRILL: (Drill, True), BuildingsName.CRUSHER: (Crusher, False)},
-            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, True)},
-            BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True), BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False), BuildingsName.DIHYDROGEN_PLANT: (DihydrogenPlant, False)},
-            BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True), BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False), BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDihydrogen, False)}
+            BuildingTypes.GATHERER: {BuildingsName.DRILL_HYDROGEN: (DrillHydrogen, False),
+                                     BuildingsName.DRILL_DIHYDROGEN: (DrillDiHydrogen, False),
+                                     BuildingsName.DRILL_TRIHYDROGEN: (DrillTriHydrogen, False),
+                                     BuildingsName.CRUSHER: (Crusher, False)},
+            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, False),
+                                    BuildingsName.DIHYDROGEN_COMBINER: (DiHydrogenCombiner, False)},
+            BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True),
+                                     BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False),
+                                     BuildingsName.DIHYDROGEN_PLANT: (DiHydrogenPlant, False)},
+            BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True),
+                                      BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False),
+                                      BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDiHydrogen, False),
+                                      BuildingsName.WAREHOUSE_TRIHYDROGEN: (WarehouseTriHydrogen, False),
+                                      BuildingsName.WAREHOUSE_TRIHELIUM: (WarehouseTriHelium, False)}
         }
         self._earth = Earth()
         self.clock = pygame.time.Clock()

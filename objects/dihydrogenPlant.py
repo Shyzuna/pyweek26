@@ -2,11 +2,10 @@ from objects.building import Building
 from settings.enums import BuildingsName
 from objects.consumingBuilding import ConsumingBuilding
 from objects.producingBuilding import ProducingBuilding
-import modules.gameManager
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 
 
-class DihydrogenPlant(Building, ConsumingBuilding, ProducingBuilding):
+class DiHydrogenPlant(Building, ConsumingBuilding, ProducingBuilding):
 
     def __init__(self, position):
         Building.__init__(self, position, ALL_BUILDINGS_SETTINGS[BuildingsName.DIHYDROGEN_PLANT])
