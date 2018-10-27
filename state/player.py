@@ -45,6 +45,10 @@ class Player(object):
     def getResourcesVisible(self):
         return self._resourcesVisible
 
+    def addCredits(self, creditsToAdd):
+        currentCredits = self._resources[ObjectCategory.CREDITS]
+        self._resources.update({ObjectCategory.CREDITS: currentCredits + creditsToAdd})
+
     def upgradeResourceCapTo(self, resType, value):
         self._resourcesCap[resType] = value
 
@@ -53,12 +57,17 @@ class Player(object):
 
     def tryPay(self, resList):
         # check first
-        for r, value in resList.items():
-            if self._resources[r] < value:
-                return False
+        if not self.checkEnough(resList):
+            return False
 
         # then pay
         for r, value in resList.items():
             self._resources[r] -= value
 
+        return True
+
+    def checkEnough(self, resList):
+        for r, value in resList.items():
+            if self._resources[r] < value:
+                return False
         return True
