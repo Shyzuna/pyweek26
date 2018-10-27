@@ -171,7 +171,7 @@ ALL_BUILDINGS_SETTINGS = {
         'desc': 'Building connector.',
         'cost': {ObjectCategory.CREDITS: [10, 0, 0]},
         'produce': {},
-        'consume': {},
+        'consume': {ObjectCategory.ENERGY: [10, 10, 10]},
         'stock': {},
         'allowedSpot': None,
         'deletable': True,
