@@ -162,16 +162,17 @@ class ContractManager:
     def generateContract(self):
         factor = modules.gameManager.gameManager.getInstantProd()
         maxSeed = 10
+        energyUnit = 100
         seed = numpy.random.randint(1, maxSeed + 1)
         rewardFactors = [1, 1.2, 1.5]
         town = numpy.random.choice(list(Towns)).value
         objective = int((factor + 1) * seed)
         if seed <= int(maxSeed/3):
-            reward = int(objective * 100 * rewardFactors[0])
+            reward = int(objective * energyUnit * rewardFactors[0])
         elif seed <= int(2 * maxSeed / 3):
-            reward = int(objective * 100 * rewardFactors[1])
+            reward = int(objective * energyUnit * rewardFactors[1])
         else:
-            reward = int(objective * 100 * rewardFactors[2])
+            reward = int(objective * energyUnit * rewardFactors[2])
 
         self.contracts.append(Contract(town, reward, objective))
 

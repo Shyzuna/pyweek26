@@ -73,7 +73,7 @@ class BuildingTypes(Enum):
     """
     GENERAL = 'General'
     GATHERER = 'Gatherer'
-    REFINER = 'Refiner'
+    REFINER = 'Combiner'
     PRODUCER = 'Producer'
     CAPACITOR = 'Capacitor'
     CONNECTOR = 'Connector'

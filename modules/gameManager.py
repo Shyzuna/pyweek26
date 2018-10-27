@@ -31,6 +31,8 @@ from objects.dihydrogenCombiner import DiHydrogenCombiner
 from objects.warehouseDihydrogen import WarehouseDiHydrogen
 from objects.warehouseTrihydrogen import WarehouseTriHydrogen
 from objects.warehouseTrihelium import WarehouseTriHelium
+from objects.trihydrogenPlant import TriHydrogenPlant
+from objects.triHeliumPlant import TriHeliumPlant
 
 class GameManager:
 
@@ -40,7 +42,7 @@ class GameManager:
     def init(self):
         self._player = Player()
         baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
-        #            BuildingTypes.CONNECTOR: {BuildingsName.CONNECTOR: (Connector, True)},
+
         self.buildingList = {
             BuildingTypes.GATHERER: {BuildingsName.DRILL_HYDROGEN: (DrillHydrogen, False),
                                      BuildingsName.DRILL_DIHYDROGEN: (DrillDiHydrogen, False),
@@ -50,7 +52,9 @@ class GameManager:
                                     BuildingsName.DIHYDROGEN_COMBINER: (DiHydrogenCombiner, False)},
             BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True),
                                      BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False),
-                                     BuildingsName.DIHYDROGEN_PLANT: (DiHydrogenPlant, False)},
+                                     BuildingsName.DIHYDROGEN_PLANT: (DiHydrogenPlant, False),
+                                    BuildingsName.TRIHYDROGEN_PLANT: (TriHydrogenPlant, False),
+                                    BuildingsName.TRIHELIUM_PLANT: (TriHeliumPlant, False)},
             BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True),
                                       BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False),
                                       BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDiHydrogen, False),

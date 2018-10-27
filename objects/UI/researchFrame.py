@@ -27,7 +27,7 @@ class UIResearchFrame(object):
         self._exitButton = None
         self._progressBar = None
         self._guiManager = guiManager
-        self._researchByLine = 5
+        self._researchByLine = 3
         self._maxLine = 2
         self._researchButton = {}
         self.createMainSurf(size)

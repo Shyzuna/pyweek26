@@ -34,7 +34,8 @@ class ResearchManager(object):
             modules.gameManager.gameManager.upgradeBuildings(research['element'], research['param'], research['value'])
         elif research['type'] == ResearchType.UNLOCK:
             modules.gameManager.gameManager.unlockBuildings(research['unlocked'])
-            modules.gameManager.gameManager.unlockRes(research['resUnlocked'])
+            if research['resUnlocked'] is not None:
+                modules.gameManager.gameManager.unlockRes(research['resUnlocked'])
         self._currentResearch = None
 
     def startResearch(self, lvl, number):

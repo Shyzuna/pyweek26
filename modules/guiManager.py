@@ -229,10 +229,10 @@ class GuiManager(object):
                             "Unlock {}".format(unlock.value), 1, Colors.BLACK.value)
                         self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                         index += 1
-
-                    text = self._fonts[self._currentFont].render(
-                        "Unlock {}".format(research['resUnlocked'].value), 1, Colors.BLACK.value)
-                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    if research['resUnlocked'] is not None:
+                        text = self._fonts[self._currentFont].render(
+                            "Unlock {}".format(research['resUnlocked'].value), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
 
             elif tooltipT == TooltipType.TEXT_TIP:
                 text = self._fonts[self._currentFont].render(hoveredElem.getTooltipText(), 1, Colors.BLACK.value)
