@@ -38,8 +38,8 @@ class GameManager:
         baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
         #            BuildingTypes.CONNECTOR: {BuildingsName.CONNECTOR: (Connector, True)},
         self.buildingList = {
-            BuildingTypes.GATHERER: {BuildingsName.DRILL: (Drill, False), BuildingsName.CRUSHER: (Crusher, True)},
-            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, False)},
+            BuildingTypes.GATHERER: {BuildingsName.DRILL: (Drill, True), BuildingsName.CRUSHER: (Crusher, False)},
+            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, True)},
             BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True), BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False), BuildingsName.DIHYDROGEN_PLANT: (DihydrogenPlant, False)},
             BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True), BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False), BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDihydrogen, False)}
         }
@@ -203,11 +203,12 @@ class GameManager:
 
     def checkElementAt(self, mPos):
         tPos = mapManager.getTilePosFromReal(mPos)
-        res = self.getResourceAt(tPos)
-        if res is not None:
-            return res
         build = self.getBuildingAt(tPos)
-        return build
+        if build is not None:
+            return build
+        res = self.getResourceAt(tPos)
+
+        return res
 
     def checkTileValid(self, tilePos, allowedSpot):
         # in Map

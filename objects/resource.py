@@ -10,6 +10,7 @@ TODO:
 # May change inheritance
 
 from settings import settings
+from settings.enums import TooltipType
 
 
 class Resource(object):
@@ -29,8 +30,16 @@ class Resource(object):
         self.current_x = position[0] * settings.TILE_WIDTH
         self.current_y = position[1] * settings.TILE_HEIGHT
 
+        self._tooltipType = TooltipType.TEXT_TIP
+
     def __str__(self):
         return "{} - {} -> {} ({})".format(self._position, self._size, self._category, self._amount)
+
+    def getTooltipType(self):
+        return self._tooltipType
+
+    def getTooltipText(self):
+        return "{} {}".format(self._amount, self._category.value)
 
     def getPos(self):
         return self._position

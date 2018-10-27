@@ -44,3 +44,6 @@ class StockingBuilding():
     def geCurrentMaxStock(self):
         return self.buildingData['stock'][self.type][self.level]
 
+    def getCurrentCapacity(self, type):
+        return self.cur_capacity[type]
+
