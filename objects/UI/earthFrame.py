@@ -70,6 +70,7 @@ class UIEarthFrame(object):
                 onlineTownsTextData += town.value + " "
             else:
                 self.townIcon[town].fill(Colors.RED.value)
+            pygame.draw.rect(self.townIcon[town], Colors.BLACK.value, pygame.Rect(0, 0, 19, 19), 2)
             x, y = data['settings']['position'][0], data['settings']['position'][1]
             x = x * self._ratioWidth + self._pos[0]
             y = y * self._ratioHeight + self.topBarHeightDecal

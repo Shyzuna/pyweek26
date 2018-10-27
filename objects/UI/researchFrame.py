@@ -73,7 +73,7 @@ class UIResearchFrame(object):
                                    posY + line * buttonSize[1]), self._font, self.clickStartResearch,
                                   disabled=(hqLevel < (idx + 1)),
                                   researchInfo=[str(idx + 1), elemNumber + (line * self._researchByLine)],
-                                  tooltipType=TooltipType.RESEARCH_TIP)
+                                  tooltipType=TooltipType.RESEARCH_TIP, researchData=research)
                 localButtonList.append(button)
                 elemNumber += 1
                 if elemNumber >= self._researchByLine:

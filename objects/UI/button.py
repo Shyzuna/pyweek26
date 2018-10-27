@@ -7,12 +7,12 @@ TODO:
 """
 
 import pygame
-from settings.enums import Colors
+from settings.enums import Colors, TooltipType
 from objects.UI.hoverable import UIHoverable
 
 
 class UIButton(UIHoverable):
-    def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext='', tooltipType=None, disabled=False, researchInfo=None):
+    def __init__(self, title, size, pos, font, clickFct=None, img=None, building=None, prevContext='', tooltipType=None, disabled=False, researchInfo=None, researchData=None):
         super().__init__(pos, size, tooltipType, disabled)
         self._title = title
         self._building = building
@@ -24,6 +24,7 @@ class UIButton(UIHoverable):
             self._img = self._tmpBuild.buildingData['uiImg']
         else:
             self._img = img
+        self._researchData = researchData
         self._clickFct = clickFct
         self._prevContext = prevContext
         self._baseSurface = pygame.Surface(size)
@@ -78,6 +79,9 @@ class UIButton(UIHoverable):
             return self._tmpBuild.buildingData
         else:
             return None
+
+    def getResearchData(self):
+        return self._researchData
 
     def draw(self, screen, offset=(0,0)):
         surface = self._completedSurface if self._completed else self._runningSurface if self._running else \

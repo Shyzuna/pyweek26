@@ -7,7 +7,7 @@ TODO:
 """
 
 from settings import settings
-from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName, BuildingStates
+from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName, BuildingStates, ResearchType
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
@@ -111,18 +111,21 @@ class GuiManager(object):
     def createTooltipUIElem(self, hoveredElem):
         tooltipT = hoveredElem.getTooltipType()
         if tooltipT is not None:
-            self._tooltipSurf = pygame.Surface((200, 100))
+            self._tooltipSurf = pygame.Surface((250, 150))
             self._tooltipSurf.fill(Colors.WHITE.value)
-            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 199, 99), 2)
+            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 249, 149), 2)
             if tooltipT == TooltipType.GUI_BUILDING:
                 index = 1
                 building = hoveredElem.getBuildingData()
                 text = self._fonts[self._currentFont].render(building['name'], 1, Colors.BLACK.value)
                 self._tooltipSurf.blit(text, (5, 5))
                 index += 1
-                text = self._fonts[self._currentFont].render("{} credits".format(building['cost'][ObjectCategory.CREDITS][0]), 1, Colors.BLACK.value)
-                self._tooltipSurf.blit(text, (5, 5 + text.get_height()))
-                index += 1
+
+                for costType, data  in building['cost'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Cost {} {}".format(data[0], costType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
                 for consumeType, data in building['consume'].items():
                     text = self._fonts[self._currentFont].render(
@@ -134,7 +137,6 @@ class GuiManager(object):
                     text = self._fonts[self._currentFont].render(
                         "Produce {} {}".format(data[0], produceType.value), 1, Colors.BLACK.value)
                     self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                    index += 1
             elif tooltipT == TooltipType.IG_BUILDING:
                 index = 1
                 building = hoveredElem
@@ -145,34 +147,78 @@ class GuiManager(object):
                     "Level {}".format(hoveredElem.getLevel() + 1), 1, Colors.BLACK.value)
                 self._tooltipSurf.blit(text, (5, 5 + text.get_height()))
                 index += 1
+
+                if building.getStatus() == BuildingStates.ON:
+                    color = Colors.GREEN.value
+                else:
+                    color = Colors.RED.value
+
                 text = self._fonts[self._currentFont].render(
-                    "Status {}".format(hoveredElem.getStatus().value), 1, Colors.BLACK.value)
+                    "Status {}".format(building.getStatus().value), 1, color)
                 self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                 index += 1
 
-                if hoveredElem.getStatus() == BuildingStates.ON:
-                    for consumeType, data in building.buildingData['consume'].items():
+                if building.getLevel() >= len(building.buildingData['cost']):
+                    for costType, data  in building.buildingData['cost'].items():
                         text = self._fonts[self._currentFont].render(
-                            "Consume {} {}".format(data[building.getLevel()], consumeType.value), 1, Colors.BLACK.value)
+                            "Upgrade cost {} {}".format(data[building.getLevel() + 1], costType.value), 1, Colors.BLACK.value)
                         self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                         index += 1
+                else:
+                    text = self._fonts[self._currentFont].render(
+                        "No uprade available", 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
-                    for produceType, data in building.buildingData['produce'].items():
-                        text = self._fonts[self._currentFont].render(
-                            "Produce {} {}".format(data[building.getLevel()], produceType.value), 1, Colors.BLACK.value)
-                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                        index += 1
+                for consumeType, data in building.buildingData['consume'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Consume {} {}".format(data[building.getLevel()], consumeType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
-                    for capacityType, data in building.buildingData['stock'].items():
-                        text = self._fonts[self._currentFont].render(
-                            "Stock {}/{} {}".format(building.getCurrentCapacity(capacityType), data[building.getLevel()], capacityType.value), 1, Colors.BLACK.value)
-                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                        index += 1
+                for produceType, data in building.buildingData['produce'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Produce {} {}".format(data[building.getLevel()], produceType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for capacityType, data in building.buildingData['stock'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Stock {}/{} {}".format(building.getCurrentCapacity(capacityType), data[building.getLevel()], capacityType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
                 if isinstance(hoveredElem, MiningBuilding):
                     text = self._fonts[self._currentFont].render(hoveredElem.getLinkedRes().getTooltipText(), 1, Colors.BLACK.value)
                     self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+            elif tooltipT == TooltipType.RESEARCH_TIP:
+                index = 1
+                research = hoveredElem.getResearchData()
+                text = self._fonts[self._currentFont].render(research['name'], 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5))
+                index += 1
+
+                for costType, data  in research['cost'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Cost {} {}".format(data, costType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                     index += 1
+
+                if research['type'] == ResearchType.UPGRADE:
+                    text = self._fonts[self._currentFont].render(
+                        "Element {}".format(research['element'].value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+                elif research['type'] == ResearchType.UNLOCK:
+                    for unlock in research['unlocked']:
+                        text = self._fonts[self._currentFont].render(
+                            "Unlock {}".format(unlock.value), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                        index += 1
+
+                    text = self._fonts[self._currentFont].render(
+                        "Unlock {}".format(research['resUnlocked'].value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
 
             elif tooltipT == TooltipType.TEXT_TIP:
                 text = self._fonts[self._currentFont].render(hoveredElem.getTooltipText(), 1, Colors.BLACK.value)
