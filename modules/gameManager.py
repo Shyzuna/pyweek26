@@ -88,6 +88,7 @@ class GameManager:
             for network in self.networks:
                 network.update()
 
+            self._earth.updateDisplayedHour(time_since_hour_changed)
             if time_since_update_res > 1000:
                 time_since_update_res = 0
                 # Update buildings
