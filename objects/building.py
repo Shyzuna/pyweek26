@@ -40,3 +40,5 @@ class Building(pygame.sprite.Sprite):
     def getGameTip(self):
         pass
 
+    def canDestroy(self):
+        return self.buildingData['deletable']

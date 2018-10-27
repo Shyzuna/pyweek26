@@ -100,7 +100,7 @@ class Towns(Enum):
     """
     MOSCOW = 'Moscow'
     NEW_YORK = 'New York'
-    SHANGAI = 'Shangai'
+    SHANGHAI = 'Shanghai'
     PARIS = 'Paris'
     SYDNEY = 'Sydney'
 

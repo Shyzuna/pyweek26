@@ -36,7 +36,8 @@ class UIBuildingDestroySnap(object):
         else:
             currentRect = modules.mapManager.mapManager.currentRect
             self._tilePos = modules.mapManager.mapManager.getTilePosFromReal(mPos)
-            self._validPos = modules.gameManager.gameManager.checkIsBuildingTile(self._tilePos)
+            building = modules.gameManager.gameManager.getBuildingAt(self._tilePos)
+            self._validPos = building is not None and building.canDestroy()
 
             self._pos = (self._tilePos[0] * settings.TILE_WIDTH - currentRect.x,
                          self._tilePos[1] * settings.TILE_HEIGHT - currentRect.y)
@@ -44,7 +45,8 @@ class UIBuildingDestroySnap(object):
     def tryDestroy(self):
         if self._validPos:
             building = modules.gameManager.gameManager.getBuildingAt(self._tilePos)
-            modules.gameManager.gameManager.removeBuilding(building)
-            print('Deleted building at ' + str(self._tilePos))
+            if building is not None and building.canDestroy():
+                modules.gameManager.gameManager.removeBuilding(building)
+                print('Deleted building at ' + str(self._tilePos))
         else:
             print('Cannot Delete')

@@ -37,13 +37,12 @@ class GameManager:
     def init(self):
         self._player = Player()
         baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
+        #            BuildingTypes.CONNECTOR: {BuildingsName.CONNECTOR: (Connector, True)},
         self.buildingList = {
-            BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters), (BuildingsName.TRANSMITTER, Transmitter)],
-            BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
-            BuildingTypes.REFINER: [(BuildingsName.HYDROGEN_COMBINER, HydrogenCombiner)],
-            BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), (BuildingsName.HYDROGEN_PLANT, HydrogenPlant), (BuildingsName.DIHYDROGEN_PLANT, DihydrogenPlant)],
-            BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen), (BuildingsName.WAREHOUSE_DIHYDROGEN, WarehouseDihydrogen)],
-            BuildingTypes.CONNECTOR: [(BuildingsName.CONNECTOR, Connector)],
+            BuildingTypes.GATHERER: {BuildingsName.DRILL: (Drill, False), BuildingsName.CRUSHER: (Crusher, True)},
+            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, False)},
+            BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True), BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False), BuildingsName.DIHYDROGEN_PLANT: (DihydrogenPlant, False)},
+            BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True), BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False), BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDihydrogen, False)}
         }
         self._earth = Earth()
         self.clock = pygame.time.Clock()
@@ -56,9 +55,25 @@ class GameManager:
         guiManager.init(self.buildingList, self._earth)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._buildings = {  # Col / Row
-            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq}
+            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq},
         }
+        if settings.DEFAULT_TRANSMITTER_POS[1] in self._buildings:
+            self._buildings[settings.DEFAULT_TRANSMITTER_POS[1]].update({settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)})
+        else:
+            self._buildings.update({settings.DEFAULT_TRANSMITTER_POS[1]: {settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)}})
+
         self.networks = []
+
+    def unlockRes(self, res):
+        self._player.unlockRes(res)
+
+    def unlockBuildings(self, buildings):
+        for cat, d in self.buildingList.items():
+            for name, value in d.items():
+                if name in buildings:
+                    self.buildingList[cat][name] = (value[0], True)
+        guiManager.setBuildingList(self.buildingList)
+        guiManager.createSideButton()
 
     def upgradeBuildings(self, buildingType, param, value):
         if param in ALL_BUILDINGS_SETTINGS[buildingType].keys():

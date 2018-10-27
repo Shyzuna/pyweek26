@@ -29,7 +29,7 @@ class Player(object):
         }
         self._resourcesVisible = {
             ObjectCategory.ENERGY: False,
-            ObjectCategory.HYDROGEN: True,
+            ObjectCategory.HYDROGEN: False,
             ObjectCategory.DIHYDROGEN: True,
             ObjectCategory.TRIHYDROGEN: True,
             ObjectCategory.TRIHELIUM: True,
@@ -47,6 +47,9 @@ class Player(object):
 
     def upgradeResourceCapTo(self, resType, value):
         self._resourcesCap[resType] = value
+
+    def unlockRes(self, res):
+        self._resourcesVisible[res] = True
 
     def tryPay(self, resList):
         # check first
