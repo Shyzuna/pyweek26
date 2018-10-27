@@ -9,7 +9,7 @@ TODO:
 import pygame
 import os
 from settings import settings
-from settings.enums import Colors, LinkStatus
+from settings.enums import Colors, LinkStatus, TooltipType
 from objects.UI.button import UIButton
 
 class UIEarthFrame(object):
@@ -51,6 +51,11 @@ class UIEarthFrame(object):
 
         self.topBarHeightDecal = self._pos[1] + self.topBar.get_height() * 1.10
 
+        self._toggleButton = UIButton("Start sending", (200, text.get_height() * 2),
+                                      (int((self._size[0] - 200) / 2) + self._pos[0],
+                                       self._pos[1] + self._size[1] - 30 - text.get_height()), self._font, self._earth.toggleSending,
+                                      tooltipType=TooltipType.TEXT_TIP)
+
 
 
     def display(self, screen):
@@ -58,18 +63,41 @@ class UIEarthFrame(object):
 
         x, y = self._pos[0] + 4 * 1.10, self.topBarHeightDecal
         screen.blit(self._earthImg, (x, y))
-
+        onlineTownsTextData = "Online town(s) : "
         for town, data in self._earth.towns.items():
             if data['status'] == LinkStatus.ONLINE:
                 self.townIcon[town].fill(Colors.BLUE.value)
+                onlineTownsTextData += town.value + " "
             else:
                 self.townIcon[town].fill(Colors.RED.value)
             x, y = data['settings']['position'][0], data['settings']['position'][1]
             x = x * self._ratioWidth + self._pos[0]
             y = y * self._ratioHeight + self.topBarHeightDecal
             screen.blit(self.townIcon[town], (x, y))
-            townText = self._font.render(town.value, 1, Colors.BLACK.value)
-            screen.blit(townText, (x, y))
+
+
+        onlineTownsText = self._font.render(onlineTownsTextData, 1, Colors.BLACK.value)
+        x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 30 - onlineTownsText.get_height()
+        screen.blit(onlineTownsText, (x, y))
+
+        if self._earth.isSending():
+            buttonText = "Stop sending"
+            statusText = "sending"
+        else:
+            buttonText = "Start sending"
+            statusText = "not sending"
+
+        statusSendingText = self._font.render("Status : " + statusText, 1, Colors.BLACK.value)
+        x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 28
+        screen.blit(statusSendingText, (x, y))
+
+        if not self._earth.isTransmitterBuilt():
+            transmitterNotBuiltText = self._font.render("Transmitter not built", 1, Colors.RED.value)
+            x, y = self._pos[0] + self._size[0] - transmitterNotBuiltText.get_width() - 8, self._pos[1] + self._size[1] - 28
+            screen.blit(transmitterNotBuiltText, (x, y))
+
+        self._toggleButton.updateText(buttonText, self._font)
+        self._toggleButton.draw(screen)
 
         self._exitButton.draw(screen)
 
@@ -78,9 +106,11 @@ class UIEarthFrame(object):
 
     def checkMousePressed(self, pressed, mPos):
         self._exitButton.checkMousePressed(pressed, mPos)
+        self._toggleButton.checkMousePressed(pressed, mPos)
 
     def checkHover(self, mPos):
         self._exitButton.checkHover(mPos)
+        self._toggleButton.checkHover(mPos)
 
     def update(self):
         pass

@@ -110,6 +110,18 @@ class GameManager:
                     if objectType != ObjectCategory.CREDITS:
                         self._player._resources[objectType] = 0
 
+                if self._earth.isSending() and self._earth.isTransmitterBuilt():
+                    batteriesList = []
+                    transmitter = None
+                    for y in self._buildings:
+                        for x in self._buildings[y]:
+                            if isinstance(self._buildings[y][x], Battery):
+                                batteriesList.append(self._buildings[y][x])
+                            if isinstance(self._buildings[y][x], Transmitter):
+                                transmitter = self._buildings[y][x]
+                    self._earth.sendEnergy(transmitter, batteriesList)
+
+
                 for y in self._buildings:
                     for x in self._buildings[y]:
                         building = self._buildings[y][x]
@@ -301,7 +313,8 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] += building.buildingData['stock'][building.type][building.level]
-
+        elif isinstance(building, Transmitter):
+            self._earth.setTransmitterBuild(True)
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
@@ -364,5 +377,7 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] -= building.buildingData['stock'][building.type][building.level]
+        elif isinstance(building, Transmitter):
+            self._earth.setTransmitterBuild(False)
 
 gameManager = GameManager()

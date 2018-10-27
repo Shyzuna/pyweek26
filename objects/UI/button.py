@@ -17,6 +17,7 @@ class UIButton(UIHoverable):
         self._title = title
         self._building = building
         self._researchInfo = researchInfo
+        self._size = size
         self._tmpBuild = None
         if building is not None:
             self._tmpBuild = building((-1, -1))
@@ -75,6 +76,24 @@ class UIButton(UIHoverable):
         surface = self._completedSurface if self._completed else self._disabledSurface if self._disabled else \
             self._pressedSurface if self._pressed else self._hoverSurface if self._hover else self._baseSurface
         screen.blit(surface, (self._pos[0] + offset[0], self._pos[1] + offset[1]))
+
+    def updateText(self, text, font):
+        self._text = font.render(text, 1, Colors.BLACK.value)
+        self._baseSurface.fill(Colors.WHITE.value)
+        self._pressedSurface.fill(Colors.GREY.value)
+        self._hoverSurface.fill(Colors.LIGHT_GREY.value)
+        self._disabledSurface.fill((95, 0, 0))
+        self._completedSurface.fill((0, 95, 0))
+        self._baseSurface.blit(self._text, ((self._size[0] - self._text.get_width()) / 2,
+                                            (self._size[1] - self._text.get_height()) / 2))
+        self._hoverSurface.blit(self._text, ((self._size[0] - self._text.get_width()) / 2,
+                                             (self._size[1] - self._text.get_height()) / 2))
+        self._pressedSurface.blit(self._text, ((self._size[0] - self._text.get_width()) / 2,
+                                               (self._size[1] - self._text.get_height()) / 2))
+        self._disabledSurface.blit(self._text, ((self._size[0] - self._text.get_width()) / 2,
+                                                (self._size[1] - self._text.get_height()) / 2))
+        self._completedSurface.blit(self._text, ((self._size[0] - self._text.get_width()) / 2,
+                                                 (self._size[1] - self._text.get_height()) / 2))
 
 
     def checkMousePressed(self, pressed, mPos):
