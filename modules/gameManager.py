@@ -139,7 +139,7 @@ class GameManager:
                             self._player._resources[building.type] += building.cur_capacity[building.type]
 
             # Earth
-            if time_since_hour_changed > settings.EARTH_HOUR_ROTATING_FREQ:
+            if time_since_hour_changed > settings.EARTH_HOUR_ROTATING_FREQ * 1000:
                 time_since_hour_changed = 0
                 self._earth.changeHour()
 
