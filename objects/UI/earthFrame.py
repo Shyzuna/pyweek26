@@ -9,7 +9,7 @@ TODO:
 import pygame
 import os
 from settings import settings
-from settings.enums import Colors
+from settings.enums import Colors, LinkStatus
 from objects.UI.button import UIButton
 
 class UIEarthFrame(object):
@@ -21,10 +21,8 @@ class UIEarthFrame(object):
         self._surface = None
         self._exitButton = None
         self._guiManager = guiManager
-        self.earth = earth
+        self._earth = earth
         self.createMainSurf(size)
-        self._earthImg = pygame.image.load(os.path.join(settings.GUI_PATH, 'map.png'))
-        self._earthImg = pygame.transform.scale(self._earthImg, (size[0] - 8, int(size[1] * 0.8)))
 
     def createMainSurf(self, size):
         # put setting Border ?
@@ -39,20 +37,39 @@ class UIEarthFrame(object):
         self._exitButton = UIButton('Close', (int(size[0] * 0.1), self.topBar.get_height()),
                                     (self._pos[0], self._pos[1]), self._font, self._guiManager.closeCentralFrame)
 
+        self._earthImg = pygame.image.load(os.path.join(settings.GUI_PATH, 'map.png'))
+        self._ratioWidth = (size[0] - 8) / self._earthImg.get_width()
+        self._ratioHeight = int(size[1] * 0.8) / self._earthImg.get_height()
+
+        self._earthImg = pygame.transform.scale(self._earthImg, (size[0] - 8, int(size[1] * 0.8)))
+
+        self.townIcon = {}
+        # Town icon
+        for town in self._earth.towns:
+            self.townIcon[town] = pygame.Surface((20, 20))
+            self.townIcon[town].fill(Colors.RED.value)
+
+        self.topBarHeightDecal = self._pos[1] + self.topBar.get_height() * 1.10
+
+
 
     def display(self, screen):
         screen.blit(self._surface, self._pos)
 
-        x, y = self._pos[0] + 4 * 1.10, self._pos[1] + self.topBar.get_height() * 1.10
+        x, y = self._pos[0] + 4 * 1.10, self.topBarHeightDecal
         screen.blit(self._earthImg, (x, y))
-        # for town, data in self.earth.towns.items():
-        #     townText = self._font.render('Ville: ' + town.value, 1, Colors.BLACK.value)
-        #     screen.blit(townText, (x, y))
-        #     y += 20 * 1.10
-        #
-        #     statusText = self._font.render('Statut: ' + data['status'].value, 1, Colors.BLACK.value)
-        #     screen.blit(statusText, (x, y))
-        #     y += 20 * 2.00
+
+        for town, data in self._earth.towns.items():
+            if data['status'] == LinkStatus.ONLINE:
+                self.townIcon[town].fill(Colors.BLUE.value)
+            else:
+                self.townIcon[town].fill(Colors.RED.value)
+            x, y = data['settings']['position'][0], data['settings']['position'][1]
+            x = x * self._ratioWidth + self._pos[0]
+            y = y * self._ratioHeight + self.topBarHeightDecal
+            screen.blit(self.townIcon[town], (x, y))
+            townText = self._font.render(town.value, 1, Colors.BLACK.value)
+            screen.blit(townText, (x, y))
 
         self._exitButton.draw(screen)
 

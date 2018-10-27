@@ -99,7 +99,6 @@ class Towns(Enum):
     NEW_YORK = 'New York'
     SHANGAI = 'Shangai'
     PARIS = 'Paris'
-    LONDON = 'London'
     SYDNEY = 'Sydney'
 
 class LinkStatus(Enum):

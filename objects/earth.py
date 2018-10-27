@@ -1,36 +1,19 @@
-from settings.enums import LinkStatus, Towns, Colors
-from settings import settings
+from settings.enums import LinkStatus, Towns
+from settings.townSettings import ALL_TOWN
 
 class Earth:
 
     def __init__(self):
-        self.towns = {
-            Towns.SYDNEY: {
-                'hours': [0, 1, 2],
-                'energy': 0,
-                'status': LinkStatus.OFFLINE
-            },
-            Towns.MOSCOW: {
-                'hours': [3, 4, 5],
-                'energy': 0,
-                'status': LinkStatus.OFFLINE
-            },
-            Towns.NEW_YORK: {
-                'hours': [6, 7, 8],
-                'energy': 0,
-                'status': LinkStatus.OFFLINE
-            },
-            Towns.SHANGAI: {
-                'hours': [9, 10, 11],
-                'energy': 0,
-                'status': LinkStatus.OFFLINE
-            },
-            Towns.PARIS: {
-                'hours': [12, 13, 14],
-                'energy': 0,
-                'status': LinkStatus.OFFLINE
-            }
-        }
+        self.towns = {}
+
+        for town in Towns:
+            self.towns.update({
+                town: {
+                    'settings': ALL_TOWN[town],
+                    'energy': 0,
+                    'status': LinkStatus.OFFLINE
+                }
+            })
         self.currentHour = 0
         self.changeHour()
 
@@ -43,7 +26,7 @@ class Earth:
     def getCurrentTowns(self):
         towns = []
         for town, data in self.towns:
-            if self.currentHour in data['hours']:
+            if self.currentHour in data['settings']['hours']:
                 towns.append(town)
         return towns
 
@@ -55,7 +38,7 @@ class Earth:
         print("Changement d'heure ", self.currentHour)
 
         for town, data in self.towns.items():
-            if self.currentHour in data['hours']:
+            if self.currentHour in data['settings']['hours']:
                 data['status'] = LinkStatus.ONLINE
             else:
                 data['status'] = LinkStatus.OFFLINE
