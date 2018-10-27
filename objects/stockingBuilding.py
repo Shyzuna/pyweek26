@@ -1,4 +1,5 @@
 from settings.enums import ObjectCategory
+import modules.gameManager
 
 
 class StockingBuilding():
@@ -39,3 +40,7 @@ class StockingBuilding():
         if self.network is not None:
             for stockingType in self.buildingData['stock'].keys():
                 self.network.fillStock(self, stockingType)
+
+    def geCurrentMaxStock(self):
+        return self.buildingData['stock'][self.type][self.level]
+
