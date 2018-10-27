@@ -1,5 +1,5 @@
 import pygame
-
+import os
 from modules.displayManager import displayManager
 from modules.mapManager import mapManager
 from modules.inputManager import inputManager
@@ -48,6 +48,10 @@ class GameManager:
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
         self.networks = []
+        pygame.mixer.init()
+        pygame.mixer.music.load(os.path.join(settings.MUSIC_PATH, 'moonLake.mp3'))
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.2)
         displayManager.init()
         mapManager.init()
         inputManager.init()

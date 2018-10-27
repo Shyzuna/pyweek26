@@ -23,6 +23,7 @@ RESOURCES_PATH = os.path.join('data', 'resources')
 BUILDINGS_PATH = os.path.join('data', 'buildings')
 FONT_PATH = os.path.join('data', 'fonts')
 GUI_PATH = os.path.join('data', 'gui')
+MUSIC_PATH = os.path.join('data', 'music')
 
 # Map parameters
 TILE_WIDTH = 64
