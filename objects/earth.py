@@ -1,4 +1,5 @@
-from settings.enums import Colors, Towns
+from settings.enums import LinkStatus, Towns, Colors
+from settings import settings
 
 class Earth:
 
@@ -6,27 +7,32 @@ class Earth:
         self.towns = {
             Towns.SYDNEY: {
                 'hours': [0, 1, 2],
-                'energy': 0
+                'energy': 0,
+                'status': LinkStatus.OFFLINE
             },
             Towns.MOSCOW: {
                 'hours': [3, 4, 5],
-                'energy': 0
+                'energy': 0,
+                'status': LinkStatus.OFFLINE
             },
             Towns.NEW_YORK: {
                 'hours': [6, 7, 8],
-                'energy': 0
+                'energy': 0,
+                'status': LinkStatus.OFFLINE
             },
             Towns.SHANGAI: {
                 'hours': [9, 10, 11],
-                'energy': 0
+                'energy': 0,
+                'status': LinkStatus.OFFLINE
             },
             Towns.PARIS: {
                 'hours': [12, 13, 14],
-                'energy': 0
+                'energy': 0,
+                'status': LinkStatus.OFFLINE
             }
         }
-
         self.currentHour = 0
+        self.changeHour()
 
     def sendEnergy(self, town, amount):
         self.towns[town] += amount
@@ -48,5 +54,8 @@ class Earth:
         self.currentHour = (self.currentHour + 1) % 23
         print("Changement d'heure ", self.currentHour)
 
-
-
+        for town, data in self.towns.items():
+            if self.currentHour in data['hours']:
+                data['status'] = LinkStatus.ONLINE
+            else:
+                data['status'] = LinkStatus.OFFLINE
