@@ -150,24 +150,23 @@ class GuiManager(object):
                 self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                 index += 1
 
-                if hoveredElem.getStatus() == BuildingStates.ON:
-                    for consumeType, data in building.buildingData['consume'].items():
-                        text = self._fonts[self._currentFont].render(
-                            "Consume {} {}".format(data[building.getLevel()], consumeType.value), 1, Colors.BLACK.value)
-                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                        index += 1
+                for consumeType, data in building.buildingData['consume'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Consume {} {}".format(data[building.getLevel()], consumeType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
-                    for produceType, data in building.buildingData['produce'].items():
-                        text = self._fonts[self._currentFont].render(
-                            "Produce {} {}".format(data[building.getLevel()], produceType.value), 1, Colors.BLACK.value)
-                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                        index += 1
+                for produceType, data in building.buildingData['produce'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Produce {} {}".format(data[building.getLevel()], produceType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
-                    for capacityType, data in building.buildingData['stock'].items():
-                        text = self._fonts[self._currentFont].render(
-                            "Stock {}/{} {}".format(building.getCurrentCapacity(capacityType), data[building.getLevel()], capacityType.value), 1, Colors.BLACK.value)
-                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
-                        index += 1
+                for capacityType, data in building.buildingData['stock'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Stock {}/{} {}".format(building.getCurrentCapacity(capacityType), data[building.getLevel()], capacityType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
 
                 if isinstance(hoveredElem, MiningBuilding):
                     text = self._fonts[self._currentFont].render(hoveredElem.getLinkedRes().getTooltipText(), 1, Colors.BLACK.value)
