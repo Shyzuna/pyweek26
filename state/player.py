@@ -71,3 +71,6 @@ class Player(object):
             if self._resources[r] < value:
                 return False
         return True
+
+    def upgradeResourceCapWith(self, resType, value):
+        self._resourcesCap[resType] += value

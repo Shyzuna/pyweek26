@@ -13,6 +13,7 @@ import modules.mapManager
 import modules.gameManager
 import modules.researchManager
 from objects.headquarters import HeadQuarters
+from objects.stockingBuilding import StockingBuilding
 
 class UIBuildingUpgradeSnap(object):
     def __init__(self, upgradeImg, guiManager):
@@ -55,5 +56,7 @@ class UIBuildingUpgradeSnap(object):
                     print('Upgraded building at ' + str(self._tilePos))
                     if isinstance(building, HeadQuarters):
                         modules.researchManager.researchManager.unlockNewLevel(building.level)
+                    elif isinstance(building, StockingBuilding):
+                        building.updateTotalResCap()
         else:
             print('Cannot Upgrade')

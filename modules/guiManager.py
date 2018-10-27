@@ -391,6 +391,7 @@ class GuiManager(object):
         self._currentSideMenu = arg[0]
 
     def upgradeBuilding(self, *arg):
+        pygame.mouse.set_visible(True)
         self._buildingUpgrade = UIBuildingUpgradeSnap(None, self)
         self._buildingSelected = None
         self._buildingDestroy = None
@@ -404,6 +405,7 @@ class GuiManager(object):
     def selectBuilding(self, *arg):
         print("Building {} selected".format(arg[0]))
         if arg[1] is not None:
+            pygame.mouse.set_visible(True)
             self._buildingSelected = UIBuildingMouseSnap(arg[1]((-1, -1)), self)
             self._buildingDestroy = None
             self._buildingUpgrade = None
