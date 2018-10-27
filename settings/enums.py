@@ -54,6 +54,7 @@ class BuildingsName(Enum):
     HEADQUARTERS = 'Head Quarters'
     WAREHOUSE_HYDROGEN = 'Warehouse Hydrogen'
     HYDROGEN_PLANT = 'Hydrogen Plant'
+    DIHYDROGEN_PLANT = 'Dihydrogen Plant'
     CONNECTOR = 'Connector'
     TRANSMITTER = 'Transmitter'
     HYDROGEN_COMBINER = 'Hydrogen Combiner'

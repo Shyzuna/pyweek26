@@ -147,6 +147,25 @@ ALL_BUILDINGS_SETTINGS = {
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HYDROGEN_PLANT.png'))
         ]
     },
+    BuildingsName.DIHYDROGEN_PLANT: {
+        'name': BuildingsName.DIHYDROGEN_PLANT.value,
+        'desc': 'Produce energy with hydrogen.',
+        'cost': {ObjectCategory.CREDITS: [200, 210, 250]},
+        'produce': {ObjectCategory.ENERGY: [30, 50, 120]},
+        'consume': {ObjectCategory.DIHYDROGEN: [5, 15, 20]},
+        'stock': {},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DIHYDROGEN_PLANT.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DIHYDROGEN_PLANT.png'))
+        ]
+    },
     BuildingsName.CONNECTOR: {
         'name': BuildingsName.CONNECTOR.value,
         'desc': 'Building connector.',
