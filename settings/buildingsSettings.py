@@ -33,8 +33,8 @@ ALL_BUILDINGS_SETTINGS = {
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'BATTERY.png'))
         ]
     },
-    BuildingsName.DRILL: {
-        'name': BuildingsName.DRILL.value,
+    BuildingsName.DRILL_HYDROGEN: {
+        'name': BuildingsName.DRILL_HYDROGEN.value,
         'desc': 'Collect Hydrogen in exchange of energy.',
         'cost': {ObjectCategory.CREDITS: [100, 110, 150]},
         'produce': {ObjectCategory.HYDROGEN: [2, 5, 10]},
@@ -46,10 +46,48 @@ ALL_BUILDINGS_SETTINGS = {
         'canLevelUp': True,
         'constructionTime': 0,
         'size': (1, 1),
-        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL.png')),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_HYDROGEN.png')),
                                         (64, 64)),
         'animImg': [
-            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL.png'))
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_HYDROGEN.png'))
+        ]
+    },
+    BuildingsName.DRILL_DIHYDROGEN: {
+        'name': BuildingsName.DRILL_DIHYDROGEN.value,
+        'desc': 'Collect Hydrogen in exchange of energy.',
+        'cost': {ObjectCategory.CREDITS: [100, 110, 150]},
+        'produce': {ObjectCategory.DIHYDROGEN: [2, 5, 10]},
+        'consume': {ObjectCategory.ENERGY: [5, 10, 15]},
+        'stock': {},
+        'allowedSpot': [ObjectCategory.DIHYDROGEN],
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_DIHYDROGEN.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_DIHYDROGEN.png'))
+        ]
+    },
+    BuildingsName.DRILL_TRIHYDROGEN: {
+        'name': BuildingsName.DRILL_TRIHYDROGEN.value,
+        'desc': 'Collect Hydrogen in exchange of energy.',
+        'cost': {ObjectCategory.CREDITS: [100, 110, 150]},
+        'produce': {ObjectCategory.TRIHYDROGEN: [2, 5, 10]},
+        'consume': {ObjectCategory.ENERGY: [5, 10, 15]},
+        'stock': {},
+        'allowedSpot': [ObjectCategory.TRIHYDROGEN],
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_TRIHYDROGEN.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DRILL_TRIHYDROGEN.png'))
         ]
     },
     BuildingsName.CRUSHER: {
@@ -224,6 +262,25 @@ ALL_BUILDINGS_SETTINGS = {
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'HYDROGEN_COMBINER.png'))
         ]
     },
+    BuildingsName.DIHYDROGEN_COMBINER: {
+        'name': BuildingsName.DIHYDROGEN_COMBINER.value,
+        'desc': 'Building connector.',
+        'cost': {ObjectCategory.CREDITS: [10, 0, 0]},
+        'produce': {ObjectCategory.TRIHYDROGEN: [1, 2, 3]},
+        'consume': {ObjectCategory.ENERGY: [10, 14, 18], ObjectCategory.DIHYDROGEN: [2, 4, 6]},
+        'stock': {},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': False,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DIHYDROGEN_COMBINER.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'DIHYDROGEN_COMBINER.png'))
+        ]
+    },
     BuildingsName.WAREHOUSE_DIHYDROGEN: {
         'name': BuildingsName.WAREHOUSE_DIHYDROGEN.value,
         'desc': 'Contains dihydrogen.',
@@ -241,6 +298,44 @@ ALL_BUILDINGS_SETTINGS = {
                                         (64, 64)),
         'animImg': [
             pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_DIHYDROGEN.png'))
+        ]
+    },
+    BuildingsName.WAREHOUSE_TRIHYDROGEN: {
+        'name': BuildingsName.WAREHOUSE_TRIHYDROGEN.value,
+        'desc': 'Contains trihydrogen.',
+        'cost': {ObjectCategory.CREDITS: [180, 200, 280]},
+        'produce': {},
+        'consume': {},
+        'stock': {ObjectCategory.TRIHYDROGEN: [20, 50, 100]},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_TRIHYDROGEN.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_TRIHYDROGEN.png'))
+        ]
+    },
+    BuildingsName.WAREHOUSE_TRIHELIUM: {
+        'name': BuildingsName.WAREHOUSE_TRIHELIUM.value,
+        'desc': 'Contains trihelium.',
+        'cost': {ObjectCategory.CREDITS: [180, 200, 280]},
+        'produce': {},
+        'consume': {},
+        'stock': {ObjectCategory.TRIHELIUM: [20, 50, 100]},
+        'allowedSpot': None,
+        'deletable': True,
+        'constructable': True,
+        'canLevelUp': True,
+        'constructionTime': 0,
+        'size': (1, 1),
+        'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_TRIHELIUM.png')),
+                                        (64, 64)),
+        'animImg': [
+            pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'WAREHOUSE_TRIHELIUM.png'))
         ]
     }
 }

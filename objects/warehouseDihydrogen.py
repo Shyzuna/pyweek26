@@ -5,7 +5,7 @@ from settings.enums import BuildingsName, BuildingStates, ObjectCategory
 from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 
 
-class WarehouseDihydrogen(Building, ProducingBuilding, StockingBuilding):
+class WarehouseDiHydrogen(Building, ProducingBuilding, StockingBuilding):
 
     def __init__(self, position):
 

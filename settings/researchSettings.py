@@ -26,7 +26,7 @@ ALL_RESEARCH = {
             'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
             'time': 10,
-            'unlocked': [BuildingsName.HYDROGEN_PLANT, BuildingsName.DRILL, BuildingsName.WAREHOUSE_HYDROGEN],
+            'unlocked': [BuildingsName.HYDROGEN_PLANT, BuildingsName.DRILL_HYDROGEN, BuildingsName.WAREHOUSE_HYDROGEN],
             'resUnlocked': ObjectCategory.HYDROGEN
         },
         {
@@ -56,6 +56,14 @@ ALL_RESEARCH = {
             'time': 10,
             'element': BuildingsName.BATTERY,
             'value': 1.2
+        },
+        {
+            'name': 'Unlock Dihydrogen stuff',
+            'type': ResearchType.UNLOCK,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'unlocked': [BuildingsName.DIHYDROGEN_PLANT, BuildingsName.DRILL_HYDROGEN, BuildingsName.WAREHOUSE_DIHYDROGEN],
+            'resUnlocked': ObjectCategory.HYDROGEN
         }
     ],
     '3': [
