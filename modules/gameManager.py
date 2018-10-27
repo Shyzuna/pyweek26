@@ -183,6 +183,13 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
+    def getInstantProd(self):
+        instantProd = 0
+        for network in self.networks:
+            instantProd += network.instantProduction[ObjectCategory.ENERGY]
+        return instantProd
+
+
     def checkIsBuildingTile(self, tilePos):
         tx, ty = tilePos
         borderSize = settings.BORDER_TILES_NUM
