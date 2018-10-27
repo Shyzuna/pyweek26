@@ -1,5 +1,6 @@
 from settings.enums import LinkStatus, Towns
 from settings.townSettings import ALL_TOWN
+from settings import settings
 from modules.contractManager import contractManager
 
 class Earth:
@@ -75,7 +76,7 @@ class Earth:
             self._isSending = False
 
     def updateDisplayedHour(self, millis):
-        minutes = int(millis / 1000 * 60 / 30)
+        minutes = int(millis / 1000 * 60 / settings.EARTH_HOUR_ROTATING_FREQ)
         self._displayedTime = "{:02}:{:02}".format(self.currentHour, minutes)
 
     def getCurrentTime(self):
