@@ -27,8 +27,8 @@ class ObjectCategory(Enum):
     Enum for object names
     """
     HYDROGEN = 'HYDROGEN'
-    DIHYGROGEN = 'DIHYDROGEN'
-    TRIHYGROGEN = 'TRIHYDROGEN'
+    DIHYDROGEN = 'DIHYDROGEN'
+    TRIHYDROGEN = 'TRIHYDROGEN'
     TRIHELIUM = 'TRIHELIUM'
     ENERGY = 'ENERGY'
     CREDITS = 'CREDITS'
@@ -54,8 +54,11 @@ class BuildingsName(Enum):
     HEADQUARTERS = 'Head Quarters'
     WAREHOUSE_HYDROGEN = 'Warehouse Hydrogen'
     HYDROGEN_PLANT = 'Hydrogen Plant'
+    DIHYDROGEN_PLANT = 'Dihydrogen Plant'
     CONNECTOR = 'Connector'
     TRANSMITTER = 'Transmitter'
+    HYDROGEN_COMBINER = 'Hydrogen Combiner'
+    WAREHOUSE_DIHYDROGEN = 'Warehouse Dihydrogen'
 
 class BuildingTypes(Enum):
     """

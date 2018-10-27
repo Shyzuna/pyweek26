@@ -14,25 +14,25 @@ class Player(object):
         self._resources = {
             ObjectCategory.ENERGY: 5,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0,
             ObjectCategory.CREDITS: 1000
         }
         self._resourcesCap = {
             ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0,
             ObjectCategory.CREDITS: None
         }
         self._resourcesVisible = {
             ObjectCategory.ENERGY: False,
-            ObjectCategory.HYDROGEN: True,
-            ObjectCategory.DIHYGROGEN: False,
-            ObjectCategory.TRIHYGROGEN: False,
-            ObjectCategory.TRIHELIUM: False,
+            ObjectCategory.HYDROGEN: False,
+            ObjectCategory.DIHYDROGEN: True,
+            ObjectCategory.TRIHYDROGEN: True,
+            ObjectCategory.TRIHELIUM: True,
             ObjectCategory.CREDITS: True
         }
 
@@ -47,6 +47,9 @@ class Player(object):
 
     def upgradeResourceCapTo(self, resType, value):
         self._resourcesCap[resType] = value
+
+    def unlockRes(self, res):
+        self._resourcesVisible[res] = True
 
     def tryPay(self, resList):
         # check first

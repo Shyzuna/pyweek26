@@ -22,7 +22,6 @@ class ResearchManager(object):
 
     def init(self, hq):
         self._hq = hq
-        self.startResearch('1', 0)
 
     def completeResearch(self):
         ALL_RESEARCH[self._currentLevel][self._currentResearch]['done'] = True
@@ -31,12 +30,14 @@ class ResearchManager(object):
         if research['type'] == ResearchType.UPGRADE:
             modules.gameManager.gameManager.upgradeBuildings(research['element'], research['param'], research['value'])
         elif research['type'] == ResearchType.UNLOCK:
-           pass
+            modules.gameManager.gameManager.unlockBuildings(research['unlocked'])
+            modules.gameManager.gameManager.unlockRes(research['resUnlocked'])
         self._currentResearch = None
 
     def startResearch(self, lvl, number):
         if self._currentResearch is None and 'done' not in ALL_RESEARCH[lvl][number]:
             if modules.gameManager.gameManager.getPlayer().tryPay(ALL_RESEARCH[lvl][number]['cost']):
+                modules.guiManager.guiManager.getFrameMenu('Research').startResearch(lvl, number)
                 self._currentLevel = lvl
                 self._currentResearch = number
                 self._maxTimer = ALL_RESEARCH[lvl][number]['time'] * 1000

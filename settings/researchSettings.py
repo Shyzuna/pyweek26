@@ -22,13 +22,12 @@ ALL_RESEARCH = {
             'param': 'stock'
         },
         {
-            'name': 'Upgrade battery',
-            'type': ResearchType.UPGRADE,
+            'name': 'Unlock Hydrogen stuff',
+            'type': ResearchType.UNLOCK,
             'cost': {ObjectCategory.CREDITS: 100},
             'time': 10,
-            'element': BuildingsName.BATTERY,
-            'value': 1.2,
-            'param': 'stock'
+            'unlocked': [BuildingsName.HYDROGEN_PLANT, BuildingsName.DRILL, BuildingsName.WAREHOUSE_HYDROGEN],
+            'resUnlocked': ObjectCategory.HYDROGEN
         },
         {
             'name': 'Upgrade battery',

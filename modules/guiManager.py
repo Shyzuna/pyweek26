@@ -7,7 +7,7 @@ TODO:
 """
 
 from settings import settings
-from settings.enums import Colors, ObjectCategory, TooltipType
+from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
@@ -17,6 +17,7 @@ from objects.UI.researchFrame import UIResearchFrame
 import modules.gameManager
 import pygame
 import os
+from objects.connector import Connector
 
 class GuiManager(object):
     def __init__(self):
@@ -177,31 +178,45 @@ class GuiManager(object):
             self._topBar.blit(t, (lastLeft, topSpace))
             lastLeft += (t.get_width() + widthSpaceByElem)
 
+    def setBuildingList(self, bList):
+        self._buildingsList = bList
+
     def createSideButton(self):
         # build menu and child
         buildButtonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 2))
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 3))
         buttonH = self._topBar.get_height()
-        for cat, l in self._buildingsList.items():
+        for cat, d in self._buildingsList.items():
             buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
                                             self._fonts[self._currentFont], self.changeMenu))
             buttonH += buttonSize[1]
 
+            size = 1
+            for name, value in d.items():
+                obj, available = value
+                if available:
+                    size += 1
+
             localButtonH = self._topBar.get_height()
             localButtonList = []
             localButtonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(l) + 1))
-            for e in l:
-                name, obj = e
-                localButtonList.append(UIButton(name.value, localButtonSize, (0, localButtonH),
-                                                self._fonts[self._currentFont], self.selectBuilding, building=obj,
-                                                tooltipType=TooltipType.GUI_BUILDING))
-                localButtonH += localButtonSize[1]
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / size)
+            for name, value in d.items():
+                obj, available = value
+                if available:
+                    localButtonList.append(UIButton(name.value, localButtonSize, (0, localButtonH),
+                                                    self._fonts[self._currentFont], self.selectBuilding, building=obj,
+                                                    tooltipType=TooltipType.GUI_BUILDING))
+                    localButtonH += localButtonSize[1]
             localButtonList.append(UIButton('Back', localButtonSize, (0, localButtonH),
                                             self._fonts[self._currentFont], self.resetMenu, prevContext='Build'))
             self._sideButtons[cat.value] = localButtonList
 
+        buildButtonList.append(UIButton(BuildingsName.CONNECTOR.value, buttonSize, (0, buttonH),
+                                        self._fonts[self._currentFont], self.selectBuilding, building=Connector,
+                                        tooltipType=TooltipType.GUI_BUILDING))
+        buttonH += buttonSize[1]
         buildButtonList.append(UIButton('Remove', buttonSize, (0, buttonH),
                                         self._fonts[self._currentFont], self.destroyBuilding,
                                         img=self._guiImg['destructor']))

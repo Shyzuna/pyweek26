@@ -42,6 +42,9 @@ class UIButton(UIHoverable):
         self._completedSurface = pygame.Surface(size)
         self._completedSurface.fill((0, 95, 0))
         pygame.draw.rect(self._completedSurface, Colors.BLACK.value, self._pressedSurface.get_rect(), 2)
+        self._runningSurface = pygame.Surface(size)
+        self._runningSurface.fill((180, 180, 0))
+        pygame.draw.rect(self._completedSurface, Colors.BLACK.value, self._pressedSurface.get_rect(), 2)
         self._text = font.render(title, 1, Colors.BLACK.value)
         if self._img is not None:
             self._baseSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
@@ -54,6 +57,8 @@ class UIButton(UIHoverable):
                                                 (size[1] - self._img.get_height()) / 2))
             self._completedSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
                                                 (size[1] - self._img.get_height()) / 2))
+            self._runningSurface.blit(self._img, ((size[0] - self._img.get_width()) / 2,
+                                                (size[1] - self._img.get_height()) / 2))
         else:
             self._baseSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
                                                 (size[1] - self._text.get_height()) / 2))
@@ -65,6 +70,8 @@ class UIButton(UIHoverable):
                                                 (size[1] - self._text.get_height()) / 2))
             self._completedSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
                                                 (size[1] - self._text.get_height()) / 2))
+            self._runningSurface.blit(self._text, ((size[0] - self._text.get_width()) / 2,
+                                                (size[1] - self._text.get_height()) / 2))
 
     def getBuildingData(self):
         if self._tmpBuild:
@@ -73,8 +80,9 @@ class UIButton(UIHoverable):
             return None
 
     def draw(self, screen, offset=(0,0)):
-        surface = self._completedSurface if self._completed else self._disabledSurface if self._disabled else \
-            self._pressedSurface if self._pressed else self._hoverSurface if self._hover else self._baseSurface
+        surface = self._completedSurface if self._completed else self._runningSurface if self._running else \
+            self._disabledSurface if self._disabled else self._pressedSurface if self._pressed else \
+                self._hoverSurface if self._hover else self._baseSurface
         screen.blit(surface, (self._pos[0] + offset[0], self._pos[1] + offset[1]))
 
     def updateText(self, text, font):
