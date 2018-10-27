@@ -100,6 +100,7 @@ class UIEarthFrame(object):
             screen.blit(transmitterNotBuiltText, (x, y))
 
         self._toggleButton.updateText(buttonText, self._font)
+        self._toggleButton.setDisabled(not self._earth.isTransmitterBuilt())
         self._toggleButton.draw(screen)
 
         self._exitButton.draw(screen)

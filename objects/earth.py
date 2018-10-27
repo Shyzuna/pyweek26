@@ -69,6 +69,9 @@ class Earth:
     def setTransmitterBuild(self, transmitterBuilt):
         self._isTransmitterBuilt = transmitterBuilt
 
+        if not transmitterBuilt:
+            self._isSending = False
+
     def updateDisplayedHour(self, millis):
         minutes = int(millis / 1000 * 60 / 30)
         self._displayedTime = "{:02}".format(self.currentHour) + ":" + "{:02}".format(minutes)
