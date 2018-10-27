@@ -74,7 +74,7 @@ class Earth:
 
     def updateDisplayedHour(self, millis):
         minutes = int(millis / 1000 * 60 / 30)
-        self._displayedTime = "{:02}".format(self.currentHour) + ":" + "{:02}".format(minutes)
+        self._displayedTime = "{:02}:{:02}".format(self.currentHour, minutes)
 
     def getCurrentTime(self):
         return self._displayedTime

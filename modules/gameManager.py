@@ -24,6 +24,8 @@ from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
 from objects.warehouseHydrogen import WarehouseHydrogen
 from objects.hydrogenPlant import HydrogenPlant
+from objects.hydrogenCombiner import HydrogenCombiner
+from objects.warehouseDihydrogen import WarehouseDihydrogen
 from objects.connector import Connector
 
 class GameManager:
@@ -37,9 +39,9 @@ class GameManager:
         self.buildingList = {
             BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters), (BuildingsName.TRANSMITTER, Transmitter)],
             BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
-            BuildingTypes.REFINER: [],
+            BuildingTypes.REFINER: [(BuildingsName.HYDROGEN_COMBINER, HydrogenCombiner)],
             BuildingTypes.PRODUCER: [(BuildingsName.SOLARPANEL, SolarPanel), (BuildingsName.HYDROGEN_PLANT, HydrogenPlant)],
-            BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen)],
+            BuildingTypes.CAPACITOR: [(BuildingsName.BATTERY, Battery), (BuildingsName.WAREHOUSE_HYDROGEN, WarehouseHydrogen), (BuildingsName.WAREHOUSE_DIHYDROGEN, WarehouseDihydrogen)],
             BuildingTypes.CONNECTOR: [(BuildingsName.CONNECTOR, Connector)],
         }
         self._earth = Earth()
