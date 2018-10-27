@@ -32,6 +32,8 @@ class GameManager:
         pass
 
     def init(self):
+        self._player = Player()
+        baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
         self.buildingList = {
             BuildingTypes.GENERAL: [(BuildingsName.HEADQUARTERS, HeadQuarters), (BuildingsName.TRANSMITTER, Transmitter)],
             BuildingTypes.GATHERER: [(BuildingsName.DRILL, Drill), (BuildingsName.CRUSHER, Crusher)],
@@ -47,12 +49,11 @@ class GameManager:
         displayManager.init()
         mapManager.init()
         inputManager.init()
-        researchManager.init()
+        researchManager.init(baseHq)
         guiManager.init(self.buildingList)
         displayManager.createBaseMapSurface(mapManager.baseMap)
-        self._player = Player()
         self._buildings = {  # Col / Row
-            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: HeadQuarters(position=settings.DEFAULT_HQ_POS)}
+            settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq}
         }
         self.networks = []
 
@@ -171,6 +172,9 @@ class GameManager:
                     if r.getPos() == tilePos and r.getCategory() in allowedSpot:
                         return True
         return False
+
+    def getPlayer(self):
+        return self._player
 
     def getResourceAt(self, tilePos):
         # get resource at

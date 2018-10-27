@@ -81,6 +81,7 @@ class TooltipType(Enum):
     TEXT_TIP = 0
     GUI_BUILDING = 1
     IG_BUILDING = 2
+    RESEARCH_TIP = 3
 
 class ResearchType(Enum):
     """

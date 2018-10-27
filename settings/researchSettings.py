@@ -16,7 +16,79 @@ ALL_RESEARCH = {
             'name': 'Upgrade battery',
             'type': ResearchType.UPGRADE,
             'cost': {ObjectCategory.CREDITS: 100},
-            'time': 100,
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
+            'element': BuildingsName.BATTERY,
+            'value': 1.2
+        },
+        {
+            'name': 'Upgrade battery',
+            'type': ResearchType.UPGRADE,
+            'cost': {ObjectCategory.CREDITS: 100},
+            'time': 10,
             'element': BuildingsName.BATTERY,
             'value': 1.2
         }
@@ -26,7 +98,7 @@ ALL_RESEARCH = {
             'name': 'Upgrade battery',
             'type': ResearchType.UPGRADE,
             'cost': {ObjectCategory.CREDITS: 100},
-            'time': 100,
+            'time': 10,
             'element': BuildingsName.BATTERY,
             'value': 1.2
         }

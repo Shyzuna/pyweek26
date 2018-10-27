@@ -9,10 +9,12 @@ TODO:
 import pygame
 
 class UIHoverable(object):
-    def __init__(self, pos, size, tooltipType):
+    def __init__(self, pos, size, tooltipType, disabled):
         self._lastHover = False
         self._hover = False
         self._pressed = False
+        self._disabled = disabled
+        self._completed = False  # Research only
         self._pos = pos
         self._tooltipType = tooltipType
         self._rect = pygame.Rect(pos[0], pos[1], size[0], size[1])
@@ -29,3 +31,11 @@ class UIHoverable(object):
 
     def getTooltipType(self):
         return self._tooltipType
+
+    def setDisabled(self, val):
+        self._disabled = val
+
+    def setCompleted(self, val):
+        self._completed = val
+        if self._completed:
+            self._disabled = True

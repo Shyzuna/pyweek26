@@ -7,6 +7,8 @@ TODO:
 """
 
 from settings.researchSettings import ALL_RESEARCH
+import modules.guiManager
+import modules.gameManager
 
 
 class ResearchManager(object):
@@ -15,20 +17,24 @@ class ResearchManager(object):
         self._currentResearch = None
         self._currentTimer = 0
         self._maxTimer = 0
+        self._hq = None
 
-    def init(self):
+    def init(self, hq):
+        self._hq = hq
         self.startResearch('1', 0)
 
     def completeResearch(self):
         ALL_RESEARCH[self._currentLevel][self._currentResearch]['done'] = True
+        modules.guiManager.guiManager.getFrameMenu('Research').setResearchCompleted(self._currentLevel, self._currentResearch)
         self._currentResearch = None
 
     def startResearch(self, lvl, number):
         if self._currentResearch is None and 'done' not in ALL_RESEARCH[lvl][number]:
-            self._currentLevel = lvl
-            self._currentResearch = number
-            self._maxTimer = ALL_RESEARCH[lvl][number]['time'] * 1000
-            self._currentTimer = self._maxTimer
+            if modules.gameManager.gameManager.getPlayer().tryPay(ALL_RESEARCH[lvl][number]['cost']):
+                self._currentLevel = lvl
+                self._currentResearch = number
+                self._maxTimer = ALL_RESEARCH[lvl][number]['time'] * 1000
+                self._currentTimer = self._maxTimer
 
     def update(self, dTime):
         if self._currentResearch is not None:
@@ -41,5 +47,8 @@ class ResearchManager(object):
 
     def isSearching(self):
         return self._currentResearch is not None
+
+    def getHqLevel(self):
+        return self._hq.level + 1
 
 researchManager = ResearchManager()

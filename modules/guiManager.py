@@ -256,7 +256,8 @@ class GuiManager(object):
         # Check central frame
         if self._centralFrame is not None:
             onGui = onGui or self._frameList[self._centralFrame].isOn(mPos)
-            self._frameList[self._centralFrame].checkHover(mPos)
+            if self._frameList[self._centralFrame].checkHover(mPos):
+                hoveredElem = True
 
         # Check battery
         batterySize = self._battery.get_size()
@@ -326,5 +327,8 @@ class GuiManager(object):
 
     def closeCentralFrame(self, *arg):
         self._centralFrame = None
+
+    def getFrameMenu(self, name):
+        return self._frameList[name]
 
 guiManager = GuiManager()
