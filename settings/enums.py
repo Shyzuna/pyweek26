@@ -91,8 +91,8 @@ class ResearchType(Enum):
     """
     Enum for research Type
     """
-    UNLOCK = 0
-    UPGRADE = 1
+    UNLOCK = 'Unlock'
+    UPGRADE = 'Upgrade'
 
 class Towns(Enum):
     """
