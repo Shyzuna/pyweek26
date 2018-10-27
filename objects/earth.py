@@ -1,5 +1,6 @@
 from settings.enums import LinkStatus, Towns
 from settings.townSettings import ALL_TOWN
+from modules.contractManager import contractManager
 
 class Earth:
 
@@ -23,7 +24,7 @@ class Earth:
     def sendEnergy(self, transmitter, batteries):
         if self.isSending():
             towns = self.getCurrentTowns()
-            toSend = int(transmitter.buildingData['transmitCapacity'][transmitter.level] / len(towns))
+            toSend = int(transmitter.buildingData['transmitCapacity'][transmitter.level] / (len(towns) + 1))
             leftToSend = toSend
             for town in towns:
                 for battery in batteries:
@@ -33,6 +34,7 @@ class Earth:
                         break
                 print("Envoi d'énergie ", town.value, toSend - leftToSend)
                 self.towns[town]['energy'] += toSend - leftToSend
+                contractManager.updateContracts(town.value, toSend - leftToSend)
 
     def getEnergy(self, town):
         return self.towns[town]

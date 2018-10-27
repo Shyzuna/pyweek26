@@ -5,7 +5,6 @@ from modules.mapManager import mapManager
 from modules.inputManager import inputManager
 from modules.guiManager import guiManager
 from modules.researchManager import researchManager
-from modules.contractManager import contractManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
 from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,BuildingsName
@@ -46,6 +45,7 @@ class GameManager:
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
+        self.networks = []
         displayManager.init()
         mapManager.init()
         inputManager.init()
@@ -55,7 +55,6 @@ class GameManager:
         self._buildings = {  # Col / Row
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq}
         }
-        self.networks = []
 
     def upgradeBuildings(self, buildingType, param, value):
         if param in ALL_BUILDINGS_SETTINGS[buildingType].keys():

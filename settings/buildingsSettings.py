@@ -75,7 +75,7 @@ ALL_BUILDINGS_SETTINGS = {
         'name': BuildingsName.SOLARPANEL.value,
         'desc': 'Produce energy from sunlight.',
         'cost': {ObjectCategory.CREDITS: [100, 110, 150]},
-        'produce': {ObjectCategory.ENERGY: [10, 20, 30]},
+        'produce': {ObjectCategory.ENERGY: [2, 5, 10]},
         'consume': {},
         'stock': {},
         'allowedSpot': None,
