@@ -150,7 +150,8 @@ class ContractManager:
         if self.runningContractIndex is not None:
             runningContract = self.contracts[self.runningContractIndex]
             if runningContract.left <= 0:
-                # Delete it and generate a new one
+                # Delete it, send the reward and generate a new one
+                modules.gameManager.gameManager.getPlayer().addCredits(runningContract.reward)
                 del self.contracts[self.runningContractIndex]
                 self.runningContractIndex = None
                 self.generateContract()

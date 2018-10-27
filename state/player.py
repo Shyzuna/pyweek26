@@ -45,6 +45,10 @@ class Player(object):
     def getResourcesVisible(self):
         return self._resourcesVisible
 
+    def addCredits(self, creditsToAdd):
+        currentCredits = self._resources[ObjectCategory.CREDITS]
+        self._resources.update({ObjectCategory.CREDITS: currentCredits + creditsToAdd})
+
     def upgradeResourceCapTo(self, resType, value):
         self._resourcesCap[resType] = value
 
