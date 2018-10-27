@@ -5,7 +5,6 @@ from modules.mapManager import mapManager
 from modules.inputManager import inputManager
 from modules.guiManager import guiManager
 from modules.researchManager import researchManager
-from modules.contractManager import contractManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
 from settings.enums import ObjectCategory,BuildingTypes,BuildingStates,BuildingsName
@@ -48,6 +47,7 @@ class GameManager:
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
+        self.networks = []
         displayManager.init()
         mapManager.init()
         inputManager.init()
@@ -61,8 +61,6 @@ class GameManager:
             self._buildings[settings.DEFAULT_TRANSMITTER_POS[1]].update({settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)})
         else:
             self._buildings.update({settings.DEFAULT_TRANSMITTER_POS[1]: {settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)}})
-
-        self.networks = []
 
     def unlockRes(self, res):
         self._player.unlockRes(res)
