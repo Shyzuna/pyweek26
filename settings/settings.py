@@ -5,7 +5,7 @@ from settings.enums import ObjectCategory
 SEED = None  #93917774  # None for random
 SEED_POWER = 8
 DELTA_PERCENT = 0.1
-RESOURCES = [ObjectCategory.HYDROGEN, ObjectCategory.DIHYGROGEN, ObjectCategory.TRIHYGROGEN, ObjectCategory.TRIHELIUM]
+RESOURCES = [ObjectCategory.HYDROGEN, ObjectCategory.DIHYDROGEN, ObjectCategory.TRIHYDROGEN, ObjectCategory.TRIHELIUM]
 SPOT_NUMBERS = [0.08, 0.05, 0.03, 0.02]  # percent
 REPARTITION_NUMBERS = [0.04, 0.02, 0.014, 0.06]  # percent
 TOTAL_RES = 100000
@@ -57,7 +57,7 @@ MAX_AVAILABLE_CONTRACTS = 4
 UI_CENTRAL_FRAME = (0.8, 0.8)
 
 # Earth params
-EARTH_HOUR_ROTATING_FREQ = 1000 * 30
+EARTH_HOUR_ROTATING_FREQ = 5
 
 # Game Value
 BUILDING_MAX_LEVEL = 4

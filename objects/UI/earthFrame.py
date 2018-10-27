@@ -94,13 +94,13 @@ class UIEarthFrame(object):
         x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 30
         screen.blit(statusSendingText, (x, y))
 
-        if not self._earth.isTransmitterBuilt():
-            transmitterNotBuiltText = self._font.render("Transmitter not built", 1, Colors.RED.value)
-            x, y = self._pos[0] + self._size[0] - transmitterNotBuiltText.get_width() - 8, self._pos[1] + self._size[1] - 28
-            screen.blit(transmitterNotBuiltText, (x, y))
+        if not self._earth.isTransmitterOn():
+            transmitterNotOnText = self._font.render("Transmitter is off", 1, Colors.RED.value)
+            x, y = self._pos[0] + self._size[0] - transmitterNotOnText.get_width() - 8, self._pos[1] + self._size[1] - 28
+            screen.blit(transmitterNotOnText, (x, y))
 
         self._toggleButton.updateText(buttonText, self._font)
-        self._toggleButton.setDisabled(not self._earth.isTransmitterBuilt())
+        self._toggleButton.setDisabled(not self._earth.isTransmitterOn())
         self._toggleButton.draw(screen)
 
         self._exitButton.draw(screen)

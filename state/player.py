@@ -14,24 +14,24 @@ class Player(object):
         self._resources = {
             ObjectCategory.ENERGY: 5,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0,
             ObjectCategory.CREDITS: 1000
         }
         self._resourcesCap = {
             ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0,
             ObjectCategory.CREDITS: None
         }
         self._resourcesVisible = {
             ObjectCategory.ENERGY: False,
             ObjectCategory.HYDROGEN: False,
-            ObjectCategory.DIHYGROGEN: False,
-            ObjectCategory.TRIHYGROGEN: False,
+            ObjectCategory.DIHYDROGEN: False,
+            ObjectCategory.TRIHYDROGEN: False,
             ObjectCategory.TRIHELIUM: False,
             ObjectCategory.CREDITS: True
         }
@@ -44,6 +44,10 @@ class Player(object):
 
     def getResourcesVisible(self):
         return self._resourcesVisible
+
+    def addCredits(self, creditsToAdd):
+        currentCredits = self._resources[ObjectCategory.CREDITS]
+        self._resources.update({ObjectCategory.CREDITS: currentCredits + creditsToAdd})
 
     def upgradeResourceCapTo(self, resType, value):
         self._resourcesCap[resType] = value

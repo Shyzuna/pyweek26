@@ -41,3 +41,7 @@ class Contract:
 
         leftText = fonts['medium'].render('Left: {}'.format(self.left), 1, Colors.BLACK.value)
         screen.blit(leftText, (topLeft[0] + window.width / 4 + 20, topLeft[1] + self.contour * 2 + 3 * window.height / 4))
+
+    def update(self, energySent):
+        self.left -= energySent
+        self.left = 0 if self.left < 0 else self.left

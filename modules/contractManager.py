@@ -1,6 +1,7 @@
 import pygame
 import os
 import numpy
+import modules.gameManager
 
 from settings import settings
 from settings.enums import Colors
@@ -31,7 +32,7 @@ class ContractManager:
         self.runningContractIndex = None
 
         for i in range(settings.MAX_AVAILABLE_CONTRACTS):
-            self.generateContract(factor=1)
+            self.generateContract()
 
         # GUI
         self.contour = 2
@@ -102,7 +103,6 @@ class ContractManager:
 
     def isOn(self, mPos):
         rect = pygame.Rect(self.popupTopLeft, self.popup.size)
-        print(rect.collidepoint(mPos[0], mPos[1]))
         return rect.collidepoint(mPos[0], mPos[1])
 
     def onClick(self, contractIndex):
@@ -145,31 +145,34 @@ class ContractManager:
     def updateContracts(self, town, energySent):
         # Update running contract
         self.updateRunningContract(town, energySent)
-
+        print(town)
         # Is the running contract complete?
-        runningContract = self.contracts[self.runningContractIndex]
-        if runningContract.left <= 0:
-            # Delete it and generate a new one
-            del self.contracts[self.runningContractIndex]
-            self.runningContractIndex = None
-            self.generateContract()
+        if self.runningContractIndex is not None:
+            runningContract = self.contracts[self.runningContractIndex]
+            if runningContract.left <= 0:
+                # Delete it, send the reward and generate a new one
+                modules.gameManager.gameManager.getPlayer().addCredits(runningContract.reward)
+                del self.contracts[self.runningContractIndex]
+                self.runningContractIndex = None
+                self.generateContract()
 
     def update(self):
         pass
 
-    def generateContract(self, factor):
+    def generateContract(self):
+        factor = modules.gameManager.gameManager.getInstantProd()
         maxSeed = 10
         seed = numpy.random.randint(1, maxSeed + 1)
         rewardFactors = [1, 1.2, 1.5]
         town = numpy.random.choice(list(Towns)).value
-        objective = int(factor * seed)
+        objective = int((factor + 1) * seed)
         if seed <= int(maxSeed/3):
             reward = int(objective * 100 * rewardFactors[0])
         elif seed <= int(2 * maxSeed / 3):
             reward = int(objective * 100 * rewardFactors[1])
         else:
             reward = int(objective * 100 * rewardFactors[2])
-            
+
         self.contracts.append(Contract(town, reward, objective))
 
 

@@ -1,5 +1,7 @@
 from settings.enums import LinkStatus, Towns
 from settings.townSettings import ALL_TOWN
+from settings import settings
+from modules.contractManager import contractManager
 
 class Earth:
 
@@ -18,12 +20,12 @@ class Earth:
         self._displayedTime = "00:00"
         self.changeHour()
         self._isSending = False
-        self._isTransmitterBuilt = False
+        self._isTransmitterOn = False
 
     def sendEnergy(self, transmitter, batteries):
         if self.isSending():
             towns = self.getCurrentTowns()
-            toSend = int(transmitter.buildingData['transmitCapacity'][transmitter.level] / len(towns))
+            toSend = int(transmitter.buildingData['transmitCapacity'][transmitter.level] / (len(towns) + 1))
             leftToSend = toSend
             for town in towns:
                 for battery in batteries:
@@ -33,6 +35,7 @@ class Earth:
                         break
                 print("Envoi d'énergie ", town.value, toSend - leftToSend)
                 self.towns[town]['energy'] += toSend - leftToSend
+                contractManager.updateContracts(town.value, toSend - leftToSend)
 
     def getEnergy(self, town):
         return self.towns[town]
@@ -63,18 +66,18 @@ class Earth:
     def toggleSending(self, *arg):
         self._isSending = not self._isSending
 
-    def isTransmitterBuilt(self):
-        return self._isTransmitterBuilt
+    def isTransmitterOn(self):
+        return self._isTransmitterOn
 
-    def setTransmitterBuild(self, transmitterBuilt):
-        self._isTransmitterBuilt = transmitterBuilt
+    def setTransmitterOn(self, transmitterOn):
+        self._isTransmitterOn = transmitterOn
 
-        if not transmitterBuilt:
+        if not transmitterOn:
             self._isSending = False
 
     def updateDisplayedHour(self, millis):
-        minutes = int(millis / 1000 * 60 / 30)
-        self._displayedTime = "{:02}".format(self.currentHour) + ":" + "{:02}".format(minutes)
+        minutes = int(millis / 1000 * 60 / settings.EARTH_HOUR_ROTATING_FREQ)
+        self._displayedTime = "{:02}:{:02}".format(self.currentHour, minutes)
 
     def getCurrentTime(self):
         return self._displayedTime

@@ -5,10 +5,9 @@ from modules.mapManager import mapManager
 from modules.inputManager import inputManager
 from modules.guiManager import guiManager
 from modules.researchManager import researchManager
-from modules.contractManager import contractManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
-from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,BuildingsName
+from settings.enums import ObjectCategory,BuildingTypes,BuildingStates,BuildingsName
 from objects.network import Network
 from objects.producingBuilding import ProducingBuilding
 from objects.consumingBuilding import ConsumingBuilding
@@ -24,6 +23,9 @@ from objects.solarpanel import SolarPanel
 from objects.headquarters import HeadQuarters
 from objects.warehouseHydrogen import WarehouseHydrogen
 from objects.hydrogenPlant import HydrogenPlant
+from objects.dihydrogenPlant import DihydrogenPlant
+from objects.hydrogenCombiner import HydrogenCombiner
+from objects.warehouseDihydrogen import WarehouseDihydrogen
 from objects.connector import Connector
 
 class GameManager:
@@ -37,14 +39,15 @@ class GameManager:
         #            BuildingTypes.CONNECTOR: {BuildingsName.CONNECTOR: (Connector, True)},
         self.buildingList = {
             BuildingTypes.GATHERER: {BuildingsName.DRILL: (Drill, False), BuildingsName.CRUSHER: (Crusher, True)},
-            BuildingTypes.REFINER: {},
-            BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True), BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False)},
-            BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True), BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False)}
+            BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, False)},
+            BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True), BuildingsName.HYDROGEN_PLANT: (HydrogenPlant, False), BuildingsName.DIHYDROGEN_PLANT: (DihydrogenPlant, False)},
+            BuildingTypes.CAPACITOR: {BuildingsName.BATTERY: (Battery, True), BuildingsName.WAREHOUSE_HYDROGEN: (WarehouseHydrogen, False), BuildingsName.WAREHOUSE_DIHYDROGEN: (WarehouseDihydrogen, False)}
         }
         self._earth = Earth()
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
+        self.networks = []
         displayManager.init()
         mapManager.init()
         inputManager.init()
@@ -58,45 +61,6 @@ class GameManager:
             self._buildings[settings.DEFAULT_TRANSMITTER_POS[1]].update({settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)})
         else:
             self._buildings.update({settings.DEFAULT_TRANSMITTER_POS[1]: {settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)}})
-
-        self.networks = []
-
-    def unlockRes(self, res):
-        self._player.unlockRes(res)
-
-    def unlockBuildings(self, buildings):
-        for cat, d in self.buildingList.items():
-            for name, value in d.items():
-                if name in buildings:
-                    self.buildingList[cat][name] = (value[0], True)
-        guiManager.setBuildingList(self.buildingList)
-        guiManager.createSideButton()
-
-    def upgradeBuildings(self, buildingType, param, value):
-        if param in ALL_BUILDINGS_SETTINGS[buildingType].keys():
-            if type(ALL_BUILDINGS_SETTINGS[buildingType][param]) == dict:
-                for k, v in ALL_BUILDINGS_SETTINGS[buildingType][param].items():
-                    if type(v) == list:
-                        v = [i * value for i in v]
-                    else:
-                        v *= value
-                    ALL_BUILDINGS_SETTINGS[buildingType][param][k] = v
-                print(ALL_BUILDINGS_SETTINGS[buildingType][param])
-            else:
-                ALL_BUILDINGS_SETTINGS[buildingType][param] *= value
-
-        if buildingType in [BuildingsName.BATTERY]:
-            storage = 0
-            resType = None
-            for y in self._buildings:
-                for x in self._buildings[y]:
-                    if self._buildings[y][x].buildingData['name'] == buildingType.value:
-                        building = self._buildings[y][x]
-                        if isinstance(building, StockingBuilding):
-                            resType = building.type
-                            storage += building.geCurrentMaxStock()
-            self._player.upgradeResourceCapTo(resType, storage)
-
 
     def start(self):
         #pygame.event.set_grab(True)
@@ -146,13 +110,15 @@ class GameManager:
                     for x in self._buildings[y]:
                         if isinstance(self._buildings[y][x], ConsumingBuilding):
                             self._buildings[y][x].consume()
+                        if isinstance(self._buildings[y][x], Transmitter):
+                            self._earth.setTransmitterOn(self._buildings[y][x].state == BuildingStates.ON)
 
                 # Then apply stock
                 for objectType in ObjectCategory:
                     if objectType != ObjectCategory.CREDITS:
                         self._player._resources[objectType] = 0
 
-                if self._earth.isSending() and self._earth.isTransmitterBuilt():
+                if self._earth.isSending() and self._earth.isTransmitterOn():
                     batteriesList = []
                     transmitter = None
                     for y in self._buildings:
@@ -173,7 +139,7 @@ class GameManager:
                             self._player._resources[building.type] += building.cur_capacity[building.type]
 
             # Earth
-            if time_since_hour_changed > settings.EARTH_HOUR_ROTATING_FREQ:
+            if time_since_hour_changed > settings.EARTH_HOUR_ROTATING_FREQ * 1000:
                 time_since_hour_changed = 0
                 self._earth.changeHour()
 
@@ -183,12 +149,47 @@ class GameManager:
             pygame.display.flip()
         pygame.quit()
 
+    def unlockRes(self, res):
+        self._player.unlockRes(res)
+
+    def unlockBuildings(self, buildings):
+        for cat, d in self.buildingList.items():
+            for name, value in d.items():
+                if name in buildings:
+                    self.buildingList[cat][name] = (value[0], True)
+        guiManager.setBuildingList(self.buildingList)
+        guiManager.createSideButton()
+
+    def upgradeBuildings(self, buildingType, param, value):
+        if param in ALL_BUILDINGS_SETTINGS[buildingType].keys():
+            if type(ALL_BUILDINGS_SETTINGS[buildingType][param]) == dict:
+                for k, v in ALL_BUILDINGS_SETTINGS[buildingType][param].items():
+                    if type(v) == list:
+                        v = [i * value for i in v]
+                    else:
+                        v *= value
+                    ALL_BUILDINGS_SETTINGS[buildingType][param][k] = v
+                print(ALL_BUILDINGS_SETTINGS[buildingType][param])
+            else:
+                ALL_BUILDINGS_SETTINGS[buildingType][param] *= value
+
+        if buildingType in [BuildingsName.BATTERY]:
+            storage = 0
+            resType = None
+            for y in self._buildings:
+                for x in self._buildings[y]:
+                    if self._buildings[y][x].buildingData['name'] == buildingType.value:
+                        building = self._buildings[y][x]
+                        if isinstance(building, StockingBuilding):
+                            resType = building.type
+                            storage += building.geCurrentMaxStock()
+            self._player.upgradeResourceCapTo(resType, storage)
+
     def getInstantProd(self):
         instantProd = 0
         for network in self.networks:
             instantProd += network.instantProduction[ObjectCategory.ENERGY]
         return instantProd
-
 
     def checkIsBuildingTile(self, tilePos):
         tx, ty = tilePos
@@ -249,28 +250,6 @@ class GameManager:
         if ty in self._buildings and tx in self._buildings[ty]:
             return self._buildings[ty][tx]
         return None
-
-    def addBuilding(self, buildingType, posInTiles):
-
-        #TODO: avoid overlapping
-        print("addBuilding flag")
-        building = None
-        if buildingType == 'BATTERY':
-            print("battery")
-            building = Battery(position=posInTiles)
-            self._player._resourcesCap[ObjectCategory.ENERGY] += building.max_capacity
-        if buildingType == 'SOLARPANEL':
-            print("SOLARPANEL")
-            building = SolarPanel(position=posInTiles)
-        elif buildingType == 'CRUSHER':
-            print("CRUSHER")
-            building = Crusher(position=posInTiles)
-        elif buildingType == 'DRILL':
-            print("DRILL")
-            building = Drill(position=posInTiles)
-
-        self.createBuilding(building)
-        print(self._buildings)
 
     def createBuilding(self, building):
         if self._player._resources[ObjectCategory.CREDITS] > building.buildingData['cost'][ObjectCategory.CREDITS][0]:
@@ -362,8 +341,6 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] += building.buildingData['stock'][building.type][building.level]
-        elif isinstance(building, Transmitter):
-            self._earth.setTransmitterBuild(True)
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
@@ -426,7 +403,5 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] -= building.buildingData['stock'][building.type][building.level]
-        elif isinstance(building, Transmitter):
-            self._earth.setTransmitterBuild(False)
 
 gameManager = GameManager()

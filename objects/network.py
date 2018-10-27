@@ -117,22 +117,22 @@ class Network():
         self.instantProduction = {
             ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0
         }
         self.instantStock = {
             ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0
         }
         self.consumedStock = {
             ObjectCategory.ENERGY: 0,
             ObjectCategory.HYDROGEN: 0,
-            ObjectCategory.DIHYGROGEN: 0,
-            ObjectCategory.TRIHYGROGEN: 0,
+            ObjectCategory.DIHYDROGEN: 0,
+            ObjectCategory.TRIHYDROGEN: 0,
             ObjectCategory.TRIHELIUM: 0
         }
 
