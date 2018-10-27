@@ -28,10 +28,10 @@ class ContractManager:
         self.contracts = [
             Contract(contractor="New York", reward=1000, objective=10),
             Contract(contractor="Shanghai", reward=100, objective=2),
-            Contract(contractor="Paris", reward=400, objective=5)
+            Contract(contractor="Paris", reward=400, objective=5),
+            Contract(contractor="Moscow", reward=1000, objective=10)
         ]
 
-        self.current_contract = Contract(contractor="Moscow", reward=1000, objective=10)
         self.showGui = False
         self.contour = 2
         self.popupTopLeft = framePos
@@ -71,6 +71,9 @@ class ContractManager:
             )
         )
 
+        self.contract_running = False
+        self.pressed = False
+
     def display(self, screen):
         # Display white background window with black edges
         self.popupContour.fill(Colors.BLACK.value)
@@ -94,25 +97,42 @@ class ContractManager:
         x = self.popupTopLeft[0]
         y = self.popupTopLeft[1] + self.topBarHeight
         for contract in self.contracts:
+            color = Colors.RED.value if contract.current else Colors.BLACK.value
+            contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, color)
             y += (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS
-            contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, Colors.BLACK.value)
-
-        # Display current contract
-        if self.current_contract is None:
-            pass
-        else:
-            x = self.popupTopLeft[0]
-            y = self.popupTopLeft[1] + self.topBarHeight
-            self.current_contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, Colors.RED.value)
 
     def isOn(self, mPos):
-        return self.popup.collidepoint(mPos[0], mPos[1])
+        rect = pygame.Rect(self.popupTopLeft, self.popup.size)
+        print(rect.collidepoint(mPos[0], mPos[1]))
+        return rect.collidepoint(mPos[0], mPos[1])
+
+    def onClick(self, contratIndex):
+        # Check if any contract is running
+        if not self.contract_running:
+            self.contracts[contratIndex].current = True
+            self.contract_running = True
 
     def checkHover(self, mPos):
         self.exitButton.checkHover(mPos)
 
     def checkMousePressed(self, pressed, mPos):
+        # Check click on exit
         self.exitButton.checkMousePressed(pressed, mPos)
+
+        # Check click on contract
+        x = self.popupTopLeft[0]
+        y = self.popupTopLeft[1] + self.topBarHeight
+        i = 0
+        for contract in self.contracts:
+            rect = pygame.Rect((x, y), self.contractWindow.size)
+            y += (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS
+            isInside = rect.collidepoint(mPos[0], mPos[1])
+            if not pressed and self.pressed and isInside:
+                self.onClick(contratIndex=i)
+                self.pressed = False
+            elif pressed and isInside:
+                self.pressed = True
+            i += 1
 
     def update(self):
         pass

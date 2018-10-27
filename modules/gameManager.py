@@ -50,7 +50,7 @@ class GameManager:
         mapManager.init()
         inputManager.init()
         researchManager.init(baseHq)
-        guiManager.init(self.buildingList)
+        guiManager.init(self.buildingList, self._earth)
         displayManager.createBaseMapSurface(mapManager.baseMap)
         self._buildings = {  # Col / Row
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq}

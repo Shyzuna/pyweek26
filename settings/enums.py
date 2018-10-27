@@ -94,9 +94,16 @@ class Towns(Enum):
     """
     Enum for towns
     """
-    MOSCOW = 'Moscow',
-    NEW_YORK = 'New York',
-    SHANGAI = 'Shangai',
-    PARIS = 'Paris',
-    LONDON = 'London',
+    MOSCOW = 'Moscow'
+    NEW_YORK = 'New York'
+    SHANGAI = 'Shangai'
+    PARIS = 'Paris'
+    LONDON = 'London'
     SYDNEY = 'Sydney'
+
+class LinkStatus(Enum):
+    """"
+    Enum for link status
+    """
+    OFFLINE = 'Offline'
+    ONLINE = 'Online'

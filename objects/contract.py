@@ -7,13 +7,14 @@ from settings import settings
 
 class Contract:
 
-    def __init__(self, contractor, reward, objective):
+    def __init__(self, contractor, reward, objective, current=False):
 
         self.contractor = contractor
         self.reward = reward
         self.objective = objective
         self.contour = 5
         self.left = objective
+        self.current = current
         self.img = pygame.transform.scale(pygame.image.load(os.path.join(settings.GUI_PATH, 'contract.jpg')),
                                           (64, 64))
 
