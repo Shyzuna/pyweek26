@@ -1,8 +1,10 @@
 import pygame
 import os
+import numpy
 
 from settings import settings
 from settings.enums import Colors
+from settings.enums import Towns
 from objects.UI.button import UIButton
 from objects.contract import Contract
 
@@ -25,15 +27,16 @@ class ContractManager:
         self.CONTRACTS_WINDOW_WIDTH = frameSize[0]
         self.CONTRACTS_WINDOW_HEIGHT = frameSize[1]
 
-        self.contracts = [
-            Contract(contractor="New York", reward=1000, objective=10),
-            Contract(contractor="Shanghai", reward=100, objective=2),
-            Contract(contractor="Paris", reward=400, objective=5),
-            Contract(contractor="Moscow", reward=1000, objective=10)
-        ]
+        self.contracts = []
+        self.runningContractIndex = None
 
-        self.showGui = False
+        for i in range(settings.MAX_AVAILABLE_CONTRACTS):
+            self.generateContract(factor=1)
+
+        # GUI
         self.contour = 2
+
+        # Whole contracts window
         self.popupTopLeft = framePos
         self.popup = pygame.Rect(self.contour,
                                  self.contour,
@@ -42,6 +45,7 @@ class ContractManager:
         self.popupContour = pygame.Surface((self.CONTRACTS_WINDOW_WIDTH + 2 * self.contour,
                                             self.CONTRACTS_WINDOW_HEIGHT + 2 * self.contour))
 
+        # Top bar
         self.topBarTopLeft = self.popupTopLeft
         self.topBarHeight = self.CONTRACTS_WINDOW_HEIGHT / 10
         self.topBar = pygame.Rect(self.contour, self.contour,
@@ -49,14 +53,8 @@ class ContractManager:
         self.topBarContour = pygame.Surface((self.CONTRACTS_WINDOW_WIDTH + 2 * self.contour,
                                              self.CONTRACTS_WINDOW_HEIGHT / 10 + 2 * self.contour))
 
-        self.QUIT_BUTTON_SIZE = (self.CONTRACTS_WINDOW_WIDTH / 10, self.topBarHeight)
-        self.quitButtonTopLeft = self.popupTopLeft
-        self.quitButton = pygame.Rect(self.contour, self.contour,
-                                      self.QUIT_BUTTON_SIZE[0], self.QUIT_BUTTON_SIZE[1])
 
-        self.quitButtonContour = pygame.Surface((self.QUIT_BUTTON_SIZE[0] + 2 * self.contour,
-                                                 self.QUIT_BUTTON_SIZE[1] + 2 * self.contour))
-
+        # Quit button
         self.exitButton = UIButton('Close', (int(self.CONTRACTS_WINDOW_WIDTH / 10), int(self.topBarHeight)),
                                    self.popupTopLeft, self.fonts['medium'], guiManager.closeCentralFrame)
 
@@ -71,7 +69,6 @@ class ContractManager:
             )
         )
 
-        self.contract_running = False
         self.pressed = False
 
     def display(self, screen):
@@ -96,21 +93,24 @@ class ContractManager:
         # Display available contracts
         x = self.popupTopLeft[0]
         y = self.popupTopLeft[1] + self.topBarHeight
+        i = 0
         for contract in self.contracts:
-            color = Colors.RED.value if contract.current else Colors.BLACK.value
+            color = Colors.RED.value if i == self.runningContractIndex else Colors.BLACK.value
             contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, color)
             y += (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS
+            i += 1
 
     def isOn(self, mPos):
         rect = pygame.Rect(self.popupTopLeft, self.popup.size)
         print(rect.collidepoint(mPos[0], mPos[1]))
         return rect.collidepoint(mPos[0], mPos[1])
 
-    def onClick(self, contratIndex):
+    def onClick(self, contractIndex):
         # Check if any contract is running
-        if not self.contract_running:
-            self.contracts[contratIndex].current = True
-            self.contract_running = True
+        if self.runningContractIndex is None:
+            self.contracts[contractIndex].current = True
+            self.runningContractIndex = contractIndex
+
 
     def checkHover(self, mPos):
         self.exitButton.checkHover(mPos)
@@ -128,13 +128,49 @@ class ContractManager:
             y += (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS
             isInside = rect.collidepoint(mPos[0], mPos[1])
             if not pressed and self.pressed and isInside:
-                self.onClick(contratIndex=i)
+                self.onClick(contractIndex=i)
                 self.pressed = False
             elif pressed and isInside:
                 self.pressed = True
             i += 1
 
+    def updateRunningContract(self, town, energySent):
+        # Check if any contract is running
+        if self.runningContractIndex is not None:
+            runningContract = self.contracts[self.runningContractIndex]
+            # Confirm town equality
+            if runningContract.town == town:
+                runningContract.update(energySent)
+
+    def updateContracts(self, town, energySent):
+        # Update running contract
+        self.updateRunningContract(town, energySent)
+
+        # Is the running contract complete?
+        runningContract = self.contracts[self.runningContractIndex]
+        if runningContract.left <= 0:
+            # Delete it and generate a new one
+            del self.contracts[self.runningContractIndex]
+            self.runningContractIndex = None
+            self.generateContract()
+
     def update(self):
         pass
+
+    def generateContract(self, factor):
+        maxSeed = 10
+        seed = numpy.random.randint(1, maxSeed + 1)
+        rewardFactors = [1, 1.2, 1.5]
+        town = numpy.random.choice(list(Towns)).value
+        objective = int(factor * seed)
+        if seed <= int(maxSeed/3):
+            reward = int(objective * 100 * rewardFactors[0])
+        elif seed <= int(2 * maxSeed / 3):
+            reward = int(objective * 100 * rewardFactors[1])
+        else:
+            reward = int(objective * 100 * rewardFactors[2])
+            
+        self.contracts.append(Contract(town, reward, objective))
+
 
 contractManager = ContractManager()

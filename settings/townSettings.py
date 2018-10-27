@@ -11,7 +11,7 @@ from settings.enums import Towns
 
 
 ALL_TOWN = {
-    Towns.SHANGAI: {
+    Towns.SHANGHAI: {
         'position': (1006, 285),
         'hours': [0, 1, 2]
     },

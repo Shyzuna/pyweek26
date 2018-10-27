@@ -7,14 +7,13 @@ from settings import settings
 
 class Contract:
 
-    def __init__(self, contractor, reward, objective, current=False):
+    def __init__(self, town, reward, objective):
 
-        self.contractor = contractor
+        self.town = town
         self.reward = reward
         self.objective = objective
         self.contour = 5
         self.left = objective
-        self.current = current
         self.img = pygame.transform.scale(pygame.image.load(os.path.join(settings.GUI_PATH, 'contract.jpg')),
                                           (64, 64))
 
@@ -31,8 +30,8 @@ class Contract:
 
         # Display info of contract
         # Replace 200 with length of contract image
-        contractorText = fonts['medium'].render('Contractor: ' + self.contractor, 1, Colors.BLACK.value)
-        screen.blit(contractorText, (topLeft[0] + window.width / 4 + 20, topLeft[1] + self.contour * 2))
+        townText = fonts['medium'].render('Contractor: ' + self.town, 1, Colors.BLACK.value)
+        screen.blit(townText, (topLeft[0] + window.width / 4 + 20, topLeft[1] + self.contour * 2))
 
         rewardText = fonts['medium'].render('Reward: {}'.format(self.reward), 1, Colors.BLACK.value)
         screen.blit(rewardText, (topLeft[0] + window.width / 4 + 20, topLeft[1] + self.contour * 2 + window.height / 4))
