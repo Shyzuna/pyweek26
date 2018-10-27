@@ -44,3 +44,7 @@ class StockingBuilding():
     def geCurrentMaxStock(self):
         return self.buildingData['stock'][self.type][self.level]
 
+    def updateTotalResCap(self):
+        prevCap = self.buildingData['stock'][self.type][self.level - 1]
+        delta = self.buildingData['stock'][self.type][self.level] - prevCap
+        modules.gameManager.gameManager.getPlayer().upgradeResourceCapWith(self.type, delta)
