@@ -30,9 +30,9 @@ class Player(object):
         self._resourcesVisible = {
             ObjectCategory.ENERGY: False,
             ObjectCategory.HYDROGEN: False,
-            ObjectCategory.DIHYDROGEN: True,
-            ObjectCategory.TRIHYDROGEN: True,
-            ObjectCategory.TRIHELIUM: True,
+            ObjectCategory.DIHYDROGEN: False,
+            ObjectCategory.TRIHYDROGEN: False,
+            ObjectCategory.TRIHELIUM: False,
             ObjectCategory.CREDITS: True
         }
 

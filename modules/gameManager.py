@@ -7,7 +7,7 @@ from modules.guiManager import guiManager
 from modules.researchManager import researchManager
 from settings import settings
 from modules.mapGenerator import MapGenerator
-from settings.enums import ObjectCategory,BuildingTypes,BuildingShortcuts,BuildingsName
+from settings.enums import ObjectCategory,BuildingTypes,BuildingStates,BuildingsName
 from objects.network import Network
 from objects.producingBuilding import ProducingBuilding
 from objects.consumingBuilding import ConsumingBuilding
@@ -110,13 +110,15 @@ class GameManager:
                     for x in self._buildings[y]:
                         if isinstance(self._buildings[y][x], ConsumingBuilding):
                             self._buildings[y][x].consume()
+                        if isinstance(self._buildings[y][x], Transmitter):
+                            self._earth.setTransmitterOn(self._buildings[y][x].state == BuildingStates.ON)
 
                 # Then apply stock
                 for objectType in ObjectCategory:
                     if objectType != ObjectCategory.CREDITS:
                         self._player._resources[objectType] = 0
 
-                if self._earth.isSending() and self._earth.isTransmitterBuilt():
+                if self._earth.isSending() and self._earth.isTransmitterOn():
                     batteriesList = []
                     transmitter = None
                     for y in self._buildings:
@@ -339,8 +341,6 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] += building.buildingData['stock'][building.type][building.level]
-        elif isinstance(building, Transmitter):
-            self._earth.setTransmitterBuild(True)
 
     def removeBuilding(self, building):
         x_tobuild = building.position[0]
@@ -403,7 +403,5 @@ class GameManager:
 
         if isinstance(building, StockingBuilding):
             self._player._resourcesCap[building.type] -= building.buildingData['stock'][building.type][building.level]
-        elif isinstance(building, Transmitter):
-            self._earth.setTransmitterBuild(False)
 
 gameManager = GameManager()

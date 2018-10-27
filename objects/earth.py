@@ -19,7 +19,7 @@ class Earth:
         self._displayedTime = "00:00"
         self.changeHour()
         self._isSending = False
-        self._isTransmitterBuilt = False
+        self._isTransmitterOn = False
 
     def sendEnergy(self, transmitter, batteries):
         if self.isSending():
@@ -65,13 +65,13 @@ class Earth:
     def toggleSending(self, *arg):
         self._isSending = not self._isSending
 
-    def isTransmitterBuilt(self):
-        return self._isTransmitterBuilt
+    def isTransmitterOn(self):
+        return self._isTransmitterOn
 
-    def setTransmitterBuild(self, transmitterBuilt):
-        self._isTransmitterBuilt = transmitterBuilt
+    def setTransmitterOn(self, transmitterOn):
+        self._isTransmitterOn = transmitterOn
 
-        if not transmitterBuilt:
+        if not transmitterOn:
             self._isSending = False
 
     def updateDisplayedHour(self, millis):
