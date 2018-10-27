@@ -75,3 +75,4 @@ class Earth:
 
     def getCurrentTime(self):
         return self._displayedTime
+
