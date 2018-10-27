@@ -17,7 +17,7 @@ ALL_BUILDINGS_SETTINGS = {
     BuildingsName.BATTERY: {
         'name': BuildingsName.BATTERY.value,
         'desc': 'Contains energy.',
-        'cost': {ObjectCategory.CREDITS: [100, 150, 300, 500]},
+        'cost': {ObjectCategory.CREDITS: [100, 150, 300, 400]},
         'produce': {},
         'consume': {},
         'stock': {ObjectCategory.ENERGY: [50, 75, 180, 250]},

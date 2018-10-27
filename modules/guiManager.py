@@ -8,6 +8,7 @@ TODO:
 
 from settings import settings
 from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName, BuildingStates, ResearchType
+from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
@@ -111,9 +112,9 @@ class GuiManager(object):
     def createTooltipUIElem(self, hoveredElem):
         tooltipT = hoveredElem.getTooltipType()
         if tooltipT is not None:
-            self._tooltipSurf = pygame.Surface((250, 150))
+            self._tooltipSurf = pygame.Surface((300, 150))
             self._tooltipSurf.fill(Colors.WHITE.value)
-            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 249, 149), 2)
+            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 299, 149), 2)
             if tooltipT == TooltipType.GUI_BUILDING:
                 index = 1
                 building = hoveredElem.getBuildingData()
@@ -158,8 +159,8 @@ class GuiManager(object):
                 self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                 index += 1
 
-                if building.getLevel() >= len(building.buildingData['cost']):
-                    for costType, data  in building.buildingData['cost'].items():
+                if building.getLevel() < settings.BUILDING_MAX_LEVEL - 1:
+                    for costType, data in building.buildingData['cost'].items():
                         text = self._fonts[self._currentFont].render(
                             "Upgrade cost {} {}".format(data[building.getLevel() + 1], costType.value), 1, Colors.BLACK.value)
                         self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
@@ -209,6 +210,19 @@ class GuiManager(object):
                         "Element {}".format(research['element'].value), 1, Colors.BLACK.value)
                     self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
                     index += 1
+
+                    for produceType, data in ALL_BUILDINGS_SETTINGS[research['element']]['produce'].items():
+                        text = self._fonts[self._currentFont].render(
+                            "Improve prod{} by {}".format(produceType.value, research['value']), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                        index += 1
+
+                    for stockType, data in ALL_BUILDINGS_SETTINGS[research['element']]['stock'].items():
+                        text = self._fonts[self._currentFont].render(
+                            "Improve max cap {} by {}".format(stockType.value, research['value']), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                        index += 1
+
                 elif research['type'] == ResearchType.UNLOCK:
                     for unlock in research['unlocked']:
                         text = self._fonts[self._currentFont].render(
