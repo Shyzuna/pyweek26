@@ -5,6 +5,7 @@ from settings import settings
 from settings.enums import BuildingStates
 import modules.researchManager
 import modules.gameManager
+from settings.enums import BuildingStates, TooltipType
 
 
 class Building(pygame.sprite.Sprite):
@@ -23,6 +24,7 @@ class Building(pygame.sprite.Sprite):
         self.state = BuildingStates.OFF
         self.network = None
         self.level = 0
+        self._tooltipType = TooltipType.IG_BUILDING
 
     def setPos(self, pos):
         self.position = pos
@@ -33,9 +35,15 @@ class Building(pygame.sprite.Sprite):
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
 
+    def getStatus(self):
+        return self.state
+
     def getGuiTipInfo(self):
         pass
         #return self.name, self.desc, self.cost, self.creationTime, self.constructable
+
+    def getTooltipType(self):
+        return self._tooltipType
 
     def getGameTip(self):
         pass
@@ -65,3 +73,6 @@ class Building(pygame.sprite.Sprite):
                 cost[e] = v[(self.level + 1)]
             return modules.gameManager.gameManager.getPlayer().checkEnough(cost)
         return False
+
+    def getLevel(self):
+        return self.level
