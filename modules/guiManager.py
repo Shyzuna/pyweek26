@@ -150,6 +150,8 @@ class GuiManager(object):
             self._buildingDestroy.updatePosition(mPos)
         if self._tooltipSurf is not None:
             self.updateTooltipPos(mPos)
+        if self._centralFrame is not None:
+            self._frameList[self._centralFrame].update()
 
     def updateTopBar(self,  player):
         self._topBar.fill(Colors.WHITE.value)

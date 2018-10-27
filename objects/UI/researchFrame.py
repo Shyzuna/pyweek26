@@ -9,6 +9,8 @@ TODO:
 import pygame
 from settings.enums import Colors
 from objects.UI.button import UIButton
+from objects.UI.progressBar import UIProgressBar
+import modules.researchManager
 
 
 class UIResearchFrame(object):
@@ -19,6 +21,7 @@ class UIResearchFrame(object):
         self._rect = pygame.Rect(pos[0], pos[1], size[0], size[1])
         self._surface = None
         self._exitButton = None
+        self._progressBar = None
         self._guiManager = guiManager
         self.createMainSurf(size)
 
@@ -34,10 +37,14 @@ class UIResearchFrame(object):
         self._surface.blit(topBar, (2, 2))
         self._exitButton = UIButton('Close', (int(size[0] * 0.1), topBar.get_height()),
                                     (self._pos[0], self._pos[1]), self._font, self._guiManager.closeCentralFrame)
+        self._progressBar = UIProgressBar((self._size[0] * 0.5, self._size[0] * 0.05),
+                                          (int((self._size[0] - (self._size[0] * 0.5)) / 2 + self._pos[0]),
+                                          topBar.get_height() + self._pos[1]), self._font, Colors.BLUE.value)
 
     def display(self, screen):
         screen.blit(self._surface, self._pos)
         self._exitButton.draw(screen)
+        self._progressBar.draw(screen)
 
     def isOn(self, mPos):
         return self._rect.collidepoint(mPos[0], mPos[1])
@@ -47,3 +54,10 @@ class UIResearchFrame(object):
 
     def checkMousePressed(self, pressed, mPos):
         self._exitButton.checkMousePressed(pressed, mPos)
+
+    def update(self):
+        if modules.researchManager.researchManager.isSearching():
+            maxT, currentT = modules.researchManager.researchManager.getTimers()
+            self._progressBar.setMaxValue(maxT)
+            self._progressBar.setCurrentValue(maxT - currentT)
+            self._progressBar.update()
