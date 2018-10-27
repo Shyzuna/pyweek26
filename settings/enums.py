@@ -20,6 +20,7 @@ class Colors(Enum):
     LIGHT_GREY = (200, 200, 200)
     LIGHT_CYAN = (14, 174, 204)
     GREEN = (0, 255, 0)
+    BLUE_OCEAN = (9, 127, 217)
 
 class ObjectCategory(Enum):
     """
