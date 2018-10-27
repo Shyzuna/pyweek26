@@ -9,6 +9,7 @@ TODO:
 from settings.researchSettings import ALL_RESEARCH
 import modules.guiManager
 import modules.gameManager
+from settings.enums import ResearchType
 
 
 class ResearchManager(object):
@@ -26,6 +27,11 @@ class ResearchManager(object):
     def completeResearch(self):
         ALL_RESEARCH[self._currentLevel][self._currentResearch]['done'] = True
         modules.guiManager.guiManager.getFrameMenu('Research').setResearchCompleted(self._currentLevel, self._currentResearch)
+        research = ALL_RESEARCH[self._currentLevel][self._currentResearch]
+        if research['type'] == ResearchType.UPGRADE:
+            modules.gameManager.gameManager.upgradeBuildings(research['element'], research['param'], research['value'])
+        elif research['type'] == ResearchType.UNLOCK:
+           pass
         self._currentResearch = None
 
     def startResearch(self, lvl, number):

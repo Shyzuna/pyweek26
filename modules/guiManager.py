@@ -99,8 +99,8 @@ class GuiManager(object):
             pygame.draw.rect(self._batteryLevel, Colors.LIGHT_CYAN.value, rect)
 
         text = self._fonts[self._currentFont].render('{}/{}'.format(
-            str(energy),
-            str(maxEnergy)), 1, Colors.BLACK.value)
+            str(int(energy)),
+            str(int(maxEnergy))), 1, Colors.BLACK.value)
         self._batteryLevel.blit(text, ((batterySize[0] - text.get_width()) / 2,
                                        (batterySize[1] - text.get_height()) / 2))
 

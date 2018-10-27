@@ -120,6 +120,8 @@ class UIResearchFrame(object):
 
     def setResearchCompleted(self, lvl, number):
         self._researchButton[lvl][number].setCompleted(True)
+        self._progressBar.setMaxValue(0)
+        self.update()
 
     def clickStartResearch(self, *arg):
         modules.researchManager.researchManager.startResearch(arg[3][0], arg[3][1])

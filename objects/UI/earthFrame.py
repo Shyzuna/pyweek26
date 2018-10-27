@@ -75,6 +75,9 @@ class UIEarthFrame(object):
             y = y * self._ratioHeight + self.topBarHeightDecal
             screen.blit(self.townIcon[town], (x, y))
 
+        currentTimeText = self._font.render(self._earth.getCurrentTime(), 1, Colors.BLACK.value)
+        x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 30 - currentTimeText.get_height() * 2
+        screen.blit(currentTimeText, (x, y))
 
         onlineTownsText = self._font.render(onlineTownsTextData, 1, Colors.BLACK.value)
         x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 30 - onlineTownsText.get_height()
@@ -88,7 +91,7 @@ class UIEarthFrame(object):
             statusText = "not sending"
 
         statusSendingText = self._font.render("Status : " + statusText, 1, Colors.BLACK.value)
-        x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 28
+        x, y = self._pos[0] + 8, self._pos[1] + self._size[1] - 30
         screen.blit(statusSendingText, (x, y))
 
         if not self._earth.isTransmitterBuilt():
@@ -97,6 +100,7 @@ class UIEarthFrame(object):
             screen.blit(transmitterNotBuiltText, (x, y))
 
         self._toggleButton.updateText(buttonText, self._font)
+        self._toggleButton.setDisabled(not self._earth.isTransmitterBuilt())
         self._toggleButton.draw(screen)
 
         self._exitButton.draw(screen)

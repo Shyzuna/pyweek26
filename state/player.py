@@ -45,6 +45,9 @@ class Player(object):
     def getResourcesVisible(self):
         return self._resourcesVisible
 
+    def upgradeResourceCapTo(self, resType, value):
+        self._resourcesCap[resType] = value
+
     def tryPay(self, resList):
         # check first
         for r, value in resList.items():

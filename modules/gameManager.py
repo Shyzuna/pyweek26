@@ -16,7 +16,7 @@ from objects.stockingBuilding import StockingBuilding
 from objects.transmitter import Transmitter
 from objects.earth import Earth
 from state.player import Player
-
+from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 from objects.battery import Battery
 from objects.crusher import Crusher
 from objects.drill import Drill
@@ -57,6 +57,32 @@ class GameManager:
         }
         self.networks = []
 
+    def upgradeBuildings(self, buildingType, param, value):
+        if param in ALL_BUILDINGS_SETTINGS[buildingType].keys():
+            if type(ALL_BUILDINGS_SETTINGS[buildingType][param]) == dict:
+                for k, v in ALL_BUILDINGS_SETTINGS[buildingType][param].items():
+                    if type(v) == list:
+                        v = [i * value for i in v]
+                    else:
+                        v *= value
+                    ALL_BUILDINGS_SETTINGS[buildingType][param][k] = v
+                print(ALL_BUILDINGS_SETTINGS[buildingType][param])
+            else:
+                ALL_BUILDINGS_SETTINGS[buildingType][param] *= value
+
+        if buildingType in [BuildingsName.BATTERY]:
+            storage = 0
+            resType = None
+            for y in self._buildings:
+                for x in self._buildings[y]:
+                    if self._buildings[y][x].buildingData['name'] == buildingType.value:
+                        building = self._buildings[y][x]
+                        if isinstance(building, StockingBuilding):
+                            resType = building.type
+                            storage += building.geCurrentMaxStock()
+            self._player.upgradeResourceCapTo(resType, storage)
+
+
     def start(self):
         #pygame.event.set_grab(True)
 
@@ -88,6 +114,7 @@ class GameManager:
             for network in self.networks:
                 network.update()
 
+            self._earth.updateDisplayedHour(time_since_hour_changed)
             if time_since_update_res > 1000:
                 time_since_update_res = 0
                 # Update buildings
@@ -140,6 +167,13 @@ class GameManager:
             guiManager.displayGui(displayManager.screen)
             pygame.display.flip()
         pygame.quit()
+
+    def getInstantProd(self):
+        instantProd = 0
+        for network in self.networks:
+            instantProd += network.instantProduction[ObjectCategory.ENERGY]
+        return instantProd
+
 
     def checkIsBuildingTile(self, tilePos):
         tx, ty = tilePos
