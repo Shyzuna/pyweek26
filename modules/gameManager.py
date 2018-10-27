@@ -45,7 +45,7 @@ class GameManager:
             BuildingTypes.GATHERER: {BuildingsName.DRILL_HYDROGEN: (DrillHydrogen, False),
                                      BuildingsName.DRILL_DIHYDROGEN: (DrillDiHydrogen, False),
                                      BuildingsName.DRILL_TRIHYDROGEN: (DrillTriHydrogen, False),
-                                     BuildingsName.CRUSHER: (Crusher, True)},
+                                     BuildingsName.CRUSHER: (Crusher, False)},
             BuildingTypes.REFINER: {BuildingsName.HYDROGEN_COMBINER: (HydrogenCombiner, False),
                                     BuildingsName.DIHYDROGEN_COMBINER: (DiHydrogenCombiner, False)},
             BuildingTypes.PRODUCER: {BuildingsName.SOLARPANEL: (SolarPanel, True),
@@ -72,9 +72,9 @@ class GameManager:
             settings.DEFAULT_HQ_POS[1]: {settings.DEFAULT_HQ_POS[0]: baseHq},
         }
         if settings.DEFAULT_TRANSMITTER_POS[1] in self._buildings:
-            self._buildings[settings.DEFAULT_TRANSMITTER_POS[1]].update({settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)})
+            self._buildings[settings.DEFAULT_TRANSMITTER_POS[1]].update({settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS, earth=self._earth)})
         else:
-            self._buildings.update({settings.DEFAULT_TRANSMITTER_POS[1]: {settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS)}})
+            self._buildings.update({settings.DEFAULT_TRANSMITTER_POS[1]: {settings.DEFAULT_TRANSMITTER_POS[0]: Transmitter(position=settings.DEFAULT_TRANSMITTER_POS, earth=self._earth)}})
 
     def start(self):
         #pygame.event.set_grab(True)
@@ -217,11 +217,12 @@ class GameManager:
 
     def checkElementAt(self, mPos):
         tPos = mapManager.getTilePosFromReal(mPos)
-        res = self.getResourceAt(tPos)
-        if res is not None:
-            return res
         build = self.getBuildingAt(tPos)
-        return build
+        if build is not None:
+            return build
+        res = self.getResourceAt(tPos)
+
+        return res
 
     def checkTileValid(self, tilePos, allowedSpot):
         # in Map

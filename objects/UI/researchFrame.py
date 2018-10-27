@@ -52,7 +52,7 @@ class UIResearchFrame(object):
         blockSize = (self._size[0], int((self._size[1] * 0.84) / 4))
         startH = int(self._size[1] * 0.16)
         for idx, c in enumerate(colorList):
-            text = self._font.render('Level ' + str(idx), 1, Colors.BLACK.value)
+            text = self._font.render('Level ' + str(idx + 1), 1, Colors.BLACK.value)
             surface = pygame.Surface(blockSize)
             surface.fill(c)
             pygame.draw.rect(surface, Colors.BLACK.value, pygame.Rect(0, 0, blockSize[0] - 1, blockSize[1] - 1), 2)
@@ -67,14 +67,13 @@ class UIResearchFrame(object):
             posX = self._pos[0] + blockSize[0] * 0.1 + text.get_width()
             posY = startH + self._pos[1] + blockSize[1] * 0.05
             hqLevel = modules.researchManager.researchManager.getHqLevel()
-            print(hqLevel < (idx + 1))
             for research in ALL_RESEARCH[str(idx + 1)]:
                 button = UIButton(research['name'], buttonSize,
                                   (posX + elemNumber * (buttonSize[0] + blockSize[1] * 0.05),
                                    posY + line * buttonSize[1]), self._font, self.clickStartResearch,
                                   disabled=(hqLevel < (idx + 1)),
                                   researchInfo=[str(idx + 1), elemNumber + (line * self._researchByLine)],
-                                  tooltipType=TooltipType.RESEARCH_TIP)
+                                  tooltipType=TooltipType.RESEARCH_TIP, researchData=research)
                 localButtonList.append(button)
                 elemNumber += 1
                 if elemNumber >= self._researchByLine:
@@ -132,3 +131,7 @@ class UIResearchFrame(object):
 
     def startResearch(self, lvl, number):
         self._researchButton[lvl][number].setRunning(True)
+
+    def unlockLevel(self, level):
+        for b in self._researchButton[str(level +1)]:
+            b.setDisabled(False)

@@ -58,3 +58,6 @@ UI_CENTRAL_FRAME = (0.8, 0.8)
 
 # Earth params
 EARTH_HOUR_ROTATING_FREQ = 5
+
+# Game Value
+BUILDING_MAX_LEVEL = 4

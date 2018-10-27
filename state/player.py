@@ -57,12 +57,20 @@ class Player(object):
 
     def tryPay(self, resList):
         # check first
-        for r, value in resList.items():
-            if self._resources[r] < value:
-                return False
+        if not self.checkEnough(resList):
+            return False
 
         # then pay
         for r, value in resList.items():
             self._resources[r] -= value
 
         return True
+
+    def checkEnough(self, resList):
+        for r, value in resList.items():
+            if self._resources[r] < value:
+                return False
+        return True
+
+    def upgradeResourceCapWith(self, resType, value):
+        self._resourcesCap[resType] += value

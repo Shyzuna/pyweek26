@@ -97,7 +97,7 @@ class ContractManager:
         i = 0
         for contract in self.contracts:
             color = Colors.RED.value if i == self.runningContractIndex else Colors.BLACK.value
-            contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, color)
+            contract.display(screen, self.contractWindowContour, self.contractWindow, (x, y), self.fonts, i == self.runningContractIndex)
             y += (self.CONTRACTS_WINDOW_HEIGHT - self.topBarHeight) / settings.MAX_AVAILABLE_CONTRACTS
             i += 1
 

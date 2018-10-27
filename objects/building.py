@@ -3,8 +3,9 @@ import uuid
 
 from settings import settings
 from settings.enums import BuildingStates
-from objects.stockingBuilding import StockingBuilding
+import modules.researchManager
 import modules.gameManager
+from settings.enums import BuildingStates, TooltipType
 
 
 class Building(pygame.sprite.Sprite):
@@ -23,6 +24,7 @@ class Building(pygame.sprite.Sprite):
         self.state = BuildingStates.OFF
         self.network = None
         self.level = 0
+        self._tooltipType = TooltipType.IG_BUILDING
 
     def setPos(self, pos):
         self.position = pos
@@ -33,12 +35,44 @@ class Building(pygame.sprite.Sprite):
         screen.blit(self.img, (self.current_x - currentRect.topleft[0],
                                self.current_y - currentRect.topleft[1]))
 
+    def getStatus(self):
+        return self.state
+
     def getGuiTipInfo(self):
         pass
         #return self.name, self.desc, self.cost, self.creationTime, self.constructable
+
+    def getTooltipType(self):
+        return self._tooltipType
 
     def getGameTip(self):
         pass
 
     def canDestroy(self):
         return self.buildingData['deletable']
+
+    def lvlUp(self):
+        # redundant code & check with canUpgrade
+        # check Level
+        if self.buildingData['canLevelUp'] and self.level < (settings.BUILDING_MAX_LEVEL - 1):
+             # check Cost
+            cost = {}
+            for e,v in self.buildingData['cost'].items():
+                cost[e] = v[(self.level + 1)]
+            if modules.gameManager.gameManager.getPlayer().tryPay(cost):
+                self.level += 1
+                return True
+        return False
+
+    def canUpgrade(self):
+        # check Level
+        if self.buildingData['canLevelUp'] and self.level < (settings.BUILDING_MAX_LEVEL - 1):
+             # check Cost
+            cost = {}
+            for e, v in self.buildingData['cost'].items():
+                cost[e] = v[(self.level + 1)]
+            return modules.gameManager.gameManager.getPlayer().checkEnough(cost)
+        return False
+
+    def getLevel(self):
+        return self.level

@@ -10,7 +10,7 @@ from settings.buildingsSettings import ALL_BUILDINGS_SETTINGS
 class DrillTriHydrogen(Building, ConsumingBuilding, ProducingBuilding, MiningBuilding):
 
     def __init__(self, position):
-        Building.__init__(self, position, ALL_BUILDINGS_SETTINGS[BuildingsName.DRILL_TRIDIHYDROGEN])
+        Building.__init__(self, position, ALL_BUILDINGS_SETTINGS[BuildingsName.DRILL_TRIHYDROGEN])
         ConsumingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
         ProducingBuilding.__init__(self, self.network, self.buildingData, self.state, self.level)
         MiningBuilding.__init__(self, modules.gameManager.gameManager.getResourceAt(self.position))

@@ -7,10 +7,12 @@ TODO:
 """
 
 from settings import settings
-from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName
+from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName, BuildingStates, ResearchType
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
+from objects.miningBuilding import MiningBuilding
+from objects.UI.buildingUpgradeSnap import UIBuildingUpgradeSnap
 from modules.contractManager import contractManager
 from objects.UI.earthFrame import UIEarthFrame
 from objects.UI.researchFrame import UIResearchFrame
@@ -32,6 +34,7 @@ class GuiManager(object):
         self._internBatteryPos = (10, 24)
         self._buildingSelected = None
         self._buildingDestroy = None
+        self._buildingUpgrade = None
         self._onGui = False
         self._tooltipSurf = None
         self._tooltipPos = None
@@ -108,21 +111,118 @@ class GuiManager(object):
     def createTooltipUIElem(self, hoveredElem):
         tooltipT = hoveredElem.getTooltipType()
         if tooltipT is not None:
-            self._tooltipSurf = pygame.Surface((200, 100))
+            self._tooltipSurf = pygame.Surface((250, 150))
             self._tooltipSurf.fill(Colors.WHITE.value)
-            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 199, 99), 2)
+            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 249, 149), 2)
             if tooltipT == TooltipType.GUI_BUILDING:
+                index = 1
                 building = hoveredElem.getBuildingData()
                 text = self._fonts[self._currentFont].render(building['name'], 1, Colors.BLACK.value)
                 self._tooltipSurf.blit(text, (5, 5))
-        else:
-            self._tooltipSurf = None
+                index += 1
 
-    def createTooltipIGBuilding(self, element):
-        if element is not None:
-            self._tooltipSurf = pygame.Surface((200, 100))
-            self._tooltipSurf.fill(Colors.WHITE.value)
-            pygame.draw.rect(self._tooltipSurf, Colors.BLACK.value, pygame.Rect(0, 0, 199, 99), 2)
+                for costType, data  in building['cost'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Cost {} {}".format(data[0], costType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for consumeType, data in building['consume'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Consume {} {}".format(data[0], consumeType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for produceType, data in building['produce'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Produce {} {}".format(data[0], produceType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+            elif tooltipT == TooltipType.IG_BUILDING:
+                index = 1
+                building = hoveredElem
+                text = self._fonts[self._currentFont].render(building.buildingData['name'], 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5))
+                index += 1
+                text = self._fonts[self._currentFont].render(
+                    "Level {}".format(hoveredElem.getLevel() + 1), 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5 + text.get_height()))
+                index += 1
+
+                if building.getStatus() == BuildingStates.ON:
+                    color = Colors.GREEN.value
+                else:
+                    color = Colors.RED.value
+
+                text = self._fonts[self._currentFont].render(
+                    "Status {}".format(building.getStatus().value), 1, color)
+                self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                index += 1
+
+                if building.getLevel() >= len(building.buildingData['cost']):
+                    for costType, data  in building.buildingData['cost'].items():
+                        text = self._fonts[self._currentFont].render(
+                            "Upgrade cost {} {}".format(data[building.getLevel() + 1], costType.value), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                        index += 1
+                else:
+                    text = self._fonts[self._currentFont].render(
+                        "No uprade available", 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for consumeType, data in building.buildingData['consume'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Consume {} {}".format(data[building.getLevel()], consumeType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for produceType, data in building.buildingData['produce'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Produce {} {}".format(data[building.getLevel()], produceType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                for capacityType, data in building.buildingData['stock'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Stock {}/{} {}".format(building.getCurrentCapacity(capacityType), data[building.getLevel()], capacityType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                if isinstance(hoveredElem, MiningBuilding):
+                    text = self._fonts[self._currentFont].render(hoveredElem.getLinkedRes().getTooltipText(), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+            elif tooltipT == TooltipType.RESEARCH_TIP:
+                index = 1
+                research = hoveredElem.getResearchData()
+                text = self._fonts[self._currentFont].render(research['name'], 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5))
+                index += 1
+
+                for costType, data  in research['cost'].items():
+                    text = self._fonts[self._currentFont].render(
+                        "Cost {} {}".format(data, costType.value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+
+                if research['type'] == ResearchType.UPGRADE:
+                    text = self._fonts[self._currentFont].render(
+                        "Element {}".format(research['element'].value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                    index += 1
+                elif research['type'] == ResearchType.UNLOCK:
+                    for unlock in research['unlocked']:
+                        text = self._fonts[self._currentFont].render(
+                            "Unlock {}".format(unlock.value), 1, Colors.BLACK.value)
+                        self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+                        index += 1
+
+                    text = self._fonts[self._currentFont].render(
+                        "Unlock {}".format(research['resUnlocked'].value), 1, Colors.BLACK.value)
+                    self._tooltipSurf.blit(text, (5, 5 + text.get_height() * index))
+
+            elif tooltipT == TooltipType.TEXT_TIP:
+                text = self._fonts[self._currentFont].render(hoveredElem.getTooltipText(), 1, Colors.BLACK.value)
+                self._tooltipSurf.blit(text, (5, 5))
         else:
             self._tooltipSurf = None
 
@@ -149,6 +249,8 @@ class GuiManager(object):
             self._buildingSelected.updatePosition(mPos)
         if self._buildingDestroy is not None:
             self._buildingDestroy.updatePosition(mPos)
+        if self._buildingUpgrade is not None:
+            self._buildingUpgrade.updatePosition(mPos)
         if self._tooltipSurf is not None:
             self.updateTooltipPos(mPos)
         if self._centralFrame is not None:
@@ -185,7 +287,7 @@ class GuiManager(object):
         # build menu and child
         buildButtonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 3))
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 4))
         buttonH = self._topBar.get_height()
         for cat, d in self._buildingsList.items():
             buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
@@ -216,6 +318,9 @@ class GuiManager(object):
         buildButtonList.append(UIButton(BuildingsName.CONNECTOR.value, buttonSize, (0, buttonH),
                                         self._fonts[self._currentFont], self.selectBuilding, building=Connector,
                                         tooltipType=TooltipType.GUI_BUILDING))
+        buttonH += buttonSize[1]
+        buildButtonList.append(UIButton('Upgrade', buttonSize, (0, buttonH),
+                                        self._fonts[self._currentFont], self.upgradeBuilding))
         buttonH += buttonSize[1]
         buildButtonList.append(UIButton('Remove', buttonSize, (0, buttonH),
                                         self._fonts[self._currentFont], self.destroyBuilding,
@@ -254,6 +359,9 @@ class GuiManager(object):
 
         if self._buildingDestroy is not None:
             self._buildingDestroy.display(screen)
+
+        if self._buildingUpgrade is not None:
+            self._buildingUpgrade.display(screen)
 
         if self._centralFrame is not None:
             self._frameList[self._centralFrame].display(screen)
@@ -300,7 +408,7 @@ class GuiManager(object):
         if not onGui:
             element = modules.gameManager.gameManager.checkElementAt(mPos)
             if element is not None:
-                self.createTooltipIGBuilding(element)
+                self.createTooltipUIElem(element)
 
 
     def handleMouseButton(self, pressed, mPos, button):
@@ -314,11 +422,14 @@ class GuiManager(object):
                 self._buildingSelected.tryBuild()
             elif not pressed and self._buildingDestroy is not None:
                 self._buildingDestroy.tryDestroy()
+            elif not pressed and self._buildingUpgrade is not None:
+                self._buildingUpgrade.tryUpgrade()
 
         elif button == 3:
             pygame.mouse.set_visible(True)
             self._buildingSelected = None
             self._buildingDestroy = None
+            self._buildingUpgrade = None
 
     def resetMenu(self, *arg):
         self._currentSideMenu = arg[2]
@@ -326,16 +437,25 @@ class GuiManager(object):
     def changeMenu(self, *arg):
         self._currentSideMenu = arg[0]
 
+    def upgradeBuilding(self, *arg):
+        pygame.mouse.set_visible(True)
+        self._buildingUpgrade = UIBuildingUpgradeSnap(None, self)
+        self._buildingSelected = None
+        self._buildingDestroy = None
+
     def destroyBuilding(self, *arg):
         pygame.mouse.set_visible(False)
         self._buildingDestroy = UIBuildingDestroySnap(self._guiImg['destructorMini'], self)
         self._buildingSelected = None
+        self._buildingUpgrade = None
 
     def selectBuilding(self, *arg):
         print("Building {} selected".format(arg[0]))
         if arg[1] is not None:
+            pygame.mouse.set_visible(True)
             self._buildingSelected = UIBuildingMouseSnap(arg[1]((-1, -1)), self)
             self._buildingDestroy = None
+            self._buildingUpgrade = None
 
     def changeCentralFrame(self, *arg):
         self._centralFrame = arg[0]
