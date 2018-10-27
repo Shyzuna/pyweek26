@@ -11,6 +11,7 @@ from settings.enums import Colors, ObjectCategory, TooltipType, BuildingsName
 from objects.UI.button import UIButton
 from objects.UI.buildingMouseSnap import UIBuildingMouseSnap
 from objects.UI.buildingDestroySnap import UIBuildingDestroySnap
+from objects.UI.buildingUpgradeSnap import UIBuildingUpgradeSnap
 from modules.contractManager import contractManager
 from objects.UI.earthFrame import UIEarthFrame
 from objects.UI.researchFrame import UIResearchFrame
@@ -32,6 +33,7 @@ class GuiManager(object):
         self._internBatteryPos = (10, 24)
         self._buildingSelected = None
         self._buildingDestroy = None
+        self._buildingUpgrade = None
         self._onGui = False
         self._tooltipSurf = None
         self._tooltipPos = None
@@ -149,6 +151,8 @@ class GuiManager(object):
             self._buildingSelected.updatePosition(mPos)
         if self._buildingDestroy is not None:
             self._buildingDestroy.updatePosition(mPos)
+        if self._buildingUpgrade is not None:
+            self._buildingUpgrade.updatePosition(mPos)
         if self._tooltipSurf is not None:
             self.updateTooltipPos(mPos)
         if self._centralFrame is not None:
@@ -185,7 +189,7 @@ class GuiManager(object):
         # build menu and child
         buildButtonList = []
         buttonSize = (settings.SCREEN_WIDTH * settings.UI_SIDE_BAR,
-                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 3))
+                      (settings.SCREEN_HEIGHT - self._topBar.get_height()) / (len(self._buildingsList) + 4))
         buttonH = self._topBar.get_height()
         for cat, d in self._buildingsList.items():
             buildButtonList.append(UIButton(cat.value, buttonSize, (0, buttonH),
@@ -216,6 +220,9 @@ class GuiManager(object):
         buildButtonList.append(UIButton(BuildingsName.CONNECTOR.value, buttonSize, (0, buttonH),
                                         self._fonts[self._currentFont], self.selectBuilding, building=Connector,
                                         tooltipType=TooltipType.GUI_BUILDING))
+        buttonH += buttonSize[1]
+        buildButtonList.append(UIButton('Upgrade', buttonSize, (0, buttonH),
+                                        self._fonts[self._currentFont], self.upgradeBuilding))
         buttonH += buttonSize[1]
         buildButtonList.append(UIButton('Remove', buttonSize, (0, buttonH),
                                         self._fonts[self._currentFont], self.destroyBuilding,
@@ -254,6 +261,9 @@ class GuiManager(object):
 
         if self._buildingDestroy is not None:
             self._buildingDestroy.display(screen)
+
+        if self._buildingUpgrade is not None:
+            self._buildingUpgrade.display(screen)
 
         if self._centralFrame is not None:
             self._frameList[self._centralFrame].display(screen)
@@ -314,11 +324,14 @@ class GuiManager(object):
                 self._buildingSelected.tryBuild()
             elif not pressed and self._buildingDestroy is not None:
                 self._buildingDestroy.tryDestroy()
+            elif not pressed and self._buildingUpgrade is not None:
+                self._buildingUpgrade.tryUpgrade()
 
         elif button == 3:
             pygame.mouse.set_visible(True)
             self._buildingSelected = None
             self._buildingDestroy = None
+            self._buildingUpgrade = None
 
     def resetMenu(self, *arg):
         self._currentSideMenu = arg[2]
@@ -326,16 +339,23 @@ class GuiManager(object):
     def changeMenu(self, *arg):
         self._currentSideMenu = arg[0]
 
+    def upgradeBuilding(self, *arg):
+        self._buildingUpgrade = UIBuildingUpgradeSnap(None, self)
+        self._buildingSelected = None
+        self._buildingDestroy = None
+
     def destroyBuilding(self, *arg):
         pygame.mouse.set_visible(False)
         self._buildingDestroy = UIBuildingDestroySnap(self._guiImg['destructorMini'], self)
         self._buildingSelected = None
+        self._buildingUpgrade = None
 
     def selectBuilding(self, *arg):
         print("Building {} selected".format(arg[0]))
         if arg[1] is not None:
             self._buildingSelected = UIBuildingMouseSnap(arg[1]((-1, -1)), self)
             self._buildingDestroy = None
+            self._buildingUpgrade = None
 
     def changeCentralFrame(self, *arg):
         self._centralFrame = arg[0]

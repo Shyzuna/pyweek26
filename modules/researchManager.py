@@ -23,6 +23,9 @@ class ResearchManager(object):
     def init(self, hq):
         self._hq = hq
 
+    def unlockNewLevel(self, level):
+        modules.guiManager.guiManager.getFrameMenu('Research').unlockLevel(level)
+
     def completeResearch(self):
         ALL_RESEARCH[self._currentLevel][self._currentResearch]['done'] = True
         modules.guiManager.guiManager.getFrameMenu('Research').setResearchCompleted(self._currentLevel, self._currentResearch)

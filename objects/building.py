@@ -3,7 +3,7 @@ import uuid
 
 from settings import settings
 from settings.enums import BuildingStates
-from objects.stockingBuilding import StockingBuilding
+import modules.researchManager
 import modules.gameManager
 
 
@@ -42,3 +42,26 @@ class Building(pygame.sprite.Sprite):
 
     def canDestroy(self):
         return self.buildingData['deletable']
+
+    def lvlUp(self):
+        # redundant code & check with canUpgrade
+        # check Level
+        if self.buildingData['canLevelUp'] and self.level < (settings.BUILDING_MAX_LEVEL - 1):
+             # check Cost
+            cost = {}
+            for e,v in self.buildingData['cost'].items():
+                cost[e] = v[(self.level + 1)]
+            if modules.gameManager.gameManager.getPlayer().tryPay(cost):
+                self.level += 1
+                return True
+        return False
+
+    def canUpgrade(self):
+        # check Level
+        if self.buildingData['canLevelUp'] and self.level < (settings.BUILDING_MAX_LEVEL - 1):
+             # check Cost
+            cost = {}
+            for e, v in self.buildingData['cost'].items():
+                cost[e] = v[(self.level + 1)]
+            return modules.gameManager.gameManager.getPlayer().checkEnough(cost)
+        return False
