@@ -15,6 +15,7 @@ class UIHoverable(object):
         self._pressed = False
         self._disabled = disabled
         self._completed = False  # Research only
+        self._running = False  # Research only
         self._pos = pos
         self._tooltipType = tooltipType
         self._rect = pygame.Rect(pos[0], pos[1], size[0], size[1])
@@ -39,3 +40,7 @@ class UIHoverable(object):
         self._completed = val
         if self._completed:
             self._disabled = True
+            self._running = False
+
+    def setRunning(self, val):
+        self._running = val

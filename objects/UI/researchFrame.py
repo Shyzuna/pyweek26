@@ -129,3 +129,6 @@ class UIResearchFrame(object):
     def unlockResearchLevel(self, level):
         for b in self._researchButton[level]:
             b.setDisabled(False)
+
+    def startResearch(self, lvl, number):
+        self._researchButton[lvl][number].setRunning(True)
