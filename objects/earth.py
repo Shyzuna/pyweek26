@@ -1,4 +1,4 @@
-from settings.enums import LinkStatus, Towns
+from settings.enums import LinkStatus, Towns, ObjectCategory
 from settings.townSettings import ALL_TOWN
 from settings import settings
 from modules.contractManager import contractManager
@@ -25,7 +25,7 @@ class Earth:
     def sendEnergy(self, transmitter, batteries):
         if self.isSending():
             towns = self.getCurrentTowns()
-            toSend = int(transmitter.buildingData['transmitCapacity'][transmitter.level] / (len(towns) + 1))
+            toSend = int(transmitter.buildingData['transmitCapacity'][ObjectCategory.ENERGY][transmitter.level] / (len(towns) + 1))
             leftToSend = toSend
             for town in towns:
                 for battery in batteries:

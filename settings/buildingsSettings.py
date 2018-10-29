@@ -275,7 +275,7 @@ ALL_BUILDINGS_SETTINGS = {
         'constructable': True,
         'canLevelUp': True,
         'constructionTime': 0,
-        'transmitCapacity': [25, 150, 2500, 25000],
+        'transmitCapacity': {ObjectCategory.ENERGY: [25, 150, 2500, 25000]},
         'size': (1, 1),
         'uiImg': pygame.transform.scale(pygame.image.load(os.path.join(settings.BUILDINGS_PATH, 'TRANSMITTER.png')),
                                         (64, 64)),
