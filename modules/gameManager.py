@@ -65,6 +65,7 @@ class GameManager:
         self.clock = pygame.time.Clock()
         self._mg = MapGenerator()
         self._resources = self._mg.generateSettingsMap()
+        self.instantProd = 0
         self.networks = []
         pygame.mixer.init()
         pygame.mixer.music.load(os.path.join(settings.MUSIC_PATH, 'moonLake.mp3'))
@@ -118,6 +119,7 @@ class GameManager:
             self._earth.updateDisplayedHour(time_since_hour_changed)
             if time_since_update_res > 1000:
                 time_since_update_res = 0
+                self.instantProd = 0
                 # Update buildings
                 # First compute instant prod, stock
                 for y in self._buildings:
@@ -126,6 +128,9 @@ class GameManager:
                             self._buildings[y][x].produce()
                         if isinstance(self._buildings[y][x], StockingBuilding):
                             self._buildings[y][x].produceStock()
+
+                for network in self.networks:
+                    self.instantProd += network.instantProduction[ObjectCategory.ENERGY]
 
                 # Then apply consumption
                 for y in self._buildings:
@@ -208,10 +213,7 @@ class GameManager:
             self._player.upgradeResourceCapTo(resType, storage)
 
     def getInstantProd(self):
-        instantProd = 0
-        for network in self.networks:
-            instantProd += network.instantProduction[ObjectCategory.ENERGY]
-        return instantProd
+        return self.instantProd
 
     def checkIsBuildingTile(self, tilePos):
         tx, ty = tilePos
