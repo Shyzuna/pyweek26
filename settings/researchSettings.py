@@ -63,7 +63,7 @@ ALL_RESEARCH = {
             'time': 180,
             'element': BuildingsName.TRANSMITTER,
             'value': 1.2,
-            'param': 'consume'
+            'param': 'transmitCapacity'
         }
     ],
     '2': [
