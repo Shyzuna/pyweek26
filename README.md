@@ -84,4 +84,4 @@ CREDITS :
 
 LICENSE:
 
-This game Beyond the game is placed in the Public Domain.
+This game Operation Moonlight is placed in the Public Domain.
