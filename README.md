@@ -88,3 +88,5 @@ This game Operation Moonlight is placed in the Public Domain.
 
 OVER JAM CHANGELOG :
 * Fix on energy transmitter and battery causing crash in some situations.
+* Fix overconsuming resources
+* Adjust transmitter balance

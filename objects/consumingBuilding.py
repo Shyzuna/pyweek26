@@ -16,7 +16,7 @@ class ConsumingBuilding():
                 if tempState == BuildingStates.OFF:
                     break
                 if isinstance(self, MiningBuilding):
-                    tempState = self.network.consumeResources(consumeValue[self.level], consumingType, self.linkedRes)
+                    tempState = self.network.consumeResources(consumeValue[self.level], consumingType, self.linkedRes, self.buildingData['produce'][self.linkedRes.getCategory()][self.level])
                 else:
                     tempState = self.network.consumeResources(consumeValue[self.level], consumingType)
                 print("Consommation de ", consumeValue[self.level], consumingType, tempState)
