@@ -42,6 +42,7 @@ class GameManager:
     def init(self):
         self._player = Player()
         baseHq = HeadQuarters(position=settings.DEFAULT_HQ_POS)
+        baseHq.state = BuildingStates.ON
 
         self.buildingList = {
             BuildingTypes.GATHERER: {BuildingsName.DRILL_HYDROGEN: (DrillHydrogen, False),
@@ -211,6 +212,7 @@ class GameManager:
         instantProd = 0
         for network in self.networks:
             instantProd += network.instantProduction[ObjectCategory.ENERGY]
+            print("Instant prod ", str(instantProd))
         return instantProd
 
     def checkIsBuildingTile(self, tilePos):
