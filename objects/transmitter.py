@@ -13,7 +13,7 @@ class Transmitter(Building, ConsumingBuilding):
         self._earth = earth
 
     def consume(self):
-        if self._earth.isSending:
+        self.state = BuildingStates.ON if self.network is not None else BuildingStates.OFF
+        print(self.state)
+        if self._earth.isSending() and self.state == BuildingStates.ON:
             ConsumingBuilding.consume(self)
-        else:
-            self.state = BuildingStates.OFF

@@ -21,3 +21,4 @@ class Battery(Building, ProducingBuilding, StockingBuilding):
                 leftToSend = self.cur_capacity[ObjectCategory.ENERGY] - amount
                 self.cur_capacity[ObjectCategory.ENERGY] = 0
                 return leftToSend
+        return 0
