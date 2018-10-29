@@ -142,18 +142,17 @@ class Network():
     def produceStock(self, num, type):
         self.instantStock[type] += num
 
-    def consumeResources(self, num, type, resource=None):
+    def consumeResources(self, num, type, resource=None, consumedResource=0):
         state = BuildingStates.ON
 
         # Resource
         if resource is not None:
             if resource.isEmpty():
                 state = BuildingStates.OFF
-            elif num <= resource.getAmount():
-                newResourceAmount = resource.getAmount() - num
+            elif consumedResource <= resource.getAmount():
+                newResourceAmount = resource.getAmount() - consumedResource
             else:
                 newResourceAmount = 0
-                num = newResourceAmount
 
         # Production
         newInstantProduction = self.instantProduction[type]
